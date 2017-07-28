@@ -1,0 +1,57 @@
+import firebase from 'firebase';
+import { MessageBarAlert, MessageBarManager } from 'react-native-message-bar';
+import { Actions } from 'react-native-router-flux';
+import {
+    EMAIL_CHANGED,
+    PASSWORD_CHANGED,
+    LOGIN_USER_SUCCESS,
+    LOGIN_USER_FAIL,
+    LOGIN_USER
+} from './types';
+
+export const emailChanged = (text) => {
+    return ({
+        type: EMAIL_CHANGED,
+        payload: text
+    });
+};
+
+export const passwordChanged = (text) => {
+    return ({
+        type: PASSWORD_CHANGED,
+        payload: text
+    });
+};
+
+export const loginUser = ({ email, password }) => {
+    return (dispatch) => {
+        dispatch({ type: LOGIN_USER });
+
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(user => loginUserSuccess(dispatch, user))
+            .catch(() => {
+                loginUserFail(dispatch);
+            });
+    };
+};
+
+const loginUserFail = (dispatch) => {
+    dispatch({
+        type: LOGIN_USER_FAIL
+    });
+};
+const loginUserSuccess = (dispatch, user) => {
+    dispatch({
+        type: LOGIN_USER_SUCCESS,
+        payload: user
+    });
+
+    Actions.main();
+    MessageBarManager.showAlert({
+        title: 'Kullanıcı Adı',
+        message: 'Hoşgeldiniz.',
+        alertType: 'info',
+        duration: 2000,
+        avatar: 'https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png'
+    });
+};
