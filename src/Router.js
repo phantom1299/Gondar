@@ -19,7 +19,7 @@ const RouterComponent = () => {
                 <Scene key="lightbox" lightbox leftButtonTextStyle={{ color: 'green' }} backButtonTextStyle={{ color: 'red' }} initial>
                     <Scene key="modal" modal hideNavBar>
                         <Scene key="auth" initial>
-                            <Scene key="login" component={LoginForm} title="Please Login" titleStyle={{ textAlign: 'center' }} />
+                            <Scene key="login" component={LoginForm} title="Lütfen Giriş Yapın" titleStyle={{ textAlign: 'center' }} />
                         </Scene>
                         <Scene key="drawer" drawer contentComponent={SideMenu}>
                             <Scene key="main" >

@@ -52,6 +52,7 @@ const loginUserSuccess = (dispatch, user) => {
         message: 'Hoşgeldiniz.',
         alertType: 'info',
         duration: 2000,
-        avatar: 'https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png'
+        avatar: 'https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png',
+        stylesheetInfo: { backgroundColor: 'rgba(0, 123, 255, 0.8)' }
     });
 };
