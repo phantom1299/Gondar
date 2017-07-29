@@ -7,7 +7,7 @@ import YeniKisiEkle from './components/YeniKisiEkle';
 import YeniIsEkle from './components/YeniIsEkle';
 import Ayarlar from './components/Ayarlar';
 import Profil from './components/Profil';
-import IsTeklifleri from './components/IsTeklifleri';
+import IsTeklifleri from './components/is_teklifleri/IsTeklifleri';
 import IsDetaylari from './components/IsDetaylari';
 import MessageBar from './components/MessageBar';
 

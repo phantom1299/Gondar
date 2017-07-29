@@ -3,10 +3,12 @@ import AuthReducer from './AuthReducer';
 import DataReducer from './DataReducer';
 import NewUserReducer from './NewUserReducer';
 import NewMissionReducer from './NewMissionReducer';
+import MissionReducer from './MissionReducer';
 
 export default combineReducers({
     auth: AuthReducer,
     data: DataReducer,
     newUserForm: NewUserReducer,
-    newMissionForm: NewMissionReducer
+    newMissionForm: NewMissionReducer,
+    missions: MissionReducer
 });
