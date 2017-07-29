@@ -6,44 +6,6 @@ import { Actions } from 'react-native-router-flux';
 import Button from 'react-native-button';
 import { CardSection } from '../src/components/common';
 
-const contextTypes = {
-  drawer: React.PropTypes.object,
-};
-
-const propTypes = {
-  name: PropTypes.string,
-  sceneStyle: ViewPropTypes.style,
-  title: PropTypes.string,
-};
-
-const styles = StyleSheet.create({
-  viewContainer: {
-    flex: 1,
-    backgroundColor: '#fff'
-  },
-  container: {
-    padding: 15,
-    height: 45,
-    overflow: 'hidden',
-    alignSelf: 'flex-start',
-  },
-  textStyle: {
-    fontSize: 18,
-    color: '#555',
-  },
-  nameContainer: {
-    padding: 15,
-    height: 45,
-    overflow: 'hidden',
-    alignSelf: 'flex-start',
-  },
-  name: {
-    fontSize: 22,
-    color: '#555',
-    fontWeight: '400',
-  }
-});
-
 class SideMenu extends Component {
   constructor() {
     super();
@@ -135,6 +97,44 @@ class SideMenu extends Component {
     );
   }
 }
+
+const contextTypes = {
+  drawer: React.PropTypes.object,
+};
+
+const propTypes = {
+  name: PropTypes.string,
+  sceneStyle: ViewPropTypes.style,
+  title: PropTypes.string,
+};
+
+const styles = StyleSheet.create({
+  viewContainer: {
+    flex: 1,
+    backgroundColor: '#fff'
+  },
+  container: {
+    padding: 15,
+    height: 45,
+    overflow: 'hidden',
+    alignSelf: 'flex-start',
+  },
+  textStyle: {
+    fontSize: 18,
+    color: '#555',
+  },
+  nameContainer: {
+    padding: 15,
+    height: 45,
+    overflow: 'hidden',
+    alignSelf: 'flex-start',
+  },
+  name: {
+    fontSize: 22,
+    color: '#555',
+    fontWeight: '400',
+  }
+});
 
 SideMenu.contextTypes = contextTypes;
 SideMenu.propTypes = propTypes;
