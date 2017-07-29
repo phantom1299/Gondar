@@ -48,7 +48,7 @@ class SideMenu extends Component {
   constructor() {
     super();
     this.onProfil = this.onProfil.bind(this);
-    this.onHome = this.onHome.bind(this);
+    this.onAnasayfa = this.onAnasayfa.bind(this);
     this.onIsTeklifleri = this.onIsTeklifleri.bind(this);
     this.onYeniKisiEkle = this.onYeniKisiEkle.bind(this);
     this.onYeniIsEkle = this.onYeniIsEkle.bind(this);
