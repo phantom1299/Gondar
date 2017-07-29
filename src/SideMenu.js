@@ -45,7 +45,44 @@ const styles = StyleSheet.create({
 });
 
 class SideMenu extends Component {
-  componentDidMount() { Actions.refresh({ key: 'drawer', ref: this.refs.navigation }); }
+  constructor() {
+    super();
+    this.onProfil = this.onProfil.bind(this);
+    this.onHome = this.onHome.bind(this);
+    this.onIsTeklifleri = this.onIsTeklifleri.bind(this);
+    this.onYeniKisiEkle = this.onYeniKisiEkle.bind(this);
+    this.onYeniIsEkle = this.onYeniIsEkle.bind(this);
+    this.onAyarlar = this.onAyarlar.bind(this);
+    this.onAuth = this.onAuth.bind(this);
+  }
+
+  // componentDidMount() { Actions.refresh({ key: 'drawer', ref: this.refs.navigation }); }
+
+  onProfil() {
+    Actions.profil();
+  }
+  onAnasayfa() {
+    Actions.anasayfa();
+  }
+  onIsTeklifleri() {
+    Actions.isTeklifleri();
+  }
+  onYeniKisiEkle() {
+    Actions.yeniKisiEkle();
+  }
+  onYeniIsEkle() {
+    Actions.yeniIsEkle();
+  }
+  onAyarlar() {
+    Actions.ayarlar();
+  }
+  onAuth() {
+    firebase.auth().signOut()
+      .then(() => {
+        Actions.auth();
+      });
+  }
+
   render() {
     return (
       <View style={[styles.viewContainer, this.props.sceneStyle]}>
@@ -53,46 +90,41 @@ class SideMenu extends Component {
           <Button
             containerStyle={styles.container}
             style={styles.name}
-            onPress={() => { Actions.profil(); }}
+            onPress={this.onProfil}
           >{this.props.name} {this.props.surname}</Button>
         </CardSection>
         <CardSection style={{ flexDirection: 'column' }}>
           <Button
             containerStyle={styles.container}
             style={styles.textStyle}
-            onPress={() => { Actions.anaSayfa(); }}
+            onPress={this.onAnasayfa}
           >Ana Sayfa</Button>
           <Button
             containerStyle={styles.container}
             style={styles.textStyle}
-            onPress={() => { Actions.isTeklifleri(); }}
+            onPress={this.onIsTeklifleri}
           >İş Teklifleri</Button>
           <Button
             containerStyle={styles.container}
             style={styles.textStyle}
-            onPress={() => { Actions.yeniKisiEkle(); }}
+            onPress={this.onYeniKisiEkle}
           >Kişi Ekle</Button>
           <Button
             containerStyle={styles.container}
             style={styles.textStyle}
-            onPress={() => { Actions.yeniIsEkle(); }}
+            onPress={this.onYeniIsEkle}
           >İş Teklifi Ekle</Button>
         </CardSection>
         <CardSection style={{ flexDirection: 'column', borderBottomWidth: 0, }}>
           <Button
             containerStyle={styles.container}
             style={styles.textStyle}
-            onPress={() => Actions.ayarlar()}
+            onPress={this.onAyarlar}
           >Ayarlar</Button>
           <Button
             containerStyle={styles.container}
             style={styles.textStyle}
-            onPress={() => {
-              firebase.auth().signOut()
-                .then(() => {
-                  Actions.auth();
-                });
-            }}
+            onPress={this.onAuth}
           >Çıkış Yap</Button>
           <Button
             containerStyle={styles.container}

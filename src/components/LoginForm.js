@@ -5,6 +5,12 @@ import { emailChanged, passwordChanged, loginUser } from '../actions';
 import { Card, CardSection, Input, Button, Spinner } from './common';
 
 class LoginForm extends Component {
+    constructor() {
+        super();
+        this.onEmailChange = this.onEmailChange.bind(this);
+        this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.onButtonPress = this.onButtonPress.bind(this);
+    }
 
     componentWillUnmount() {
         Keyboard.dismiss();
@@ -40,9 +46,9 @@ class LoginForm extends Component {
                     backgroundColor: '#007bff',
                     borderRadius: 5,
                     borderWidth: 0,
-                }} onPress={this.onButtonPress.bind(this)} >
-                Giriş Yap
-                </Button>
+                }} onPress={this.onButtonPress}
+            >Giriş Yap
+            </Button>
         );
     }
 
@@ -53,7 +59,7 @@ class LoginForm extends Component {
                     <Input
                         label="Email"
                         placeholder="user@example.com"
-                        onChangeText={this.onEmailChange.bind(this)}
+                        onChangeText={this.onEmailChange}
                         value={this.props.email}
                     />
                 </CardSection>
@@ -63,7 +69,7 @@ class LoginForm extends Component {
                         secureTextEntry
                         label="Sifre"
                         placeholder="password"
-                        onChangeText={this.onPasswordChange.bind(this)}
+                        onChangeText={this.onPasswordChange}
                         value={this.props.password}
                     />
                 </CardSection>
@@ -73,7 +79,7 @@ class LoginForm extends Component {
                 <CardSection>
                     {this.renderButton()}
                 </CardSection>
-            </Card>  
+            </Card>
         );
     }
 }
