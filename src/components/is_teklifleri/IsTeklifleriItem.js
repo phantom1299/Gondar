@@ -2,16 +2,27 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity
 } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import { Card, CardSection } from '../common';
 
 class IsTeklifleriItem extends Component {
+  constructor() {
+    super();
+    this.onPress = this.onPress.bind(this);
+  }
+
+  onPress() {
+    Actions.isDetaylari();
+  }
+  
   render() {
     const { name, budget, description, tags, deadline } = this.props.mission;
     const { container, nameStyle, descriptionStyle, tagStyle, budgetStyle, deadlineStyle } = styles;
     return (
-      <View>
+      <TouchableOpacity onPress={this.onPress}>
         <Card>
           <CardSection style={container}>
             <View style={{ flexDirection: 'row' }}>
@@ -38,7 +49,7 @@ class IsTeklifleriItem extends Component {
             </View>
           </CardSection>
         </Card>
-      </View >
+      </TouchableOpacity>
     );
   }
 }
@@ -67,7 +78,7 @@ const styles = StyleSheet.create({
   },
   tagStyle: {
     color: 'blue',
-    fontSize: 16
+    fontSize: 12
   },
   budgetStyle: {
     fontSize: 20,

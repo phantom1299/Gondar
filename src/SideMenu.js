@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import firebase from 'firebase';
-import { StyleSheet, Text, View, ViewPropTypes } from 'react-native';
+import { StyleSheet, View, Text, Image, ViewPropTypes } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Button from 'react-native-button';
@@ -48,14 +48,33 @@ class SideMenu extends Component {
   render() {
     return (
       <View style={[styles.viewContainer, this.props.sceneStyle]}>
-        <CardSection style={{ flexDirection: 'column', padding: 30 }}>
-          <Button
-            containerStyle={styles.container}
-            style={styles.name}
-            onPress={this.onProfil}
-          >{this.props.name} {this.props.surname}</Button>
+        <CardSection style={{ flexDirection: 'column', paddingBottom: 10 }}>
+          <View style={{ flexDirection: 'row', paddingLeft: 10, paddingTop: 10 }}>
+            <Button
+              containerStyle={styles.profilButtonContainer}
+              style={styles.name}
+              onPress={this.onProfil}
+            >
+              <Image
+                style={{ width: 55, height: 55 }}
+                source={{ uri: this.props.avatar }}
+              />
+              <View style={{ justifyContent: 'center', paddingLeft: 10 }} >
+                <Text style={styles.name}>{this.props.name} {this.props.surname}</Text>
+                <Text style={{ color: '#aaa' }}>Graphic Designer</Text>
+              </View>
+              <View>
+                <Button
+                  containerStyle={styles.logOutButtonContainer}
+                  style={styles.logOutButtonText}
+                  onPress={this.onAuth}
+                >Çıkış Yap</Button>
+              </View>
+            </Button>
+          </View>
         </CardSection>
-        <CardSection style={{ flexDirection: 'column' }}>
+
+        <CardSection style={{ flexDirection: 'column', padding: 15 }}>
           <Button
             containerStyle={styles.container}
             style={styles.textStyle}
@@ -77,21 +96,17 @@ class SideMenu extends Component {
             onPress={this.onYeniIsEkle}
           >İş Teklifi Ekle</Button>
         </CardSection>
-        <CardSection style={{ flexDirection: 'column', borderBottomWidth: 0, }}>
+
+        <CardSection style={{ flexDirection: 'column', borderBottomWidth: 0, padding: 15 }}>
           <Button
             containerStyle={styles.container}
             style={styles.textStyle}
             onPress={this.onAyarlar}
           >Ayarlar</Button>
-          <Button
+          {/* <Button
             containerStyle={styles.container}
             style={styles.textStyle}
-            onPress={this.onAuth}
-          >Çıkış Yap</Button>
-          <Button
-            containerStyle={styles.container}
-            style={styles.textStyle}
-          >Log</Button>
+          >Log</Button> */}
         </CardSection>
       </View>
     );
@@ -111,11 +126,26 @@ const propTypes = {
 const styles = StyleSheet.create({
   viewContainer: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#ddd'
+  },
+  profilButtonContainer: {
+    paddingLeft: 15,
+    paddingTop: 5,
+    overflow: 'hidden',
+    alignSelf: 'center',
+  },
+  logOutButtonContainer: {
+    paddingLeft: 15,
+    bottom: 15
+  },
+  logOutButtonText: {
+    fontSize: 16,
+    color: 'blue',
   },
   container: {
-    padding: 15,
-    height: 45,
+    paddingLeft: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
     overflow: 'hidden',
     alignSelf: 'flex-start',
   },
@@ -140,9 +170,9 @@ SideMenu.contextTypes = contextTypes;
 SideMenu.propTypes = propTypes;
 
 const mapStateToProps = state => {
-  const { name, surname } = state.data.user_id;
+  const { name, surname, avatar } = state.data.user_id;
 
-  return { name, surname };
+  return { name, surname, avatar };
 };
 
 export default connect(mapStateToProps)(SideMenu);

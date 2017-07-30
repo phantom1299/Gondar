@@ -35,9 +35,10 @@ const RouterComponent = () => {
                                     title="İş Teklifleri"
                                 />
                                 <Scene
-                                    key="isDetayları"
+                                    key="isDetaylari"
                                     component={IsDetaylari}
                                     title="İş Detayları"
+                                    back
                                 />
                                 <Scene
                                     key="yeniKisiEkle"
