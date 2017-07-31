@@ -1,7 +1,8 @@
 {
     "user_id": {
+        "avatar": "https://facebook.github.io/react/img/logo_og.png",
         "name": "Çapatay",
-        "surname": "",
+        "surname": "Çiftçi",
         "balance": -0.00,
         "participated_missions": [
             {

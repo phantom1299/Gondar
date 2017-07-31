@@ -6,6 +6,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { Icon } from 'react-native-elements';
 import { Card, CardSection } from '../common';
 
 class IsTeklifleriItem extends Component {
@@ -29,8 +30,10 @@ class IsTeklifleriItem extends Component {
               <View style={{ flex: 3 }}>
                 <Text style={nameStyle}>{name}</Text>
               </View>
-              <View style={{ flex: 2 }}>
-                <Text style={budgetStyle}>Bütçe: {budget}₺</Text>
+              <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <Text style={budgetStyle}>Bütçe: </Text>
+                <Text style={{ color: '#000', fontSize: 18 }}>{budget} </Text>
+                <Icon size={16} type="font-awesome" name="try" containerStyle={{ alignSelf: 'flex-start', paddingTop: 2 }} color="#444" />
               </View>
             </View>
             <View>
@@ -58,7 +61,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     padding: 15,
-    backgroundColor: 'rgba(183, 204, 218, 1)'
+    backgroundColor: 'rgba(223, 250, 220, 0.5)'
   },
   nameStyle: {
     fontSize: 22,
@@ -81,8 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   budgetStyle: {
-    fontSize: 20,
-    alignSelf: 'flex-end'
+    fontSize: 18,
   },
   deadlineStyle: {
     fontSize: 18,

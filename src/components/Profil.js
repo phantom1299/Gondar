@@ -3,12 +3,17 @@ import {
   Text,
   View,
 } from 'react-native';
+import { Card, CardSection } from './common';
 
 class Profil extends Component {
   render() {
     return (
       <View>
-        <Text>Profil</Text>
+        <Card>
+          <CardSection>
+            <Text>Merhaba</Text>
+          </CardSection>
+        </Card>
       </View>
     );
   }

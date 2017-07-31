@@ -1,10 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import firebase from 'firebase';
-import { StyleSheet, View, Text, Image, ViewPropTypes } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  ViewPropTypes,
+  Keyboard,
+  TouchableOpacity
+} from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import Button from 'react-native-button';
+import { Icon, Button } from 'react-native-elements';
 import { CardSection } from '../src/components/common';
+
+let pressed = false;
 
 class SideMenu extends Component {
   constructor() {
@@ -18,95 +28,154 @@ class SideMenu extends Component {
     this.onAuth = this.onAuth.bind(this);
   }
 
-  // componentDidMount() { Actions.refresh({ key: 'drawer', ref: this.refs.navigation }); }
+  componentDidUpdate() {
+    setTimeout(() => { pressed = false; }, 500);
+  }
 
   onProfil() {
-    Actions.profil();
+    if (!pressed) {
+      pressed = true;
+      Actions.profil();
+    }
   }
+
   onAnasayfa() {
-    Actions.anasayfa();
+    if (!pressed) {
+      pressed = true;
+      Actions.anaSayfa();
+    }
   }
+
   onIsTeklifleri() {
-    Actions.isTeklifleri();
+    if (!pressed) {
+      pressed = true;
+      Actions.isTeklifleri();
+    }
   }
+
   onYeniKisiEkle() {
-    Actions.yeniKisiEkle();
+    if (!pressed) {
+      pressed = true;
+      Actions.yeniKisiEkle();
+    }
   }
+
   onYeniIsEkle() {
-    Actions.yeniIsEkle();
+    if (!pressed) {
+      pressed = true;
+      Actions.yeniIsEkle();
+    }
   }
+
   onAyarlar() {
-    Actions.ayarlar();
+    if (!pressed) {
+      pressed = true;
+      Actions.ayarlar();
+    }
   }
+
   onAuth() {
-    firebase.auth().signOut()
-      .then(() => {
-        Actions.auth();
-      });
+    if (!pressed) {
+      firebase.auth().signOut()
+        .then(() => {
+          pressed = true;
+          Actions.auth();
+        });
+    }
   }
 
   render() {
     return (
       <View style={[styles.viewContainer, this.props.sceneStyle]}>
-        <CardSection style={{ flexDirection: 'column', paddingBottom: 10 }}>
-          <View style={{ flexDirection: 'row', paddingLeft: 10, paddingTop: 10 }}>
-            <Button
-              containerStyle={styles.profilButtonContainer}
-              style={styles.name}
+        <CardSection style={{ paddingBottom: 0 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <TouchableOpacity
+              style={styles.profilButtonContainer}
               onPress={this.onProfil}
             >
-              <Image
-                style={{ width: 55, height: 55 }}
-                source={{ uri: this.props.avatar }}
-              />
+              <View style={{ justifyContent: 'center' }} >
+                <Image
+                  style={{ width: 55, height: 55 }}
+                  source={{ uri: this.props.avatar }}
+                />
+              </View>
               <View style={{ justifyContent: 'center', paddingLeft: 10 }} >
                 <Text style={styles.name}>{this.props.name} {this.props.surname}</Text>
                 <Text style={{ color: '#aaa' }}>Graphic Designer</Text>
               </View>
-              <View>
-                <Button
-                  containerStyle={styles.logOutButtonContainer}
-                  style={styles.logOutButtonText}
+              <View style={{ justifyContent: 'center', padding: 5 }}>
+                <Icon
+                  component={TouchableOpacity}
+                  iconStyle={styles.logOutIconStyle}
+                  name='sign-out'
+                  type='font-awesome'
+                  color='#f50'
                   onPress={this.onAuth}
-                >Çıkış Yap</Button>
+                />
               </View>
-            </Button>
+            </TouchableOpacity>
           </View>
         </CardSection>
 
-        <CardSection style={{ flexDirection: 'column', padding: 15 }}>
+        <CardSection style={{ flexDirection: 'column', margin: 10, padding: 15, borderBottomWidth: 1, borderColor: '#222' }}>
           <Button
-            containerStyle={styles.container}
-            style={styles.textStyle}
+            Component={TouchableOpacity}
+            icon={{ name: 'home', type: 'font-awesome', color: '#999', size: 28 }}
+            title='Ana Sayfa'
+            textStyle={styles.textStyle}
+            backgroundColor="transparent"
+            color="#555"
+            buttonStyle={styles.buttonStyle}
+            containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onAnasayfa}
-          >Ana Sayfa</Button>
+          />
           <Button
-            containerStyle={styles.container}
-            style={styles.textStyle}
+            Component={TouchableOpacity}
+            icon={{ name: 'calendar-o', type: 'font-awesome', color: '#999', size: 28 }}
+            title='İş Teklifleri'
+            textStyle={styles.textStyle}
+            backgroundColor="transparent"
+            color="#555"
+            buttonStyle={styles.buttonStyle}
+            containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onIsTeklifleri}
-          >İş Teklifleri</Button>
+          />
           <Button
-            containerStyle={styles.container}
-            style={styles.textStyle}
+            Component={TouchableOpacity}
+            icon={{ name: 'user-plus', type: 'font-awesome', color: '#999', size: 28 }}
+            title='Yeni Kişi'
+            textStyle={styles.textStyle}
+            backgroundColor="transparent"
+            color="#555"
+            buttonStyle={styles.buttonStyle}
+            containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onYeniKisiEkle}
-          >Kişi Ekle</Button>
+          />
           <Button
-            containerStyle={styles.container}
-            style={styles.textStyle}
+            Component={TouchableOpacity}
+            icon={{ name: 'calendar-plus-o', type: 'font-awesome', color: '#999', size: 28 }}
+            title='Yeni İş Teklifi'
+            textStyle={styles.textStyle}
+            backgroundColor="transparent"
+            color="#555"
+            buttonStyle={styles.buttonStyle}
+            containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onYeniIsEkle}
-          >İş Teklifi Ekle</Button>
+          />
         </CardSection>
 
-        <CardSection style={{ flexDirection: 'column', borderBottomWidth: 0, padding: 15 }}>
+        <CardSection style={{ flexDirection: 'column', margin: 10, padding: 15, paddingTop: 0 }}>
           <Button
-            containerStyle={styles.container}
-            style={styles.textStyle}
+            Component={TouchableOpacity}
+            icon={{ name: 'gear', type: 'font-awesome', color: '#999', size: 28 }}
+            title='Ayarlar'
+            textStyle={styles.textStyle}
+            backgroundColor="transparent"
+            color="#555"
+            buttonStyle={styles.buttonStyle}
+            containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onAyarlar}
-          >Ayarlar</Button>
-          {/* <Button
-            containerStyle={styles.container}
-            style={styles.textStyle}
-          >Log</Button> */}
+          />
         </CardSection>
       </View>
     );
@@ -126,21 +195,18 @@ const propTypes = {
 const styles = StyleSheet.create({
   viewContainer: {
     flex: 1,
-    backgroundColor: '#ddd'
+    backgroundColor: '#333'
   },
   profilButtonContainer: {
     paddingLeft: 15,
     paddingTop: 5,
     overflow: 'hidden',
     alignSelf: 'center',
+    flexDirection: 'row'
   },
-  logOutButtonContainer: {
-    paddingLeft: 15,
-    bottom: 15
-  },
-  logOutButtonText: {
-    fontSize: 16,
-    color: 'blue',
+  logOutIconStyle: {
+    padding: 20,
+    alignSelf: 'center'
   },
   container: {
     paddingLeft: 20,
@@ -150,19 +216,16 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   textStyle: {
-    fontSize: 18,
-    color: '#555',
-  },
-  nameContainer: {
-    padding: 15,
-    height: 45,
-    overflow: 'hidden',
-    alignSelf: 'flex-start',
+    fontSize: 20,
+    color: '#888',
   },
   name: {
     fontSize: 22,
     color: '#555',
     fontWeight: '400',
+  },
+  buttonStyle: {
+    alignSelf: 'flex-start',
   }
 });
 
