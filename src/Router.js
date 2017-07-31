@@ -17,7 +17,7 @@ const RouterComponent = () => {
             <Scene overlay>
                 <Scene key="messageBar" component={MessageBar} />
                 <Scene key="lightbox" lightbox leftButtonTextStyle={{ color: 'green' }} backButtonTextStyle={{ color: 'red' }} initial>
-                    <Scene key="modal" modal hideNavBar>
+                    <Scene key="modal" reset hideNavBar>
                         <Scene key="auth" initial>
                             <Scene key="login" component={LoginForm} title="Lütfen Giriş Yapın" titleStyle={{ textAlign: 'center' }} />
                         </Scene>

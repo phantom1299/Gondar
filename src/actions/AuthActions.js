@@ -1,5 +1,4 @@
 import firebase from 'firebase';
-import { MessageBarAlert, MessageBarManager } from 'react-native-message-bar';
 import { Actions } from 'react-native-router-flux';
 import {
     EMAIL_CHANGED,
@@ -47,12 +46,4 @@ const loginUserSuccess = (dispatch, user) => {
     });
 
     Actions.main();
-    MessageBarManager.showAlert({
-        title: 'Kullanıcı Adı',
-        message: 'Hoşgeldiniz.',
-        alertType: 'info',
-        duration: 2000,
-        avatar: 'https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png',
-        stylesheetInfo: { backgroundColor: 'rgba(0, 123, 255, 0.8)' }
-    });
 };

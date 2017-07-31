@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ListView, Keyboard } from 'react-native';
+import { ListView } from 'react-native';
 import ListItem from './IsTeklifleriItem';
 
 class IsTeklifleri extends Component {
@@ -10,11 +10,6 @@ class IsTeklifleri extends Component {
     });
 
     this.DataSource = ds.cloneWithRows(this.props.missions);
-    this.onMenu = this.props.onLeft;
-    this.props.onLeft = () => {
-      Keyboard.dismisss();
-      this.onMenu();
-    };
   }
 
   renderRow(mission) {
@@ -22,7 +17,6 @@ class IsTeklifleri extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <ListView
         dataSource={this.DataSource}
