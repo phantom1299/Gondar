@@ -6,7 +6,6 @@ import {
   Text,
   Image,
   ViewPropTypes,
-  Keyboard,
   TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -27,9 +26,11 @@ class SideMenu extends Component {
     this.onAyarlar = this.onAyarlar.bind(this);
     this.onAuth = this.onAuth.bind(this);
   }
-
+  //TODO
   componentDidUpdate() {
-    setTimeout(() => { pressed = false; }, 500);
+    setTimeout(() => {
+      pressed = false;
+    }, 500);
   }
 
   onProfil() {
@@ -76,11 +77,10 @@ class SideMenu extends Component {
 
   onAuth() {
     if (!pressed) {
-      firebase.auth().signOut()
-        .then(() => {
-          pressed = true;
-          Actions.auth();
-        });
+      firebase.auth().signOut().then(() => {
+        pressed = true;
+        Actions.auth({ type: 'reset' });
+      });
     }
   }
 
@@ -88,90 +88,134 @@ class SideMenu extends Component {
     return (
       <View style={[styles.viewContainer, this.props.sceneStyle]}>
         <CardSection style={{ paddingBottom: 0 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-around' }}
+          >
             <TouchableOpacity
               style={styles.profilButtonContainer}
               onPress={this.onProfil}
             >
-              <View style={{ justifyContent: 'center' }} >
+              <View style={{ justifyContent: 'center' }}>
                 <Image
                   style={{ width: 55, height: 55 }}
                   source={{ uri: this.props.avatar }}
                 />
               </View>
-              <View style={{ justifyContent: 'center', paddingLeft: 10 }} >
-                <Text style={styles.name}>{this.props.name} {this.props.surname}</Text>
+              <View style={{ justifyContent: 'center', paddingLeft: 10 }}>
+                <Text style={styles.name}>
+                  {this.props.name} {this.props.surname}
+                </Text>
                 <Text style={{ color: '#aaa' }}>Graphic Designer</Text>
               </View>
-              <View style={{ justifyContent: 'center', padding: 5 }}>
-                <Icon
-                  component={TouchableOpacity}
-                  iconStyle={styles.logOutIconStyle}
-                  name='sign-out'
-                  type='font-awesome'
-                  color='#f50'
-                  onPress={this.onAuth}
-                />
-              </View>
             </TouchableOpacity>
+            <View style={{ justifyContent: 'center', padding: 5 }}>
+              <Icon
+                component={TouchableOpacity}
+                iconStyle={styles.logOutIconStyle}
+                name='sign-out'
+                type='font-awesome'
+                color='#f50'
+                onPress={this.onAuth}
+              />
+            </View>
           </View>
         </CardSection>
 
-        <CardSection style={{ flexDirection: 'column', margin: 10, padding: 15, borderBottomWidth: 1, borderColor: '#222' }}>
+        <CardSection
+          style={{
+            flexDirection: 'column',
+            margin: 10,
+            padding: 15,
+            borderBottomWidth: 1,
+            borderColor: '#222'
+          }}
+        >
           <Button
             Component={TouchableOpacity}
-            icon={{ name: 'home', type: 'font-awesome', color: '#999', size: 28 }}
+            icon={{
+              name: 'home',
+              type: 'font-awesome',
+              color: iconColor,
+              size: 28
+            }}
             title='Ana Sayfa'
             textStyle={styles.textStyle}
-            backgroundColor="transparent"
-            color="#555"
+            backgroundColor='transparent'
+            color='#555'
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onAnasayfa}
           />
           <Button
             Component={TouchableOpacity}
-            icon={{ name: 'calendar-o', type: 'font-awesome', color: '#999', size: 28 }}
+            icon={{
+              name: 'calendar-o',
+              type: 'font-awesome',
+              color: iconColor,
+              size: 28
+            }}
             title='İş Teklifleri'
             textStyle={styles.textStyle}
-            backgroundColor="transparent"
-            color="#555"
+            backgroundColor='transparent'
+            color='#555'
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onIsTeklifleri}
           />
           <Button
             Component={TouchableOpacity}
-            icon={{ name: 'user-plus', type: 'font-awesome', color: '#999', size: 28 }}
+            icon={{
+              name: 'user-plus',
+              type: 'font-awesome',
+              color: iconColor,
+              size: 28
+            }}
             title='Yeni Kişi'
             textStyle={styles.textStyle}
-            backgroundColor="transparent"
-            color="#555"
+            backgroundColor='transparent'
+            color='#555'
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onYeniKisiEkle}
           />
           <Button
             Component={TouchableOpacity}
-            icon={{ name: 'calendar-plus-o', type: 'font-awesome', color: '#999', size: 28 }}
+            icon={{
+              name: 'calendar-plus-o',
+              type: 'font-awesome',
+              color: iconColor,
+              size: 28
+            }}
             title='Yeni İş Teklifi'
             textStyle={styles.textStyle}
-            backgroundColor="transparent"
-            color="#555"
+            backgroundColor='transparent'
+            color='#555'
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onYeniIsEkle}
           />
         </CardSection>
 
-        <CardSection style={{ flexDirection: 'column', margin: 10, padding: 15, paddingTop: 0 }}>
+        <CardSection
+          style={{
+            flexDirection: 'column',
+            margin: 10,
+            padding: 15,
+            paddingTop: 0
+          }}
+        >
           <Button
             Component={TouchableOpacity}
-            icon={{ name: 'gear', type: 'font-awesome', color: '#999', size: 28 }}
+            icon={{
+              name: 'gear',
+              type: 'font-awesome',
+              color: iconColor,
+              size: 28
+            }}
             title='Ayarlar'
             textStyle={styles.textStyle}
-            backgroundColor="transparent"
-            color="#555"
+            backgroundColor='transparent'
+            color='#555'
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onAyarlar}
@@ -182,20 +226,22 @@ class SideMenu extends Component {
   }
 }
 
+const iconColor = '#555';
+
 const contextTypes = {
-  drawer: React.PropTypes.object,
+  drawer: React.PropTypes.object
 };
 
 const propTypes = {
   name: PropTypes.string,
   sceneStyle: ViewPropTypes.style,
-  title: PropTypes.string,
+  title: PropTypes.string
 };
 
 const styles = StyleSheet.create({
   viewContainer: {
     flex: 1,
-    backgroundColor: '#333'
+    backgroundColor: '#ddd'
   },
   profilButtonContainer: {
     paddingLeft: 15,
@@ -213,19 +259,19 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     overflow: 'hidden',
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-start'
   },
   textStyle: {
     fontSize: 20,
-    color: '#888',
+    color: '#888'
   },
   name: {
     fontSize: 22,
-    color: '#555',
-    fontWeight: '400',
+    color: '#666',
+    fontWeight: '600'
   },
   buttonStyle: {
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-start'
   }
 });
 

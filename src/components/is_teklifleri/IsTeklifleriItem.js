@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity
-} from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import { Icon } from 'react-native-elements';
-import { Card, CardSection } from '../common';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Actions, ActionConst } from 'react-native-router-flux';
+import { Icon, Card } from 'react-native-elements';
 
 class IsTeklifleriItem extends Component {
   constructor() {
@@ -16,41 +10,96 @@ class IsTeklifleriItem extends Component {
   }
 
   onPress() {
-    Actions.isDetaylari();
+    Actions.isDetaylari({ ...this.props, title: this.props.mission.baslik });
   }
-  
+
   render() {
-    const { name, budget, description, tags, deadline } = this.props.mission;
-    const { container, nameStyle, descriptionStyle, tagStyle, budgetStyle, deadlineStyle } = styles;
+    const {
+      baslik,
+      butce,
+      detay,
+      tags,
+      deadline,
+      isVeren
+    } = this.props.mission;
+    const {
+      container,
+      isVerenStyle,
+      baslikStyle,
+      detayStyle,
+      tagStyle,
+      butceStyle,
+      deadlineStyle
+    } = styles;
     return (
       <TouchableOpacity onPress={this.onPress}>
         <Card>
-          <CardSection style={container}>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flex: 3 }}>
-                <Text style={nameStyle}>{name}</Text>
-              </View>
-              <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end' }}>
-                <Text style={budgetStyle}>Bütçe: </Text>
-                <Text style={{ color: '#000', fontSize: 18 }}>{budget} </Text>
-                <Icon size={16} type="font-awesome" name="try" containerStyle={{ alignSelf: 'flex-start', paddingTop: 2 }} color="#444" />
-              </View>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flex: 5, justifyContent: 'flex-end' }}>
+              <Text style={baslikStyle}>
+                {baslik}
+              </Text>
             </View>
-            <View>
+            <View
+              style={{
+                flex: 3,
+                flexDirection: 'column',
+                justifyContent: 'flex-start'
+              }}
+            >
               <Text
-                style={descriptionStyle}
-                numberOfLines={3}
-              >{description}</Text>
+                style={{
+                  textDecorationLine: 'underline',
+                  fontSize: 16,
+                  alignSelf: 'flex-end'
+                }}
+              >
+                Son Teslim Tarihi:
+              </Text>
+              <Text style={deadlineStyle}>
+                {deadline}
+              </Text>
             </View>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flex: 1 }}>
-                <Text numberOfLines={2} style={tagStyle}>{tags}</Text>
-              </View>
-              <View style={{ flex: 2, justifyContent: 'flex-end' }}>
-                <Text style={deadlineStyle}>Deadline: {deadline}</Text>
-              </View>
+          </View>
+          <View>
+            <Text style={detayStyle} numberOfLines={3}>
+              {detay}
+            </Text>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flex: 3, flexWrap: 'wrap' }}>
+              <Text numberOfLines={2} style={tagStyle}>
+                {tags.map((tag, i) => {
+                  return (
+                    <Text key={i}>
+                      #{tag}{' '}
+                    </Text>
+                  );
+                })}
+              </Text>
             </View>
-          </CardSection>
+            <View
+              style={{
+                flex: 2,
+                justifyContent: 'flex-end',
+                flexDirection: 'row'
+              }}
+            >
+              <Text style={butceStyle}>Bütçe: </Text>
+              <Text
+                style={{ color: '#000', fontSize: 18, alignSelf: 'flex-end' }}
+              >
+                {butce}{' '}
+              </Text>
+              <Icon
+                size={16}
+                type="font-awesome"
+                name="try"
+                containerStyle={{ alignSelf: 'flex-end', paddingBottom: 2 }}
+                color="#444"
+              />
+            </View>
+          </View>
         </Card>
       </TouchableOpacity>
     );
@@ -63,33 +112,32 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: 'rgba(223, 250, 220, 0.5)'
   },
-  nameStyle: {
-    fontSize: 22,
-    paddingBottom: 1,
-    paddingLeft: 25,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+  baslikStyle: {
+    fontSize: 19,
+    color: '#000',
     marginBottom: 10,
+    marginLeft: 10
   },
-  descriptionStyle: {
+  detayStyle: {
     fontSize: 18,
     lineHeight: 18,
     paddingBottom: 20,
     paddingTop: 0,
-    paddingLeft: 5,
-
+    paddingLeft: 5
   },
   tagStyle: {
     color: 'blue',
-    fontSize: 12
+    fontSize: 16
   },
-  budgetStyle: {
-    fontSize: 18,
-  },
-  deadlineStyle: {
+  butceStyle: {
     fontSize: 18,
     alignSelf: 'flex-end'
   },
+  deadlineStyle: {
+    color: '#000',
+    fontSize: 16,
+    alignSelf: 'flex-end'
+  }
 });
 
 export default IsTeklifleriItem;

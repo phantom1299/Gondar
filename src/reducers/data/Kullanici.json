@@ -1,0 +1,12 @@
+{
+  "kullanici": {
+    "tcKimlikNo": "59653468490",
+    "profilFotografiUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
+    "isim": "Berat Karas",
+    "unvan": "Yönetici",
+    "email": "berat.karas@gmail.com",
+    "telefon": "589 923 5656",
+    "adres": "Cihangir mah. Bozdağ sok. Avcılar İstanbul",
+    "tags": ["yönetici", "iş veren"]
+  }
+}
