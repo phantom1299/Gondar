@@ -1,16 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import firebase from 'firebase';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  ViewPropTypes,
-  TouchableOpacity
-} from 'react-native';
+import { StyleSheet, View, Text, ViewPropTypes, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { Icon, Button } from 'react-native-elements';
+import { Icon, Button, Avatar } from 'react-native-elements';
 import { CardSection } from '../src/components/common';
 
 let pressed = false;
@@ -36,42 +29,42 @@ class SideMenu extends Component {
   onProfil() {
     if (!pressed) {
       pressed = true;
-      Actions.profil();
+      Actions.profil({ type: 'replace' });
     }
   }
 
   onAnasayfa() {
     if (!pressed) {
       pressed = true;
-      Actions.anaSayfa();
+      Actions.anaSayfa({ type: 'replace' });
     }
   }
 
   onIsTeklifleri() {
     if (!pressed) {
       pressed = true;
-      Actions.isTeklifleri();
+      Actions.isTeklifleri({ type: 'replace' });
     }
   }
 
   onYeniKisiEkle() {
     if (!pressed) {
       pressed = true;
-      Actions.yeniKisiEkle();
+      Actions.yeniKisiEkle({ type: 'replace' });
     }
   }
 
   onYeniIsEkle() {
     if (!pressed) {
       pressed = true;
-      Actions.yeniIsEkle();
+      Actions.yeniIsEkle({ type: 'replace' });
     }
   }
 
   onAyarlar() {
     if (!pressed) {
       pressed = true;
-      Actions.ayarlar();
+      Actions.ayarlar({ type: 'replace' });
     }
   }
 
@@ -85,36 +78,36 @@ class SideMenu extends Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <View style={[styles.viewContainer, this.props.sceneStyle]}>
         <CardSection style={{ paddingBottom: 0 }}>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-around' }}
-          >
-            <TouchableOpacity
-              style={styles.profilButtonContainer}
-              onPress={this.onProfil}
-            >
+          <View style={{ flexDirection: 'row', marginTop: 20 }}>
+            <TouchableOpacity style={styles.profilButtonContainer} onPress={this.onProfil}>
               <View style={{ justifyContent: 'center' }}>
-                <Image
-                  style={{ width: 55, height: 55 }}
-                  source={{ uri: this.props.avatar }}
+                <Avatar
+                  source={{ uri: this.props.profilFotografiUrl }}
+                  overlayContainerStyle={{ width: 70, height: 70, borderRadius: 35 }}
+                  containerStyle={{ width: 70, height: 70, borderRadius: 35 }}
+                  avatarStyle={{ width: 70, height: 70, borderRadius: 35 }}
                 />
               </View>
               <View style={{ justifyContent: 'center', paddingLeft: 10 }}>
                 <Text style={styles.name}>
-                  {this.props.name} {this.props.surname}
+                  {this.props.isim}
                 </Text>
-                <Text style={{ color: '#aaa' }}>Graphic Designer</Text>
+                <Text style={{ color: '#aaa' }}>
+                  {this.props.unvan}
+                </Text>
               </View>
             </TouchableOpacity>
             <View style={{ justifyContent: 'center', padding: 5 }}>
               <Icon
                 component={TouchableOpacity}
                 iconStyle={styles.logOutIconStyle}
-                name='sign-out'
-                type='font-awesome'
-                color='#f50'
+                name="sign-out"
+                type="font-awesome"
+                color="#f50"
                 onPress={this.onAuth}
               />
             </View>
@@ -125,6 +118,7 @@ class SideMenu extends Component {
           style={{
             flexDirection: 'column',
             margin: 10,
+            marginTop: 0,
             padding: 15,
             borderBottomWidth: 1,
             borderColor: '#222'
@@ -138,10 +132,10 @@ class SideMenu extends Component {
               color: iconColor,
               size: 28
             }}
-            title='Ana Sayfa'
+            title="Ana Sayfa"
             textStyle={styles.textStyle}
-            backgroundColor='transparent'
-            color='#555'
+            backgroundColor="transparent"
+            color="#555"
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onAnasayfa}
@@ -154,10 +148,10 @@ class SideMenu extends Component {
               color: iconColor,
               size: 28
             }}
-            title='İş Teklifleri'
+            title="İş Teklifleri"
             textStyle={styles.textStyle}
-            backgroundColor='transparent'
-            color='#555'
+            backgroundColor="transparent"
+            color="#555"
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onIsTeklifleri}
@@ -170,10 +164,10 @@ class SideMenu extends Component {
               color: iconColor,
               size: 28
             }}
-            title='Yeni Kişi'
+            title="Yeni Kişi"
             textStyle={styles.textStyle}
-            backgroundColor='transparent'
-            color='#555'
+            backgroundColor="transparent"
+            color="#555"
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onYeniKisiEkle}
@@ -186,10 +180,10 @@ class SideMenu extends Component {
               color: iconColor,
               size: 28
             }}
-            title='Yeni İş Teklifi'
+            title="Yeni İş Teklifi"
             textStyle={styles.textStyle}
-            backgroundColor='transparent'
-            color='#555'
+            backgroundColor="transparent"
+            color="#555"
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onYeniIsEkle}
@@ -212,10 +206,10 @@ class SideMenu extends Component {
               color: iconColor,
               size: 28
             }}
-            title='Ayarlar'
+            title="Ayarlar"
             textStyle={styles.textStyle}
-            backgroundColor='transparent'
-            color='#555'
+            backgroundColor="transparent"
+            color="#555"
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
             onPress={this.onAyarlar}
@@ -279,9 +273,9 @@ SideMenu.contextTypes = contextTypes;
 SideMenu.propTypes = propTypes;
 
 const mapStateToProps = state => {
-  const { name, surname, avatar } = state.data.user_id;
+  const { isim, unvan, profilFotografiUrl } = state.user.kullanici;
 
-  return { name, surname, avatar };
+  return { isim, unvan, profilFotografiUrl };
 };
 
 export default connect(mapStateToProps)(SideMenu);
