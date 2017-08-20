@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView } from 'react-native';
-import { Card, ListItem, FormLabel, FormInput, Avatar, Divider } from 'react-native-elements';
+import { View, Text, StyleSheet } from 'react-native';
+import { Card, ListItem, FormLabel, FormInput, Avatar } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 class Profil extends Component {
@@ -9,8 +9,7 @@ class Profil extends Component {
     super();
     this.onEditContact = this.onEditContact.bind(this);
     this.state = {
-      text2: 'Cihangir mah. Bozdağ sok. No 3 Daire 8 Avcılar İstanbul',
-      height2: 0,
+      height: 0,
       editable: false
     };
   }
@@ -53,15 +52,22 @@ class Profil extends Component {
         extraScrollHeight={100}
         enableOnAndroid
       >
-        <Card style={{ padding: 0 }}>
+        <Card
+          style={{
+            padding: 0,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 3 },
+            shadowOpacity: 0.5,
+            elevation: 1
+          }}
+        >
           <View
-            style={{
+            style={{ 
               flexDirection: 'row',
               padding: 20,
               paddingBottom: 40,
               paddingTop: 40,
-              backgroundColor: '#5a5a',
-              elevation: 2
+              backgroundColor: '#5a5a'
             }}
           >
             <View style={{ marginRight: 20, flex: 1, alignSelf: 'center' }}>
@@ -114,7 +120,11 @@ class Profil extends Component {
             <ListItem
               title="İletişim Bilgileriniz"
               titleStyle={{ fontSize: 20 }}
-              rightIcon={{ name: this.state.editable ? 'done' : 'mode-edit' }}
+              rightIcon={
+                this.state.editable
+                  ? { name: 'check-circle', color: '#0a0' }
+                  : { name: 'mode-edit', color: '#000' }
+              }
               onPressRightIcon={this.onEditContact}
             />
             <View>
@@ -180,9 +190,9 @@ class Profil extends Component {
                     this.setState({ text2 });
                   }}
                   onContentSizeChange={event => {
-                    this.setState({ height2: event.nativeEvent.contentSize.height });
+                    this.setState({ height: event.nativeEvent.contentSize.height });
                   }}
-                  style={[{ marginTop: 4 }, { height: Math.max(10, this.state.height2) }]}
+                  style={[{ marginTop: 4 }, { height: Math.max(10, this.state.height) }]}
                 />
               </View>
             </View>

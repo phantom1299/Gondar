@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Text, Keyboard, Image, StyleSheet, View } from 'react-native';
+import { Text, Keyboard, Image, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
-import { Card, CardSection, Input, Button, Spinner } from './common';
+import { Card, CardSection, Input, Spinner } from './common';
 
 class LoginForm extends Component {
   constructor() {
@@ -37,51 +38,69 @@ class LoginForm extends Component {
 
     return (
       <Button
-        textStyle={{
-          color: '#fff',
-          fontSize: 16,
-          fontWeight: '600'
+        Component={TouchableOpacity}
+        iconRight
+        icon={{
+          name: 'sign-in',
+          type: 'font-awesome',
+          size: 28
         }}
-        buttonStyle={{
-          backgroundColor: '#007bff',
-          borderRadius: 5,
-          borderWidth: 0
-        }}
+        title="Giriş Yap"
+        textStyle={styles.textStyle}
+        backgroundColor="#5af"
+        buttonStyle={styles.buttonStyle}
+        containerViewStyle={{ marginLeft: 0, alignSelf: 'center', flex: 1, marginRight: 0 }}
         onPress={this.onButtonPress}
-      >
-        Giriş Yap
-      </Button>
+      />
     );
   }
-
+  // <Image
+  //   source={{
+  //     uri:
+  //       'https://s-media-cache-ak0.pinimg.com/originals/f0/00/4d/f0004d555447885c1d24e89afe58ad6e.jpg'
+  //   }}
+  //   style={styles.backgroundImage}
+  // >
   render() {
     return (
-      <Card style={{}}>
-        <CardSection>
-          <Input
-            label='Email'
-            placeholder='user@example.com'
-            onChangeText={this.onEmailChange}
-            value={this.props.email}
+      <View>
+        <View style={{ justifyContent: 'center', padding: 10 }}>
+          <Image
+            source={require('./../../img/picturetopeople.org-9dc41589dd48d7450e4615abb9c928fcf1d754a0abecc5bd42.png')}
+            style={{ width: 300, resizeMode: 'contain', alignSelf: 'center' }}
           />
-        </CardSection>
+          <CardSection
+            style={{ backgroundColor: '#aaa', opacity: 0.8, borderRadius: 8, marginBottom: 1 }}
+          >
+            <Input
+              label="Email"
+              labelStyle={{ color: '#fff' }}
+              inputStyle={{ color: '#fff' }}
+              placeholder="user@example.com"
+              onChangeText={this.onEmailChange}
+              value={this.props.email}
+            />
+          </CardSection>
 
-        <CardSection>
-          <Input
-            secureTextEntry
-            label='Sifre'
-            placeholder='password'
-            onChangeText={this.onPasswordChange}
-            value={this.props.password}
-          />
-        </CardSection>
-        <Text style={styles.errosTextStyle}>
-          {this.props.error}
-        </Text>
-        <CardSection>
-          {this.renderButton()}
-        </CardSection>
-      </Card>
+          <CardSection style={{ backgroundColor: '#aaa', opacity: 0.8, borderRadius: 8 }}>
+            <Input
+              secureTextEntry
+              label="Sifre"
+              labelStyle={{ color: '#fff' }}
+              inputStyle={{ color: '#fff' }}
+              placeholder="password"
+              onChangeText={this.onPasswordChange}
+              value={this.props.password}
+            />
+          </CardSection>
+          <Text style={styles.errosTextStyle}>
+            {this.props.error}
+          </Text>
+          <CardSection style={{ padding: 0 }}>
+            {this.renderButton()}
+          </CardSection>
+        </View>
+      </View>
     );
   }
 }
@@ -91,6 +110,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: 'center',
     color: 'red'
+  },
+  buttonStyle: {},
+  textStyle: {
+    fontSize: 18,
+    marginRight: 10
+  },
+  backgroundImage: {
+    backgroundColor: '#ccc',
+    flex: 1,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center'
   }
 });
 
