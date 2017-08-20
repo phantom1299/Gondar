@@ -17,7 +17,7 @@ class SideMenu extends Component {
     this.onYeniKisiEkle = this.onYeniKisiEkle.bind(this);
     this.onYeniIsEkle = this.onYeniIsEkle.bind(this);
     this.onAyarlar = this.onAyarlar.bind(this);
-    this.onAuth = this.onAuth.bind(this);
+    this.onLogout = this.onLogout.bind(this);
   }
   //TODO
   componentDidUpdate() {
@@ -68,17 +68,14 @@ class SideMenu extends Component {
     }
   }
 
-  onAuth() {
+  onLogout() {
     if (!pressed) {
-      firebase.auth().signOut().then(() => {
-        pressed = true;
-        Actions.auth({ type: 'reset' });
-      });
+      pressed = true;
+      Actions.auth({ type: 'reset' });
     }
   }
 
   render() {
-    console.log(this.props);
     return (
       <View style={[styles.viewContainer, this.props.sceneStyle]}>
         <CardSection style={{ paddingBottom: 0 }}>
@@ -108,7 +105,7 @@ class SideMenu extends Component {
                 name="sign-out"
                 type="font-awesome"
                 color="#f50"
-                onPress={this.onAuth}
+                onPress={this.onLogout}
               />
             </View>
           </View>
