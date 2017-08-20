@@ -186,8 +186,8 @@ class Profil extends Component {
                   editable={this.state.editable}
                   multiline
                   value={adres}
-                  onChangeText={text2 => {
-                    this.setState({ text2 });
+                  onChangeText={text => {
+                    this.setState({ text });
                   }}
                   onContentSizeChange={event => {
                     this.setState({ height: event.nativeEvent.contentSize.height });
