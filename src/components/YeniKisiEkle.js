@@ -1,22 +1,34 @@
 import React, { Component } from 'react';
-import { Text, Keyboard } from 'react-native';
+import { Text, View, Keyboard, StyleSheet, TouchableOpacity } from 'react-native';
+import { Card, Button, FormLabel, FormInput, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import {
   newUserAdd,
   newUserNameChanged,
   newUserEmailChanged,
   newUserPasswordChanged,
-  newUserPassword2Changed,
   newUserFormWillMount
 } from '../actions';
-import { Card, CardSection, Input, Button, Spinner } from './common';
+import { CardSection, Input, Spinner } from './common';
 
 class KisiEkle extends Component {
-  componentWillMount() {
-    this.props.newUserFormWillMount();
+  constructor() {
+    super();
+    this.onNameChange = this.onNameChange.bind(this);
+    this.onEmailChange = this.onEmailChange.bind(this);
+    this.onPasswordChange = this.onPasswordChange.bind(this);
+    this.onTagChange = this.onTagChange.bind(this);
+    this.onTagAdd = this.onTagAdd.bind(this);
+    this.onTagDelete = this.onTagDelete.bind(this);
+    this.onButtonPress = this.onButtonPress.bind(this);
+    this.renderTags = this.renderTags.bind(this);
+    this.state = { tag: '' };
   }
 
-  componentWillUnmount() {
+  componentWillMount() {
+    this.props.newUserFormWillMount();
     Keyboard.dismiss();
   }
 
@@ -32,14 +44,57 @@ class KisiEkle extends Component {
     this.props.newUserPasswordChanged(sifre);
   }
 
-  onPassword2Change(sifre2) {
-    this.props.newUserPassword2Changed(sifre2);
+  onTagChange(tag) {
+    this.setState({ tag });
+  }
+
+  onTagAdd() {
+    Keyboard.dismiss();
+    if (this.state.tag !== '') {
+      this.props.tags.push(this.state.tag);
+    }
+    this.setState({ tag: '' });
+  }
+
+  onTagDelete(i) {
+    this.props.tags.splice(i, 1);
+    this.forceUpdate();
   }
 
   onButtonPress() {
     Keyboard.dismiss();
-    const { isim, email, sifre } = this.props;
-    this.props.newUserAdd({ isim, email, sifre });
+    const { isim, email, sifre, loading, tags } = this.props;
+    this.props.newUserAdd({ isim, email, sifre, tags, loading });
+  }
+
+  renderTags() {
+    return this.props.tags.map((tag, i) => {
+      return (
+        <Card flexDirection={'row'} containerStyle={styles.tagContainerStyle} key={i}>
+          <Text style={styles.tagStyle}>{`#${tag}`}</Text>
+          <Icon
+            Component={TouchableOpacity}
+            name={'clear'}
+            size={20}
+            onPress={this.onTagDelete.bind(this, i)}
+            color={'#222'}
+          />
+        </Card>
+      );
+    });
+  }
+
+  renderError() {
+    if (this.props.error) {
+      return (
+        <View style={styles.errorContainerStyle}>
+          <Icon name={'error'} color={'#D8000C'} />
+          <Text style={styles.errorTextStyle}>
+            {this.props.error}
+          </Text>
+        </View>
+      );
+    }
   }
 
   renderButton() {
@@ -47,52 +102,100 @@ class KisiEkle extends Component {
       return <Spinner />;
     }
 
-    return <Button onPress={this.onButtonPress.bind(this)}>Ekle</Button>;
+    return (
+      <View style={{ flex: 1, marginTop: 20 }}>
+        <Button
+          raised
+          icon={{ name: 'person-add' }}
+          title="EKLE"
+          onPress={this.onButtonPress}
+          backgroundColor={'#397af8'}
+        />
+      </View>
+    );
   }
 
   render() {
+    const { isim, email, sifre } = this.props;
+    const {
+      labelStyle,
+      labelContainerStyle,
+      inputStyle,
+      inputContainerStyle,
+      iconStyle,
+      iconContainerStyle,
+      tagInputStyle
+    } = styles;
     return (
       <Card>
-        <CardSection>
-          <Input
-            label="İsim"
-            placeholder="Kullanıcının ismini giriniz"
-            onChangeText={this.onNameChange.bind(this)}
-            value={this.props.name}
+        <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+          <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
+            İsim
+          </FormLabel>
+          <FormInput
+            inputStyle={inputStyle}
+            containerStyle={inputContainerStyle}
+            ref="form1"
+            containerRef="isimInputContainer"
+            textInputRef="isimInput"
+            onChangeText={this.onNameChange}
+            value={isim}
             autoCapitalize="words"
           />
-        </CardSection>
-
-        <CardSection>
-          <Input
-            secureTextEntry
-            label="Email"
-            placeholder="Kullanıcının Emailini giriniz"
-            onChangeText={this.onEmailChange.bind(this)}
-            value={this.props.email}
+        </View>
+        <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+          <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
+            Email
+          </FormLabel>
+          <FormInput
+            inputStyle={inputStyle}
+            containerStyle={inputContainerStyle}
+            ref="form1"
+            containerRef="emailInputContainer"
+            textInputRef="emailInput"
+            onChangeText={this.onEmailChange}
+            value={email}
             keyboardType="email-address"
           />
-        </CardSection>
-        <CardSection style={{ borderBottomWidth: 0 }}>
-          <Input
+        </View>
+        <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+          <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
+            Şifre
+          </FormLabel>
+          <FormInput
             secureTextEntry
-            label="Şifre"
-            placeholder="Kullanıcının şifresini giriniz"
-            onChangeText={this.onPasswordChange.bind(this)}
-            value={this.props.password}
+            inputStyle={inputStyle}
+            containerStyle={inputContainerStyle}
+            ref="form1"
+            containerRef="sifreInputContainer"
+            textInputRef="sifreInput"
+            value={sifre}
+            onChangeText={this.onPasswordChange}
           />
-        </CardSection>
-        <CardSection>
-          <Input
-            secureTextEntry
-            placeholder="Şifreyi tekrar giriniz"
-            onChangeText={this.onPassword2Change.bind(this)}
-            value={this.props.password2}
+        </View>
+        <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+          <FormLabel labelStyle={labelStyle}>Etiket</FormLabel>
+          <FormInput
+            inputStyle={tagInputStyle}
+            ref="form1"
+            containerRef="tagInputContainer"
+            textInputRef="tagInput"
+            value={this.state.tag}
+            onChangeText={this.onTagChange}
           />
-        </CardSection>
-        <Text style={styles.errosTextStyle}>
-          {this.props.error}
-        </Text>
+          <Icon
+            name={'add-circle'}
+            size={30}
+            color={'#28f'}
+            iconStyle={iconStyle}
+            containerStyle={iconContainerStyle}
+            onPress={this.onTagAdd}
+          />
+        </View>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+          {this.renderTags()}
+        </View>
+        {this.renderError()}
         <CardSection>
           {this.renderButton()}
         </CardSection>
@@ -101,18 +204,72 @@ class KisiEkle extends Component {
   }
 }
 
-const styles = {
-  errosTextStyle: {
-    fontSize: 20,
+const styles = StyleSheet.create({
+  errorTextStyle: {
+    fontSize: 18,
     alignSelf: 'center',
-    color: 'red'
+    color: '#D8000C',
+    marginLeft: 5
+  },
+  errorContainerStyle: {
+    flexDirection: 'row',
+    marginHorizontal: 10,
+    marginTop: 20,
+    padding: 5,
+    borderRadius: 8,
+    backgroundColor: '#FFBABA',
+    justifyContent: 'center'
+  },
+  labelStyle: {
+    fontSize: 18,
+    fontWeight: '200',
+    color: '#777',
+    marginRight: 0,
+    paddingRight: 0
+  },
+  labelContainerStyle: {
+    flex: 1
+  },
+  inputContainerStyle: {
+    flex: 3,
+    marginLeft: 0
+  },
+  inputStyle: {
+    fontSize: 18,
+    height: 20,
+    color: '#888',
+    marginTop: 2
+  },
+  tagInputStyle: {
+    fontSize: 18,
+    height: 20,
+    width: 150,
+    color: '#888',
+    marginTop: 2
+  },
+  iconStyle: {},
+  iconContainerStyle: {
+    marginTop: 10
+  },
+  tagStyle: {
+    fontSize: 16,
+    color: '#05f',
+    marginRight: 5
+  },
+  tagContainerStyle: {
+    marginRight: 4,
+    marginLeft: 8,
+    padding: 8,
+    elevation: 1,
+    backgroundColor: '#BDE5F8',
+    borderRadius: 8
   }
-};
+});
 
 const mapStateToProps = ({ newUserForm }) => {
-  const { name, email, password, password2, error, loading } = newUserForm;
+  const { isim, email, sifre, tags, error, loading } = newUserForm;
 
-  return { name, email, password, password2, error, loading };
+  return { isim, email, sifre, tags, error, loading };
 };
 
 export default connect(mapStateToProps, {
@@ -120,6 +277,5 @@ export default connect(mapStateToProps, {
   newUserEmailChanged,
   newUserNameChanged,
   newUserPasswordChanged,
-  newUserPassword2Changed,
   newUserFormWillMount
 })(KisiEkle);

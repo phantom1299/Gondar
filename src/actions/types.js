@@ -3,14 +3,17 @@ export const PASSWORD_CHANGED = 'login_password_changed';
 export const LOGIN_USER_SUCCESS = 'login_user_success';
 export const LOGIN_USER_FAIL = 'login_user_fail';
 export const LOGIN_USER = 'login_user';
+export const LOGOUT_USER = 'logout_user';
+
 export const NEW_USER_FORM_WILL_MOUNT = 'new_user_form_will_mount';
 export const NEW_USER_FORM_NAME_CHANGED = 'new_user_name_changed';
 export const NEW_USER_FORM_EMAIL_CHANGED = 'new_user_email_changed';
 export const NEW_USER_FORM_PASSWORD_CHANGED = 'new_user_password_changed';
-export const NEW_USER_FORM_PASSWORD2_CHANGED = 'new_user_password2_changed';
+export const NEW_USER_FORM_TAG_CHANGED = 'new_user_tag_changed';
 export const NEW_USER_FORM_ADD_USER = 'new_user_add';
 export const NEW_USER_FORM_ADD_USER_SUCCESS = 'new_user_add_success';
 export const NEW_USER_FORM_ADD_USER_FAIL = 'new_user_add_fail';
+
 export const NEW_MISSION_FORM_WILL_MOUNT = 'new_mission_form_will_mount';
 export const NEW_MISSION_FORM_NAME_CHANGED = 'new_mission_name_changed';
 export const NEW_MISSION_FORM_EMPLOYER_CHANGED = 'new_mission_employer_changed';
