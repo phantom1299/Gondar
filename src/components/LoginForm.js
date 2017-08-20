@@ -60,7 +60,7 @@ class LoginForm extends Component {
   //       'https://s-media-cache-ak0.pinimg.com/originals/f0/00/4d/f0004d555447885c1d24e89afe58ad6e.jpg'
   //   }}
   //   style={styles.backgroundImage}
-  // >
+  // />
   render() {
     return (
       <View>

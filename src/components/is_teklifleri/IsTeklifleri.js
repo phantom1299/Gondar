@@ -17,7 +17,13 @@ class IsTeklifleri extends Component {
   }
 
   render() {
-    return <ListView dataSource={this.DataSource} renderRow={this.renderRow} />;
+    return (
+      <ListView
+        contentContainerStyle={{ paddingBottom: 20 }}
+        dataSource={this.DataSource}
+        renderRow={this.renderRow}
+      />
+    );
   }
 }
 

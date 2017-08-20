@@ -16,7 +16,7 @@
       "adres": "Cihangir mah. Bozdağ sok. Avcılar İstanbul",
       "tags": ["yönetici", "iş veren"]
     },
-    "katilimcilar": [
+    "basvurular": [
       {
         "tcKimlikNo": "59653468490",
         "profilFotografiUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
@@ -36,6 +36,18 @@
         "telefon": "598 932 6565",
         "adres": "Cihangir mah. Bozdağ sok. Yok İstanbul",
         "tags": ["grafiker", "tasarımcı", "editör"]
+      }
+    ],
+    "onaylananlar": [
+      {
+        "tcKimlikNo": "59653468490",
+        "profilFotografiUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
+        "isim": "Mehmet Dağdelen",
+        "unvan": "Çalışan",
+        "email": "mehmet.dagdelen@gmail.com",
+        "telefon": "598 932 6565",
+        "adres": "Cihangir mah. Bozdağ sok. Taksim İstanbul",
+        "tags": ["grafiker", "tasarımcı"]
       }
     ],
     "ekler": [],
@@ -58,7 +70,7 @@
       "adres": "Cihangir mah. Bozdağ sok. Avcılar İstanbul",
       "tags": ["yönetici", "iş veren"]
     },
-    "katilimcilar": [
+    "basvurular": [
       {
         "tcKimlikNo": "59653468490",
         "profilFotografiUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
@@ -80,6 +92,7 @@
         "tags": ["grafiker", "tasarımcı", "editör"]
       }
     ],
+    "onaylananlar": [],
     "ekler": [],
     "notlar": []
   },
@@ -100,7 +113,7 @@
       "adres": "New York mah. Wallstreet sok. Bağcılar İstanbul",
       "tags": ["yönetici", "iş veren", "oyuncu"]
     },
-    "katilimcilar": [
+    "basvurular": [
       {
         "tcKimlikNo": "59653468490",
         "profilFotografiUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
@@ -112,6 +125,7 @@
         "tags": ["dağıtımcı", "satış uzmanı", "editör"]
       }
     ],
+    "onaylananlar": [],
     "ekler": [],
     "notlar": []
   }
