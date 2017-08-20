@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, ScrollView } from 'react-native';
 import { Card, Icon, List, ListItem, Divider } from 'react-native-elements';
 
 class IsDetaylari extends Component {
@@ -17,39 +17,74 @@ class IsDetaylari extends Component {
   renderUserDependingContent() {
     //if (user.tcKimlikNo === this.props.mission.isVeren.tcKimlikNo)
     return (
-      <List title="Başvurular" containerStyle={{ padding: 0 }}>
-        <Text style={styles.listHeaderStyle}>Başvurular</Text>
-        <Divider style={{ backgroundColor: '#bbb' }} />
-        {this.props.mission.katilimcilar.map((l, i) =>
-          <ListItem
-            roundAvatar
-            avatar={{ uri: l.profilFotografiUrl }}
-            avatarStyle={{ width: 50, height: 50, borderRadius: 25 }}
-            avatarContainerStyle={{ width: 50, height: 50, borderRadius: 25, marginLeft: 10 }}
-            avatarOverlayContainerStyle={{ width: 50, height: 50, borderRadius: 25 }}
-            containerStyle={{ height: 70 }}
-            key={i}
-            onPress={console.log(i)}
-            title={l.isim}
-            titleStyle={{ fontSize: 20, paddingBottom: 3, paddingTop: 3 }}
-            titleContainerStyle={{ marginLeft: 40 }}
-            subtitle={this.renderUserDependingContentTags(l.tags)}
-            subtitleContainerStyle={{ marginLeft: 40 }}
-            switchButton
-            onSwitch={() => {
-              return 5;
-            }}
-          />
-        )}
-      </List>
+      <View>
+        {this.renderBasvurular(this.props.mission.basvurular)}
+        {this.renderOnaylananlar(this.props.mission.onaylananlar)}
+      </View>
     );
+  }
+
+  renderBasvurular(basvurular) {
+    if (basvurular.length > 0) {
+      return (
+        <List title="Basvurular" containerStyle={{ padding: 0 }}>
+          <Text style={styles.listHeaderStyle}>Basvurular</Text>
+          <Divider style={{ backgroundColor: '#bbb' }} />
+          {basvurular.map((l, i) =>
+            <ListItem
+              roundAvatar
+              avatar={{ uri: l.profilFotografiUrl }}
+              avatarStyle={{ width: 50, height: 50, borderRadius: 25 }}
+              avatarContainerStyle={{ width: 50, height: 50, borderRadius: 25, marginLeft: 10 }}
+              avatarOverlayContainerStyle={{ width: 50, height: 50, borderRadius: 25 }}
+              containerStyle={{ height: 70 }}
+              key={i}
+              onPress={console.log(i)}
+              title={l.isim}
+              titleStyle={{ fontSize: 20, paddingBottom: 3, paddingTop: 3 }}
+              titleContainerStyle={{ marginLeft: 40 }}
+              subtitle={this.renderUserDependingContentTags(l.tags)}
+              subtitleContainerStyle={{ marginLeft: 40 }}
+            />
+          )}
+        </List>
+      );
+    }
+  }
+
+  renderOnaylananlar(onaylananlar) {
+    if (onaylananlar.length > 0) {
+      return (
+        <List title="Onaylananlar" containerStyle={{ padding: 0 }}>
+          <Text style={styles.listHeaderStyle}>Onaylananlar</Text>
+          <Divider style={{ backgroundColor: '#bbb' }} />
+          {onaylananlar.map((l, i) =>
+            <ListItem
+              roundAvatar
+              avatar={{ uri: l.profilFotografiUrl }}
+              avatarStyle={{ width: 50, height: 50, borderRadius: 25 }}
+              avatarContainerStyle={{ width: 50, height: 50, borderRadius: 25, marginLeft: 10 }}
+              avatarOverlayContainerStyle={{ width: 50, height: 50, borderRadius: 25 }}
+              containerStyle={{ height: 70 }}
+              key={i}
+              onPress={console.log(i)}
+              title={l.isim}
+              titleStyle={{ fontSize: 20, paddingBottom: 3, paddingTop: 3 }}
+              titleContainerStyle={{ marginLeft: 40 }}
+              subtitle={this.renderUserDependingContentTags(l.tags)}
+              subtitleContainerStyle={{ marginLeft: 40 }}
+            />
+          )}
+        </List>
+      );
+    }
   }
 
   render() {
     const { butce, detay, tags, deadline, isVeren } = this.props.mission;
     const { propDefStyle, isVerenStyle, detayStyle, deadlineStyle, butceStyle, tagStyle } = styles;
     return (
-      <View>
+      <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
         <Card>
           <View style={{ flexDirection: 'row' }}>
             <Text style={[propDefStyle, { flex: 1 }]}>İş Veren: </Text>
@@ -96,9 +131,12 @@ class IsDetaylari extends Component {
               })}
             </Text>
           </View>
+          <View>
+            <Text style={[propDefStyle, { marginTop: 10 }]}>Ekler: </Text>
+          </View>
         </Card>
         {this.renderUserDependingContent()}
-      </View>
+      </ScrollView>
     );
   }
 }
