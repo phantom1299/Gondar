@@ -11,7 +11,7 @@ import {
   newUserPasswordChanged,
   newUserFormWillMount
 } from '../actions';
-import { CardSection, Input, Spinner } from './common';
+import { CardSection, Spinner } from './common';
 
 class KisiEkle extends Component {
   constructor() {
@@ -238,7 +238,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     height: 20,
     color: '#888',
-    marginTop: 2
+    marginTop: 2,
+    width: '100%'
   },
   tagInputStyle: {
     fontSize: 18,

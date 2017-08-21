@@ -16,6 +16,7 @@ const INITIAL_STATE = {
     budget: '',
     deadline: '',
     description: '',
+    tags: [],
     error: '',
     loading: false
 };
