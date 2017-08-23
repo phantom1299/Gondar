@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ListView } from 'react-native';
 import ListItem from './IsTeklifleriItem';
+import { Content, Container } from 'native-base';
 
 class IsTeklifleri extends Component {
   componentWillMount() {
@@ -18,11 +19,15 @@ class IsTeklifleri extends Component {
 
   render() {
     return (
-      <ListView
-        contentContainerStyle={{ paddingBottom: 20 }}
-        dataSource={this.DataSource}
-        renderRow={this.renderRow}
-      />
+      <Container>
+        <Content>
+          <ListView
+            contentContainerStyle={{ paddingBottom: 20 }}
+            dataSource={this.DataSource}
+            renderRow={this.renderRow}
+          />
+        </Content>
+      </Container>
     );
   }
 }

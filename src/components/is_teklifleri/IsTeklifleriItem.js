@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Actions, ActionConst } from 'react-native-router-flux';
-import { Icon, Card } from 'react-native-elements';
+import { Actions } from 'react-native-router-flux';
+import { Card, CardItem, Thumbnail, Text, Left, Body, Right, Button } from 'native-base';
+import { TouchableOpacity } from 'react-native';
 
 class IsTeklifleriItem extends Component {
   constructor() {
@@ -10,134 +10,60 @@ class IsTeklifleriItem extends Component {
   }
 
   onPress() {
-    Actions.isDetaylari({ ...this.props, title: this.props.mission.baslik });
+    if (!this.pressed) {
+      this.pressed = true;
+      Actions.isDetaylari({ ...this.props, title: this.props.mission.baslik });
+    }
+    setTimeout(() => { this.pressed = false; }, 2000);
   }
 
   render() {
-    const {
-      baslik,
-      butce,
-      detay,
-      tags,
-      deadline,
-      isVeren
-    } = this.props.mission;
-    const {
-      container,
-      isVerenStyle,
-      baslikStyle,
-      detayStyle,
-      tagStyle,
-      butceStyle,
-      deadlineStyle
-    } = styles;
+    const { baslik, butce, detay, tags, deadline, isVeren } = this.props.mission;
     return (
       <TouchableOpacity onPress={this.onPress}>
-        <Card>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={{ flex: 5, justifyContent: 'flex-end' }}>
-              <Text style={baslikStyle}>
-                {baslik}
-              </Text>
-            </View>
-            <View
-              style={{
-                flex: 3,
-                flexDirection: 'column',
-                justifyContent: 'flex-start'
-              }}
-            >
-              <Text
-                style={{
-                  textDecorationLine: 'underline',
-                  fontSize: 16,
-                  alignSelf: 'flex-end'
-                }}
-              >
-                Son Teslim Tarihi:
-              </Text>
-              <Text style={deadlineStyle}>
+        <Card style={{ flex: 0, marginLeft: 5, marginRight: 5 }}>
+          <CardItem>
+            <Left style={{ flex: 2 }}>
+              <Thumbnail source={{ uri: isVeren.profilFotografiUrl }} />
+              <Body>
+                <Text>
+                  {isVeren.isim}
+                </Text>
+                <Text note>
+                  {isVeren.unvan}
+                </Text>
+              </Body>
+            </Left>
+            <Right>
+              <Text>Deadline:</Text>
+              <Text note>
                 {deadline}
               </Text>
-            </View>
-          </View>
-          <View>
-            <Text style={detayStyle} numberOfLines={3}>
-              {detay}
-            </Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={{ flex: 3, flexWrap: 'wrap' }}>
-              <Text numberOfLines={2} style={tagStyle}>
-                {tags.map((tag, i) => {
-                  return (
-                    <Text key={i}>
-                      #{tag}{' '}
-                    </Text>
-                  );
-                })}
+            </Right>
+          </CardItem>
+          <CardItem>
+            <Body>
+              <Text style={{ fontSize: 20, marginBottom: 10 }}>
+                {baslik}
               </Text>
-            </View>
-            <View
-              style={{
-                flex: 2,
-                justifyContent: 'flex-end',
-                flexDirection: 'row'
-              }}
-            >
-              <Text style={butceStyle}>Bütçe: </Text>
-              <Text
-                style={{ color: '#000', fontSize: 18, alignSelf: 'flex-end' }}
-              >
-                {butce}{' '}
+              <Text style={{ padding: 10 }}>
+                {detay}
               </Text>
-              <Icon
-                size={16}
-                type="font-awesome"
-                name="try"
-                containerStyle={{ alignSelf: 'flex-end', paddingBottom: 2 }}
-                color="#444"
-              />
-            </View>
-          </View>
+            </Body>
+          </CardItem>
+          <CardItem style={{ paddingTop: 0, flexWrap: 'wrap' }}>
+            {tags.map((tag, i) => {
+              return (
+                <Text key={i} style={{ color: 'steelblue' }}>
+                  #{tag}{' '}
+                </Text>
+              );
+            })}
+          </CardItem>
         </Card>
       </TouchableOpacity>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    padding: 15,
-    backgroundColor: 'rgba(223, 250, 220, 0.5)'
-  },
-  baslikStyle: {
-    fontSize: 19,
-    color: '#000',
-    marginBottom: 10,
-    marginLeft: 10
-  },
-  detayStyle: {
-    fontSize: 18,
-    lineHeight: 18,
-    paddingBottom: 20,
-    paddingTop: 0,
-    paddingLeft: 5
-  },
-  tagStyle: {
-    color: 'blue',
-    fontSize: 16
-  },
-  butceStyle: {
-    fontSize: 18,
-    alignSelf: 'flex-end'
-  },
-  deadlineStyle: {
-    color: '#000',
-    fontSize: 16,
-    alignSelf: 'flex-end'
-  }
-});
 
 export default IsTeklifleriItem;

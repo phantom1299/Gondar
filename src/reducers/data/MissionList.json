@@ -3,12 +3,12 @@
     "baslik": "Dergi Ön Sayfa Tasarımı",
     "detay": "Lorem ipsum dolor sit amet, mea id veniam scribentur, usu ut iriure epicurei. Ei mea habeo nostrum eleifend, usu euismod admodum probatus an.",
     "butce": 800,
-    "deadline": "28/07/2017",
+    "deadline": "28/08/2017",
     "tamamlanmaYuzdesi": 0,
     "tags": ["tasarımcı", "grafiker", "editör"],
     "isVeren": {
       "tcKimlikNo": "59653468490",
-      "profilFotografiUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
+      "profilFotografiUrl": "https://randomuser.me/api/portraits/men/29.jpg",
       "isim": "Berat Karas",
       "unvan": "Yönetici",
       "email": "berat.karas@gmail.com",
@@ -19,7 +19,7 @@
     "basvurular": [
       {
         "tcKimlikNo": "59653468490",
-        "profilFotografiUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
+        "profilFotografiUrl": "https://randomuser.me/api/portraits/men/82.jpg",
         "isim": "Şamil Er",
         "unvan": "Çalışan",
         "email": "samil.er@gmail.com",
@@ -29,7 +29,7 @@
       },
       {
         "tcKimlikNo": "59653468490",
-        "profilFotografiUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
+        "profilFotografiUrl": "https://randomuser.me/api/portraits/men/17.jpg",
         "isim": "Kerem Asya",
         "unvan": "Çalışan",
         "email": "kreme.asya@gmail.com",
@@ -41,10 +41,10 @@
     "onaylananlar": [
       {
         "tcKimlikNo": "59653468490",
-        "profilFotografiUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
-        "isim": "Mehmet Dağdelen",
+        "profilFotografiUrl": "https://randomuser.me/api/portraits/women/49.jpg",
+        "isim": "Aslı Dağdelen",
         "unvan": "Çalışan",
-        "email": "mehmet.dagdelen@gmail.com",
+        "email": "asli.dagdelen@gmail.com",
         "telefon": "598 932 6565",
         "adres": "Cihangir mah. Bozdağ sok. Taksim İstanbul",
         "tags": ["grafiker", "tasarımcı"]
@@ -54,15 +54,60 @@
     "notlar": []
   },
   {
+    "baslik": "Dergi Dağıtımı ve Satışı",
+    "detay": "Lorem ipsum dolor sit amet, mea id veniam scribentur, usu ut iriure epicurei. Ei mea habeo nostrum eleifend, usu euismod admodum probatus an.",
+    "butce": 700,
+    "deadline": "13/09/2017",
+    "tamamlanmaYuzdesi": 0,
+    "tags": [
+      "dağıtımcı",
+      "satış uzmanı",
+      "wolfofwallstreetizlemiş"
+    ],
+    "isVeren": {
+      "tcKimlikNo": "59653468490",
+      "profilFotografiUrl": "http://cdn.images.express.co.uk/img/dynamic/36/590x/Leonardo-DiCaprio-in-Wolf-of-Wall-Street-691981.jpg",
+      "isim": "Leonrdo Decaprio",
+      "unvan": "Yönetici",
+      "email": "leo.decaprio@gmail.com",
+      "telefon": "589 923 5656",
+      "adres": "New York mah. Wallstreet sok. Bağcılar İstanbul",
+      "tags": [
+        "yönetici",
+        "iş veren",
+        "oyuncu"
+      ]
+    },
+    "basvurular": [
+      {
+        "tcKimlikNo": "59653468490",
+        "profilFotografiUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
+        "isim": "Kerem Asya",
+        "unvan": "Çalışan",
+        "email": "kreme.asya@gmail.com",
+        "telefon": "598 932 6565",
+        "adres": "Cihangir mah. Bozdağ sok. Yok İstanbul",
+        "tags": [
+          "dağıtımcı",
+          "satış uzmanı",
+          "editör"
+        ]
+      }
+    ],
+    "onaylananlar": [],
+    "ekler": [],
+    "notlar": []
+  },
+  {
     "baslik": "Dergi İçerik Düzenlemesi",
     "detay": "Lorem ipsum dolor sit amet, mea id veniam scribentur, usu ut iriure epicurei. Ei mea habeo nostrum eleifend, usu euismod admodum probatus an.",
     "butce": 800,
-    "deadline": "28/07/2017",
+    "deadline": "30/08/2017",
     "tamamlanmaYuzdesi": 0,
     "tags": ["editör", "tasarımcı"],
     "isVeren": {
       "tcKimlikNo": "59653468490",
-      "profilFotografiUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
+      "profilFotografiUrl": "https://randomuser.me/api/portraits/men/29.jpg",
       "isim": "Berat Karas",
       "unvan": "Yönetici",
       "email": "berat.karas@gmail.com",
@@ -90,39 +135,6 @@
         "telefon": "598 932 6565",
         "adres": "Cihangir mah. Bozdağ sok. Yok İstanbul",
         "tags": ["grafiker", "tasarımcı", "editör"]
-      }
-    ],
-    "onaylananlar": [],
-    "ekler": [],
-    "notlar": []
-  },
-  {
-    "baslik": "Dergi Dağıtımı ve Satışı",
-    "detay": "Lorem ipsum dolor sit amet, mea id veniam scribentur, usu ut iriure epicurei. Ei mea habeo nostrum eleifend, usu euismod admodum probatus an.",
-    "butce": 700,
-    "deadline": "28/07/2017",
-    "tamamlanmaYuzdesi": 0,
-    "tags": ["dağıtımcı", "satış uzmanı", "wolfofwallstreetizlemiş"],
-    "isVeren": {
-      "tcKimlikNo": "59653468490",
-      "profilFotografiUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
-      "isim": "Leonrdo Decaprio",
-      "unvan": "Yönetici",
-      "email": "leo.decaprio@gmail.com",
-      "telefon": "589 923 5656",
-      "adres": "New York mah. Wallstreet sok. Bağcılar İstanbul",
-      "tags": ["yönetici", "iş veren", "oyuncu"]
-    },
-    "basvurular": [
-      {
-        "tcKimlikNo": "59653468490",
-        "profilFotografiUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
-        "isim": "Kerem Asya",
-        "unvan": "Çalışan",
-        "email": "kreme.asya@gmail.com",
-        "telefon": "598 932 6565",
-        "adres": "Cihangir mah. Bozdağ sok. Yok İstanbul",
-        "tags": ["dağıtımcı", "satış uzmanı", "editör"]
       }
     ],
     "onaylananlar": [],
