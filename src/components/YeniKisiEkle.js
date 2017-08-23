@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Text, View, Keyboard, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card, Button, FormLabel, FormInput, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import {
   newUserAdd,

@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import firebase from 'firebase';
 import { StyleSheet, View, Text, ViewPropTypes, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';

@@ -9,13 +9,11 @@ import Ayarlar from './components/Ayarlar';
 import Profil from './components/Profil';
 import IsTeklifleri from './components/is_teklifleri/IsTeklifleri';
 import IsDetaylari from './components//is_teklifleri/IsDetaylari';
-import MessageBar from './components/MessageBar';
 
 const RouterComponent = () => {
   return (
     <Router>
       <Scene overlay>
-        <Scene key="messageBar" component={MessageBar} />
         <Scene
           key="lightbox"
           lightbox

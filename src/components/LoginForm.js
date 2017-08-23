@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Text, Keyboard, Image, StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Container, Header, Content, Button, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
-import { Card, CardSection, Input, Spinner } from './common';
+import { Card, CardSection, Input } from './common';
 
 class LoginForm extends Component {
   constructor() {
@@ -37,21 +38,10 @@ class LoginForm extends Component {
     }
 
     return (
-      <Button
-        Component={TouchableOpacity}
-        iconRight
-        icon={{
-          name: 'sign-in',
-          type: 'font-awesome',
-          size: 28
-        }}
-        title="Giriş Yap"
-        textStyle={styles.textStyle}
-        backgroundColor="#5af"
-        buttonStyle={styles.buttonStyle}
-        containerViewStyle={{ marginLeft: 0, alignSelf: 'center', flex: 1, marginRight: 0 }}
-        onPress={this.onButtonPress}
-      />
+      <Button style={{ marginHorizontal: 10 }} iconRight rounded block info onPress={this.onButtonPress}>
+        <Text style={styles.textStyle}>Giriş Yap</Text>
+        <Icon name="sign-in" size={28} />
+      </Button>
     );
   }
   // <Image
@@ -63,8 +53,8 @@ class LoginForm extends Component {
   // />
   render() {
     return (
-      <View>
-        <View style={{ justifyContent: 'center', padding: 10 }}>
+      <Container>
+        <Content>
           <Image
             source={require('./../../img/picturetopeople.org-9dc41589dd48d7450e4615abb9c928fcf1d754a0abecc5bd42.png')}
             style={{ width: 300, resizeMode: 'contain', alignSelf: 'center' }}
@@ -96,11 +86,9 @@ class LoginForm extends Component {
           <Text style={styles.errosTextStyle}>
             {this.props.error}
           </Text>
-          <CardSection style={{ padding: 0 }}>
-            {this.renderButton()}
-          </CardSection>
-        </View>
-      </View>
+          {this.renderButton()}
+        </Content>
+      </Container>
     );
   }
 }

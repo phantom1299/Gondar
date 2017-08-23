@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import firebase from 'firebase';
+import { Root } from 'native-base';
 import Router from './Router';
 import configureStore from './configureStore';
 
@@ -14,7 +14,9 @@ class App extends Component {
   render() {
     return (
       <Provider store={this.state.store}>
-        <Router />
+        <Root>
+          <Router />
+        </Root>
       </Provider>
     );
   }

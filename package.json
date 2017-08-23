@@ -2,12 +2,14 @@
   "name": "gondar",
   "version": "0.0.1",
   "private": true,
+  "main": "index.android.js",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
   "dependencies": {
     "lodash": "^4.17.4",
+    "native-base": "^2.3.1",
     "react": "16.0.0-alpha.12",
     "react-native": "0.46.4",
     "react-native-auth0": "^1.0.3",
@@ -15,7 +17,6 @@
     "react-native-elements": "^0.15.0",
     "react-native-fetch-blob": "^0.10.6",
     "react-native-keyboard-aware-scroll-view": "^0.2.9",
-    "react-native-message-bar": "^1.6.0",
     "react-native-modal": "^2.5.0",
     "react-native-router-flux": "^4.0.0-beta.14",
     "react-native-vector-icons": "^4.3.0",

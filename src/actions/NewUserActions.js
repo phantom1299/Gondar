@@ -1,4 +1,5 @@
 import Auth0 from 'react-native-auth0';
+import { Toast } from 'native-base';
 import {
   NEW_USER_FORM_WILL_MOUNT,
   NEW_USER_FORM_NAME_CHANGED,
@@ -42,13 +43,6 @@ export const newUserPasswordChanged = text => {
   };
 };
 
-export const newUserPassword2Changed = text => {
-  return {
-    type: NEW_USER_FORM_PASSWORD2_CHANGED,
-    payload: text
-  };
-};
-
 //Kişi Ekleme burda yapılacak
 export const newUserAdd = ({ isim, email, sifre }) => {
   return dispatch => {
@@ -75,6 +69,12 @@ const newUserAddSuccess = dispatch => {
   dispatch({
     type: NEW_USER_FORM_ADD_USER_SUCCESS
   });
+  Toast.show({
+    text: 'Kişi eklendi!',
+    position: 'bottom',
+    buttonText: 'Tamam',
+    type: 'success'
+  });
 };
 
 //Kişi ekleme başarısız olduysa hata mesajı göster
@@ -82,5 +82,12 @@ const newUserAddFail = (dispatch, error) => {
   dispatch({
     type: NEW_USER_FORM_ADD_USER_FAIL,
     payload: error.message
+  });
+  Toast.show({
+    text: 'Kişi eklenemedi!',
+    position: 'bottom',
+    buttonText: 'Tamam',
+    type: 'danger',
+    duration: 2000
   });
 };
