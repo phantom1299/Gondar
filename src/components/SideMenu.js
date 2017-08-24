@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ViewPropTypes, TouchableOpacity } from 'react-n
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { Icon, Button, Avatar } from 'react-native-elements';
-import { CardSection } from '../src/components/common';
+import { CardSection } from './common';
 
 let pressed = false;
 

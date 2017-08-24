@@ -2,7 +2,7 @@ import React from 'react';
 import { Scene, Router } from 'react-native-router-flux';
 import LoginForm from './components/LoginForm';
 import AnaSayfa from './components/ana_sayfa/AnaSayfa';
-import SideMenu from './SideMenu';
+import SideMenu from './components/SideMenu';
 import YeniKisiEkle from './components/YeniKisiEkle';
 import YeniIsEkle from './components/YeniIsEkle';
 import Ayarlar from './components/Ayarlar';
@@ -32,7 +32,7 @@ const RouterComponent = () => {
             </Scene>
             <Scene key="drawer" drawer contentComponent={SideMenu}>
               <Scene key="main">
-                <Scene key="anaSayfa" component={AnaSayfa} title="Ana Sayfa" initial />
+                <Scene key="anaSayfa" component={AnaSayfa} title="Pano" initial />
                 <Scene key="isTeklifleri" component={IsTeklifleri} title="İş Teklifleri" />
                 <Scene key="isDetaylari" component={IsDetaylari} title="İş Detayları" back />
                 <Scene key="yeniKisiEkle" component={YeniKisiEkle} title="Yeni Kişi Ekle" />
