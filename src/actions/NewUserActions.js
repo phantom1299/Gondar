@@ -44,7 +44,7 @@ export const newUserPasswordChanged = text => {
 };
 
 //Kişi Ekleme burda yapılacak
-export const newUserAdd = ({ isim, email, sifre }) => {
+export const newUserAdd = ({ isim, email, sifre, tags }) => {
   return dispatch => {
     dispatch({ type: NEW_USER_FORM_ADD_USER });
     auth0.auth
@@ -54,7 +54,23 @@ export const newUserAdd = ({ isim, email, sifre }) => {
         connection: 'Username-Password-Authentication'
       })
       .then(user => {
-        console.log(user);
+        console.log(`asd${user}`);
+        fetch('https://gondar.herokuapp.com/kullanicilar', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            isim,
+            unvan: 'çalışan',
+            email,
+            telefon: null,
+            adres: null,
+            tags,
+            id: user.Id
+          })
+        });
         newUserAddSuccess(dispatch);
       })
       .catch(error => {

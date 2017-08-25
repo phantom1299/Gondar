@@ -54,15 +54,39 @@ export const newMissionFormDescriptionChanged = text => {
 };
 
 //İş Ekleme burda yapılacak
-export const newMissionAdd = ({ name, employer, budged, deadline, description }) => {
+//TODO Dosya ekleme
+export const newMissionAdd = ({ name, employer, budged, deadline, description, tags }) => {
   return dispatch => {
     dispatch({ type: NEW_MISSION_FORM_ADD_MISSION });
-    newMissionAddSuccess(dispatch, { name, employer, budged, deadline, description });
+    console.log('fetchleniyor');
+    fetch('https://gondar.herokuapp.com/isTeklifleri', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        baslik: name,
+        isVeren: employer,
+        butce: budged,
+        deadline,
+        detay: description,
+        tags,
+        basvurular: null,
+        //onaylananlar: null,
+        ekler: null,
+        notlar: null,
+        durum: 'Oluşturuldu'
+      })
+    })
+    .then(stats => console.log(stats))
+    .catch(console.log);
+    newMissionAddSuccess(dispatch);
   };
 };
 
 //İş başarılı bir şekilde oluşturulduysa, verileri database gir,
-const newMissionAddSuccess = (dispatch, { name, employer, budged, deadline, description }) => {
+const newMissionAddSuccess = (dispatch) => {
   dispatch({
     type: NEW_MISSION_FORM_ADD_MISSION_SUCCESS
   });

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, Keyboard, StyleSheet, TouchableOpacity } from 'react-native';
+import { Container, Content } from 'native-base';
 import { Card, Button, FormLabel, FormInput, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 
@@ -9,8 +10,8 @@ import {
   newUserEmailChanged,
   newUserPasswordChanged,
   newUserFormWillMount
-} from '../actions';
-import { CardSection, Spinner } from './common';
+} from '../../actions';
+import { CardSection, Spinner } from '../common';
 
 class KisiEkle extends Component {
   constructor() {
@@ -126,79 +127,83 @@ class KisiEkle extends Component {
       tagInputStyle
     } = styles;
     return (
-      <Card>
-        <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-          <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
-            İsim
-          </FormLabel>
-          <FormInput
-            inputStyle={inputStyle}
-            containerStyle={inputContainerStyle}
-            ref="form1"
-            containerRef="isimInputContainer"
-            textInputRef="isimInput"
-            onChangeText={this.onNameChange}
-            value={isim}
-            autoCapitalize="words"
-          />
-        </View>
-        <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-          <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
-            Email
-          </FormLabel>
-          <FormInput
-            inputStyle={inputStyle}
-            containerStyle={inputContainerStyle}
-            ref="form1"
-            containerRef="emailInputContainer"
-            textInputRef="emailInput"
-            onChangeText={this.onEmailChange}
-            value={email}
-            keyboardType="email-address"
-          />
-        </View>
-        <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-          <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
-            Şifre
-          </FormLabel>
-          <FormInput
-            secureTextEntry
-            inputStyle={inputStyle}
-            containerStyle={inputContainerStyle}
-            ref="form1"
-            containerRef="sifreInputContainer"
-            textInputRef="sifreInput"
-            value={sifre}
-            onChangeText={this.onPasswordChange}
-          />
-        </View>
-        <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-          <FormLabel labelStyle={labelStyle}>Etiket</FormLabel>
-          <FormInput
-            inputStyle={tagInputStyle}
-            ref="form1"
-            containerRef="tagInputContainer"
-            textInputRef="tagInput"
-            value={this.state.tag}
-            onChangeText={this.onTagChange}
-          />
-          <Icon
-            name={'add-circle'}
-            size={30}
-            color={'#28f'}
-            iconStyle={iconStyle}
-            containerStyle={iconContainerStyle}
-            onPress={this.onTagAdd}
-          />
-        </View>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-          {this.renderTags()}
-        </View>
-        {this.renderError()}
-        <CardSection>
-          {this.renderButton()}
-        </CardSection>
-      </Card>
+      <Container>
+        <Content>
+          <Card>
+            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+              <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
+                İsim
+              </FormLabel>
+              <FormInput
+                inputStyle={inputStyle}
+                containerStyle={inputContainerStyle}
+                ref="form1"
+                containerRef="isimInputContainer"
+                textInputRef="isimInput"
+                onChangeText={this.onNameChange}
+                value={isim}
+                autoCapitalize="words"
+              />
+            </View>
+            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+              <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
+                Email
+              </FormLabel>
+              <FormInput
+                inputStyle={inputStyle}
+                containerStyle={inputContainerStyle}
+                ref="form1"
+                containerRef="emailInputContainer"
+                textInputRef="emailInput"
+                onChangeText={this.onEmailChange}
+                value={email}
+                keyboardType="email-address"
+              />
+            </View>
+            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+              <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
+                Şifre
+              </FormLabel>
+              <FormInput
+                secureTextEntry
+                inputStyle={inputStyle}
+                containerStyle={inputContainerStyle}
+                ref="form1"
+                containerRef="sifreInputContainer"
+                textInputRef="sifreInput"
+                value={sifre}
+                onChangeText={this.onPasswordChange}
+              />
+            </View>
+            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+              <FormLabel labelStyle={labelStyle}>Etiket</FormLabel>
+              <FormInput
+                inputStyle={tagInputStyle}
+                ref="form1"
+                containerRef="tagInputContainer"
+                textInputRef="tagInput"
+                value={this.state.tag}
+                onChangeText={this.onTagChange}
+              />
+              <Icon
+                name={'add-circle'}
+                size={30}
+                color={'#28f'}
+                iconStyle={iconStyle}
+                containerStyle={iconContainerStyle}
+                onPress={this.onTagAdd}
+              />
+            </View>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+              {this.renderTags()}
+            </View>
+            {this.renderError()}
+            <CardSection>
+              {this.renderButton()}
+            </CardSection>
+          </Card>
+        </Content>
+      </Container>
     );
   }
 }

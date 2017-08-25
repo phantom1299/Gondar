@@ -1,31 +1,38 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView } from 'react-native';
-import { connect } from 'react-redux';
-
+import { Container, Tab, Tabs, TabHeading, Icon, Text, Badge, Button } from 'native-base';
 import AktifIslerim from './AktifIslerim';
+import Sohbetler from './chat/Sohbetler';
 
 class AnaSayfa extends Component {
   render() {
     return (
-      <View>
-        <Text style={{ fontSize: 20, marginLeft: 10, marginTop: 10, marginBottom: 5 }}>
-          Aktiv İşlerin:
-        </Text>
-        <ScrollView
-          style={{ padding: 10 }}
-          overScrollMode="always"
-          contentContainerStyle={{ paddingBottom: 50 }}
+      <Tabs initialPage={0} tabBarPosition="bottom">
+        <Tab
+          heading={
+            <TabHeading>
+              <Icon name="home" />
+              <Text>Aktif İşler</Text>
+            </TabHeading>
+          }
         >
           <AktifIslerim />
-          <AktifIslerim />
-        </ScrollView>
-      </View>
+        </Tab>
+        <Tab
+          heading={
+            <TabHeading>
+              <Icon name="ios-chatboxes" />
+              <Badge>
+                <Text>2</Text>
+              </Badge>
+              <Text>Mesajlar</Text>
+            </TabHeading>
+          }
+        >
+          <Sohbetler />
+        </Tab>
+      </Tabs>
     );
   }
 }
 
-const mapStateToProps = state => {
-  return state.user.kullanici;
-};
-
-export default connect(mapStateToProps)(AnaSayfa);
+export default AnaSayfa;

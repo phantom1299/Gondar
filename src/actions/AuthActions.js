@@ -48,13 +48,23 @@ const loginUserFail = dispatch => {
   });
 };
 const loginUserSuccess = (dispatch, user) => {
-  console.log(user);
-  dispatch({
-    type: LOGIN_USER_SUCCESS,
-    payload: user
-  });
+  auth0.auth
+    .userInfo({ token: user.accessToken })
+    .then(user1 => {
+      const id = user1.sub.split('|')[1];
+      fetch(`https://gondar.herokuapp.com/kullanicilar/:${id}`) //default olarak get on
+        .then(response => {
+          console.log(response);
+          dispatch({
+            type: LOGIN_USER_SUCCESS,
+            payload: user1
+          });
+        })
+        .catch(console.log);
 
-  Actions.drawer({ type: 'reset' });
+      Actions.drawer({ type: 'reset' });
+    })
+    .catch(console.error);
 };
 
 export const logoutUser = () => {

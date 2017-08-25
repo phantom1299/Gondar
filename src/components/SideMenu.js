@@ -13,7 +13,7 @@ class SideMenu extends Component {
     this.onProfil = this.onProfil.bind(this);
     this.onAnasayfa = this.onAnasayfa.bind(this);
     this.onIsTeklifleri = this.onIsTeklifleri.bind(this);
-    this.onYeniKisiEkle = this.onYeniKisiEkle.bind(this);
+    this.onKisiler = this.onKisiler.bind(this);
     this.onYeniIsEkle = this.onYeniIsEkle.bind(this);
     this.onAyarlar = this.onAyarlar.bind(this);
     this.onLogout = this.onLogout.bind(this);
@@ -46,10 +46,10 @@ class SideMenu extends Component {
     }
   }
 
-  onYeniKisiEkle() {
+  onKisiler() {
     if (!pressed) {
       pressed = true;
-      Actions.yeniKisiEkle({ type: 'replace' });
+      Actions.kisilerList({ type: 'replace' });
     }
   }
 
@@ -77,38 +77,41 @@ class SideMenu extends Component {
   render() {
     return (
       <View style={[styles.viewContainer, this.props.sceneStyle]}>
-        <CardSection style={{ paddingBottom: 0 }}>
-          <View style={{ flexDirection: 'row', marginTop: 20 }}>
-            <TouchableOpacity style={styles.profilButtonContainer} onPress={this.onProfil}>
-              <View style={{ justifyContent: 'center' }}>
-                <Avatar
-                  source={{ uri: this.props.profilFotografiUrl }}
-                  overlayContainerStyle={{ width: 70, height: 70, borderRadius: 35 }}
-                  containerStyle={{ width: 70, height: 70, borderRadius: 35 }}
-                  avatarStyle={{ width: 70, height: 70, borderRadius: 35 }}
-                />
-              </View>
-              <View style={{ justifyContent: 'center', paddingLeft: 10 }}>
-                <Text style={styles.name}>
-                  {this.props.isim}
-                </Text>
-                <Text style={{ color: '#aaa' }}>
-                  {this.props.unvan}
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <View style={{ justifyContent: 'center', padding: 5 }}>
-              <Icon
-                component={TouchableOpacity}
-                iconStyle={styles.logOutIconStyle}
-                name="sign-out"
-                type="font-awesome"
-                color="#f50"
-                onPress={this.onLogout}
-              />
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 20,
+            marginLeft: 10,
+            padding: 10,
+            justifyContent: 'space-around'
+          }}
+        >
+          <TouchableOpacity style={styles.profilButtonContainer} onPress={this.onProfil}>
+            <Avatar
+              source={{
+                uri:
+                  'https://pbs.twimg.com/profile_images/2877768723/e32f9a8a76b9a41f89dce20832bf9b43_400x400.png'
+              }}
+              overlayContainerStyle={{ width: 70, height: 70, borderRadius: 35 }}
+              containerStyle={{ width: 70, height: 70, borderRadius: 35 }}
+              avatarStyle={{ width: 70, height: 70, borderRadius: 35 }}
+            />
+            <View style={{ justifyContent: 'center', paddingLeft: 15 }}>
+              <Text style={styles.name}>Ashley Ford</Text>
+              <Text style={{ color: '#aaa' }}>"Yönetici"</Text>
             </View>
+          </TouchableOpacity>
+          <View style={{ padding: 5 }}>
+            <Icon
+              component={TouchableOpacity}
+              iconStyle={styles.logOutIconStyle}
+              name="sign-out"
+              type="font-awesome"
+              color="#f50"
+              onPress={this.onLogout}
+            />
           </View>
-        </CardSection>
+        </View>
 
         <CardSection
           style={{
@@ -123,12 +126,12 @@ class SideMenu extends Component {
           <Button
             Component={TouchableOpacity}
             icon={{
-              name: 'home',
+              name: 'dashboard',
               type: 'font-awesome',
               color: iconColor,
               size: 28
             }}
-            title="Ana Sayfa"
+            title="Pano"
             textStyle={styles.textStyle}
             backgroundColor="transparent"
             color="#555"
@@ -139,7 +142,7 @@ class SideMenu extends Component {
           <Button
             Component={TouchableOpacity}
             icon={{
-              name: 'calendar-o',
+              name: 'tasks',
               type: 'font-awesome',
               color: iconColor,
               size: 28
@@ -155,34 +158,18 @@ class SideMenu extends Component {
           <Button
             Component={TouchableOpacity}
             icon={{
-              name: 'user-plus',
+              name: 'users',
               type: 'font-awesome',
               color: iconColor,
               size: 28
             }}
-            title="Yeni Kişi"
+            title="Kişiler"
             textStyle={styles.textStyle}
             backgroundColor="transparent"
             color="#555"
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
-            onPress={this.onYeniKisiEkle}
-          />
-          <Button
-            Component={TouchableOpacity}
-            icon={{
-              name: 'calendar-plus-o',
-              type: 'font-awesome',
-              color: iconColor,
-              size: 28
-            }}
-            title="Yeni İş Teklifi"
-            textStyle={styles.textStyle}
-            backgroundColor="transparent"
-            color="#555"
-            buttonStyle={styles.buttonStyle}
-            containerViewStyle={{ marginLeft: 0 }}
-            onPress={this.onYeniIsEkle}
+            onPress={this.onKisiler}
           />
         </CardSection>
 
@@ -230,19 +217,13 @@ const propTypes = {
 
 const styles = StyleSheet.create({
   viewContainer: {
-    flex: 1,
-    backgroundColor: '#ddd'
+    flex: 1
   },
   profilButtonContainer: {
-    paddingLeft: 15,
-    paddingTop: 5,
-    overflow: 'hidden',
-    alignSelf: 'center',
     flexDirection: 'row'
   },
   logOutIconStyle: {
-    padding: 20,
-    alignSelf: 'center'
+    padding: 20
   },
   container: {
     paddingLeft: 20,
@@ -269,8 +250,7 @@ SideMenu.contextTypes = contextTypes;
 SideMenu.propTypes = propTypes;
 
 const mapStateToProps = state => {
-  const { isim, unvan, profilFotografiUrl } = state.user.kullanici;
-
+  const { isim, unvan, profilFotografiUrl } = state.user;
   return { isim, unvan, profilFotografiUrl };
 };
 

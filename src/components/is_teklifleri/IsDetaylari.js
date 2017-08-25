@@ -396,16 +396,6 @@ const styles = StyleSheet.create({
     color: 'steelblue',
     justifyContent: 'flex-end'
   },
-  basvurularHeaderStyle: {
-    fontSize: 18,
-    padding: 10,
-    backgroundColor: 'rgba(30, 230, 245, 1)'
-  },
-  onaylananlarHeaderStyle: {
-    fontSize: 18,
-    padding: 10,
-    backgroundColor: 'rgba(30, 245, 180, 1)'
-  },
   buttonStyle: {
     borderRadius: 8,
     width: 100
