@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import {
-  Text,
-  View,
-} from 'react-native';
+import { Container, Header, Content, Form, Item, Input, Label, Text } from 'native-base';
 
-class Ayarlar extends Component {
+export default class Ayarlar extends Component {
   render() {
     return (
-      <View>
-        <Text>Ayarlar</Text>
-      </View>
+      <Container>
+        <Content>
+          <Text style={{ alignSelf: 'center', margin: 20 }} >(Yapılacak)</Text>
+        </Content>
+      </Container>
     );
   }
 }
-
-export default Ayarlar;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { Container, Content, Card, Text } from 'native-base';
+import { View } from 'react-native';
+import { Container, Content, Card, Text,  } from 'native-base';
 import { Slider } from 'react-native-elements';
 
 class AktifIslerim extends Component {
@@ -13,10 +13,11 @@ class AktifIslerim extends Component {
     return (
       <Container>
         <Content>
+          <Text style={{ alignSelf: 'center', margin: 20 }} >(Yapılacak)</Text>
           <Card style={{ padding: 10, marginLeft: 10, marginRight: 10, marginTop: 10 }}>
             <View style={{ flexDirection: 'row' }}>
               <Text style={{ flex: 1, justifyContent: 'flex-start', fontSize: 18 }}>
-                İş Teklifi 1
+                Dergi Kapak Tasarımı
               </Text>
               <Text style={{ alignSelf: 'flex-start' }}>8 gün kaldı</Text>
             </View>

@@ -20,7 +20,7 @@ class AnaSayfa extends Component {
         <Tab
           heading={
             <TabHeading>
-              <Icon name="ios-chatboxes" />
+              <Icon name="ios-chatboxes" style={{ fontSize: 28 }} />
               <Badge>
                 <Text>2</Text>
               </Badge>

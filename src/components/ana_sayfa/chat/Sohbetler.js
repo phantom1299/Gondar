@@ -8,12 +8,7 @@ import {
   Right,
   Body,
   Thumbnail,
-  Text,
-  Header,
-  Item,
-  Icon,
-  Button,
-  Input
+  Text
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
