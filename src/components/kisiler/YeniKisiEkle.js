@@ -63,8 +63,8 @@ class KisiEkle extends Component {
 
   onButtonPress() {
     Keyboard.dismiss();
-    const { isim, email, sifre, loading, tags } = this.props;
-    this.props.newUserAdd({ isim, email, sifre, tags, loading });
+    const { isim, email, sifre, loading, unvan, tags } = this.props;
+    this.props.newUserAdd({ isim, email, sifre, unvan, tags, loading });
   }
 
   renderTags() {
@@ -116,7 +116,7 @@ class KisiEkle extends Component {
   }
 
   render() {
-    const { isim, email, sifre } = this.props;
+    const { isim, email, sifre, unvan } = this.props;
     const {
       labelStyle,
       labelContainerStyle,
@@ -173,6 +173,20 @@ class KisiEkle extends Component {
                 textInputRef="sifreInput"
                 value={sifre}
                 onChangeText={this.onPasswordChange}
+              />
+            </View>
+            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+              <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
+                Ünvan
+              </FormLabel>
+              <FormInput
+                inputStyle={inputStyle}
+                containerStyle={inputContainerStyle}
+                ref="form1"
+                containerRef="unvanInputContainer"
+                textInputRef="unvanInput"
+                value={unvan}
+                onChangeText={this.onUnvanChange}
               />
             </View>
             <View style={{ flexDirection: 'row', marginVertical: 5 }}>

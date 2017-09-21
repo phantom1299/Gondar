@@ -1,11 +1,18 @@
 import React, { Component, PropTypes } from 'react';
-import { StyleSheet, View, Text, ViewPropTypes, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ViewPropTypes, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { Icon, Button, Avatar } from 'react-native-elements';
+import { Button } from 'react-native-elements';
+import { ListItem, Left, Body, Right, Thumbnail, Text } from 'native-base';
+import Icon1 from 'react-native-vector-icons/FontAwesome';
+
 import { CardSection } from './common';
 
 let pressed = false;
+
+String.prototype.capitalize = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
 
 class SideMenu extends Component {
   constructor() {
@@ -18,6 +25,7 @@ class SideMenu extends Component {
     this.onAyarlar = this.onAyarlar.bind(this);
     this.onLogout = this.onLogout.bind(this);
   }
+
   //TODO
   componentDidUpdate() {
     setTimeout(() => {
@@ -28,7 +36,8 @@ class SideMenu extends Component {
   onProfil() {
     if (!pressed) {
       pressed = true;
-      Actions.profil({ type: 'replace' });
+      // Actions.jump('profil', { type: 'replace', kullanici: this.props.user });
+      Actions.profil({ type: 'replace', kullanici: this.props.user });
     }
   }
 
@@ -75,43 +84,38 @@ class SideMenu extends Component {
   }
 
   render() {
+    const user = this.props.user;
     return (
       <View style={[styles.viewContainer, this.props.sceneStyle]}>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 20,
-            marginLeft: 10,
-            padding: 10,
-            justifyContent: 'space-around'
-          }}
-        >
-          <TouchableOpacity style={styles.profilButtonContainer} onPress={this.onProfil}>
-            <Avatar
-              source={{
-                uri:
-                  'https://pbs.twimg.com/profile_images/2877768723/e32f9a8a76b9a41f89dce20832bf9b43_400x400.png'
-              }}
-              overlayContainerStyle={{ width: 70, height: 70, borderRadius: 35 }}
-              containerStyle={{ width: 70, height: 70, borderRadius: 35 }}
-              avatarStyle={{ width: 70, height: 70, borderRadius: 35 }}
-            />
-            <View style={{ justifyContent: 'center', paddingLeft: 15 }}>
-              <Text style={styles.name}>Ashley Ford</Text>
-              <Text style={{ color: '#aaa' }}>"Yönetici"</Text>
-            </View>
+        <ListItem iconRight avatar>
+          <TouchableOpacity onPress={this.onProfil} style={{ flexDirection: 'row', flex: 5 }}>
+            <Left>
+              <Thumbnail
+                large
+                source={{
+                  uri:
+                    user.profilFotografiUrl ||
+                    'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png'
+                }}
+              />
+            </Left>
+            <Body>
+              <Text style={{ fontSize: 20 }}>{user.isim}</Text>
+              <Text note style={{ fontSize: 16 }}>
+                {user.unvan.capitalize()}
+              </Text>
+            </Body>
           </TouchableOpacity>
-          <View style={{ padding: 5 }}>
-            <Icon
-              component={TouchableOpacity}
-              iconStyle={styles.logOutIconStyle}
-              name="sign-out"
-              type="font-awesome"
-              color="#f50"
-              onPress={this.onLogout}
-            />
-          </View>
-        </View>
+          <TouchableOpacity
+            transparent
+            onPress={this.onLogout}
+            style={{ flexDirection: 'row', flex: 1 }}
+          >
+            <Right style={{ borderBottomWidth: 0 }}>
+              <Icon1 name={'sign-out'} size={28} color={'#f50'} />
+            </Right>
+          </TouchableOpacity>
+        </ListItem>
 
         <CardSection
           style={{
@@ -250,8 +254,8 @@ SideMenu.contextTypes = contextTypes;
 SideMenu.propTypes = propTypes;
 
 const mapStateToProps = state => {
-  const { isim, unvan, profilFotografiUrl } = state.user;
-  return { isim, unvan, profilFotografiUrl };
+  const user = state.auth.user;
+  return { user };
 };
 
 export default connect(mapStateToProps)(SideMenu);

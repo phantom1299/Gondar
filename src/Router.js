@@ -13,6 +13,10 @@ import IsTeklifleri from './components/is_teklifleri/IsTeklifleri';
 import IsDetaylari from './components//is_teklifleri/IsDetaylari';
 import Mesajlar from './components/ana_sayfa/chat/Mesajlar';
 
+import Image from '../img/menu_burger.png';
+
+let editable = false;
+
 const RouterComponent = () => {
   return (
     <Router>
@@ -31,9 +35,19 @@ const RouterComponent = () => {
                 component={LoginForm}
                 title="Lütfen Giriş Yapın"
                 titleStyle={{ textAlign: 'center' }}
+                hideNavBar
               />
             </Scene>
-            <Scene key="drawer" drawer contentComponent={SideMenu}>
+            <Scene
+              key="drawer"
+              drawer
+              contentComponent={SideMenu}
+              drawerImage={Image}
+              navigationBarStyle={{ backgroundColor: '#4169e1' }}
+              leftButtonStyle={{ color: 'white' }}
+              titleStyle={{ color: 'white', alignSelf: 'center' }}
+              rightButtonTextStyle={{ color: 'white', padding: 10 }}
+            >
               <Scene key="main">
                 <Scene key="anaSayfa" component={AnaSayfa} title="Pano" initial />
                 <Scene key="mesajlar" component={Mesajlar} title="Mesajlar" back />
@@ -55,7 +69,18 @@ const RouterComponent = () => {
                 />
                 <Scene key="kisiProfili" component={KisiProfili} title="Kişi Profili" back />
                 <Scene key="yeniKisiEkle" component={YeniKisiEkle} title="Yeni Kişi Ekle" back />
-                <Scene key="profil" component={Profil} title="Profilim" />
+                <Scene
+                  key="profil"
+                  component={Profil}
+                  title="Profilim"
+                  rightTitle="Düzenle"
+                  editable={editable}
+                  onRight={() => {
+                    //Burda bilgileri güncelle
+                    editable = !editable;
+                    Actions.refresh({ editable, rightTitle: editable ? 'Kaydet' : 'Düzenle' });
+                  }}
+                />
                 <Scene key="ayarlar" component={Ayarlar} title="Ayarlar" />
               </Scene>
             </Scene>

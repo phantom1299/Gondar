@@ -9,6 +9,7 @@ export const NEW_USER_FORM_WILL_MOUNT = 'new_user_form_will_mount';
 export const NEW_USER_FORM_NAME_CHANGED = 'new_user_name_changed';
 export const NEW_USER_FORM_EMAIL_CHANGED = 'new_user_email_changed';
 export const NEW_USER_FORM_PASSWORD_CHANGED = 'new_user_password_changed';
+export const NEW_USER_FORM_UNVAN_CHANGED = 'new_user_unvan_changed';
 export const NEW_USER_FORM_TAG_CHANGED = 'new_user_tag_changed';
 export const NEW_USER_FORM_ADD_USER = 'new_user_add';
 export const NEW_USER_FORM_ADD_USER_SUCCESS = 'new_user_add_success';
@@ -23,3 +24,5 @@ export const NEW_MISSION_FORM_DESCRIPTION_CHANGED = 'new_mission_description_cha
 export const NEW_MISSION_FORM_ADD_MISSION = 'new_mission_add';
 export const NEW_MISSION_FORM_ADD_MISSION_SUCCESS = 'new_mission_add_success';
 export const NEW_MISSION_FORM_ADD_MISSION_FAIL = 'new_mission_add_fail';
+
+export const DELETE_USER = 'delete_user';

@@ -3,6 +3,7 @@ import {
   NEW_USER_FORM_NAME_CHANGED,
   NEW_USER_FORM_EMAIL_CHANGED,
   NEW_USER_FORM_PASSWORD_CHANGED,
+  NEW_USER_FORM_UNVAN_CHANGED,
   NEW_USER_FORM_TAG_CHANGED,
   NEW_USER_FORM_ADD_USER,
   NEW_USER_FORM_ADD_USER_SUCCESS,
@@ -29,6 +30,9 @@ export default (state = INITIAL_STATE, action) => {
     case NEW_USER_FORM_NAME_CHANGED:
       return { ...state, isim: action.payload };
 
+    case NEW_USER_FORM_UNVAN_CHANGED:
+      return { ...state, unvan: action.payload };
+    
     case NEW_USER_FORM_TAG_CHANGED:
       return { ...state, tag: action.payload };
 

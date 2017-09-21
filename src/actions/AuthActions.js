@@ -13,6 +13,7 @@ const auth0 = new Auth0({
   domain: 'mlx.eu.auth0.com',
   clientId: '5TURFeY22RUuFuWZbiYrgyvPOpu11fYH'
 });
+import { data } from '../data';
 
 export const emailChanged = text => {
   return {
@@ -52,17 +53,16 @@ const loginUserSuccess = (dispatch, user) => {
     .userInfo({ token: user.accessToken })
     .then(user1 => {
       const id = user1.sub.split('|')[1];
-      fetch(`https://gondar.herokuapp.com/kullanicilar/:${id}`) //default olarak get on
+      fetch(`${data.url}/kullanicilar/${id}`)
+        .then(response => response.json())
         .then(response => {
-          console.log(response);
           dispatch({
             type: LOGIN_USER_SUCCESS,
-            payload: user1
+            payload: response
           });
+          Actions.drawer({ type: 'reset' });
         })
         .catch(console.log);
-
-      Actions.drawer({ type: 'reset' });
     })
     .catch(console.error);
 };

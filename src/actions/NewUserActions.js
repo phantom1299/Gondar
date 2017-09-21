@@ -5,11 +5,12 @@ import {
   NEW_USER_FORM_NAME_CHANGED,
   NEW_USER_FORM_EMAIL_CHANGED,
   NEW_USER_FORM_PASSWORD_CHANGED,
-  NEW_USER_FORM_PASSWORD2_CHANGED,
+  NEW_USER_FORM_UNVAN_CHANGED,
   NEW_USER_FORM_ADD_USER,
   NEW_USER_FORM_ADD_USER_SUCCESS,
   NEW_USER_FORM_ADD_USER_FAIL
 } from '../actions/types';
+import { data } from '../data';
 
 const auth0 = new Auth0({
   domain: 'mlx.eu.auth0.com',
@@ -43,8 +44,15 @@ export const newUserPasswordChanged = text => {
   };
 };
 
+export const newUserUnvanChanged = text => {
+  return {
+    type: NEW_USER_FORM_UNVAN_CHANGED,
+    payload: text
+  };
+};
+
 //Kişi Ekleme burda yapılacak
-export const newUserAdd = ({ isim, email, sifre, tags }) => {
+export const newUserAdd = ({ isim, email, sifre, unvan, tags }) => {
   return dispatch => {
     dispatch({ type: NEW_USER_FORM_ADD_USER });
     auth0.auth
@@ -54,24 +62,28 @@ export const newUserAdd = ({ isim, email, sifre, tags }) => {
         connection: 'Username-Password-Authentication'
       })
       .then(user => {
-        console.log(`asd${user}`);
-        fetch('https://gondar.herokuapp.com/kullanicilar', {
+        fetch(`${data.url}/kullanicilar`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
+            profilFotografiUrl: 'https://randomuser.me/api/portraits/lego/5.jpg',
             isim,
-            unvan: 'çalışan',
+            unvan,
             email,
             telefon: null,
             adres: null,
             tags,
-            id: user.Id
+            _id: user.Id
           })
-        });
-        newUserAddSuccess(dispatch);
+        })
+          .then(() => newUserAddSuccess(dispatch))
+          .catch(err => {
+            console.log(err);
+            newUserAddFail(dispatch, 'Kullanıcı veritabanına kaydedilemedi.');
+          });
       })
       .catch(error => {
         console.log(error);
@@ -89,7 +101,8 @@ const newUserAddSuccess = dispatch => {
     text: 'Kişi eklendi!',
     position: 'bottom',
     buttonText: 'Tamam',
-    type: 'success'
+    type: 'success',
+    duration: 2000
   });
 };
 

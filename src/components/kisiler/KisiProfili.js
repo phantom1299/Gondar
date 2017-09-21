@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Alert } from 'react-native';
 import {
   Container,
   Content,
@@ -11,8 +12,18 @@ import {
   Col,
   Button
 } from 'native-base';
+import { connect } from 'react-redux';
+import { deleteUser } from '../../actions';
 
 class KisiProfili extends Component {
+  onDelete() {
+    Alert.alert('Dikkat!', 'Kişiyi silmek istediğinizden emin misiniz?', [
+      { text: 'İptal', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+      { text: 'Evet', onPress: () => this.props.deleteUser(this.props.kisi._id) },
+      ''
+    ]);
+  }
+
   render() {
     console.log(this.props);
     const { kisi } = this.props;
@@ -21,10 +32,8 @@ class KisiProfili extends Component {
         <Content>
           <Card>
             <Body>
-              <Thumbnail large source={{ uri: kisi.profilFotografiUrl }} />
-              <Text style={{ fontSize: 28 }}>
-                {kisi.isim}
-              </Text>
+              <Thumbnail large source={{ uri: kisi.profilFotografiUrl || 'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png' }} />
+              <Text style={{ fontSize: 28 }}>{kisi.isim}</Text>
               <Text style={{ color: 'steelblue', fontSize: 18 }}>
                 {kisi.tags.map(tag => `#${tag} `)}
               </Text>
@@ -62,7 +71,7 @@ class KisiProfili extends Component {
                 </Text>
               </Col>
             </Row>
-            <Button danger block style={{ margin: 10 }}>
+            <Button danger block style={{ margin: 10 }} onPress={() => this.onDelete()}>
               <Text>Sil</Text>
             </Button>
           </Card>
@@ -72,4 +81,4 @@ class KisiProfili extends Component {
   }
 }
 
-export default KisiProfili;
+export default connect(null, { deleteUser })(KisiProfili);

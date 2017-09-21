@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Text, Keyboard, Image, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Keyboard, Image, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Container, Header, Content, Button, Spinner } from 'native-base';
+import { Container, Content, Button, Spinner, Form, Item, Label, Input, Text } from 'native-base';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
-import { Card, CardSection, Input } from './common';
 
 class LoginForm extends Component {
   constructor() {
@@ -34,11 +33,11 @@ class LoginForm extends Component {
 
   renderButton() {
     if (this.props.loading) {
-      return <Spinner />;
+      return <Spinner color="steelblue" />;
     }
 
     return (
-      <Button style={{ marginHorizontal: 10 }} iconRight rounded block info onPress={this.onButtonPress}>
+      <Button style={styles.buttonStyle} iconRight rounded block onPress={this.onButtonPress}>
         <Text style={styles.textStyle}>Giriş Yap</Text>
         <Icon name="sign-in" size={28} />
       </Button>
@@ -54,38 +53,54 @@ class LoginForm extends Component {
   render() {
     return (
       <Container>
-        <Content>
+        <Image
+          source={{
+            uri:
+              'http://iphonewallpaperhd.org/wp-content/uploads/2015/08/cool-wallpapers-for-iphone-6-plus-1080x1920-highway-blures.jpg'
+          }}
+          style={styles.backgroundImage}
+        />
+        <Content style={{ paddingTop: '20%' }}>
           <Image
-            source={require('./../../img/picturetopeople.org-9dc41589dd48d7450e4615abb9c928fcf1d754a0abecc5bd42.png')}
+            source={require('./../../img/picturetopeople.org-7f0cbca054fd418cb65f8c80d9c5d973d2203920f3c044a386.png')}
             style={{ width: 300, resizeMode: 'contain', alignSelf: 'center' }}
           />
-          <CardSection
-            style={{ backgroundColor: '#aaa', opacity: 0.8, borderRadius: 8, marginBottom: 1 }}
+          <Form
+            style={{
+              padding: 10,
+              marginRight: '8%',
+              margin: 10,
+              paddingBottom: 30,
+              opacity: 0.8,
+              borderRadius: 10
+            }}
           >
-            <Input
-              label="Email"
-              labelStyle={{ color: '#fff' }}
-              inputStyle={{ color: '#fff' }}
-              placeholder="user@example.com"
-              onChangeText={this.onEmailChange}
-              value={this.props.email}
-            />
-          </CardSection>
-
-          <CardSection style={{ backgroundColor: '#aaa', opacity: 0.8, borderRadius: 8 }}>
-            <Input
-              secureTextEntry
-              label="Sifre"
-              labelStyle={{ color: '#fff' }}
-              inputStyle={{ color: '#fff' }}
-              placeholder="password"
-              onChangeText={this.onPasswordChange}
-              value={this.props.password}
-            />
-          </CardSection>
-          <Text style={styles.errosTextStyle}>
-            {this.props.error}
-          </Text>
+            <Item inlineLabel>
+              <Label
+                style={{
+                  color: '#fff'
+                }}
+              >
+                Email
+              </Label>
+              <Input onChangeText={this.onEmailChange} value={this.props.email} placeholder="birisi@örnek.com" placeholderTextColor="#fffa" />
+            </Item>
+            <Item inlineLabel>
+              <Label
+                style={{
+                  color: '#fff'
+                }}
+              >
+                Şifre
+              </Label>
+              <Input
+                secureTextEntry
+                onChangeText={this.onPasswordChange}
+                value={this.props.password}
+              />
+            </Item>
+          </Form>
+          <Text style={styles.errosTextStyle}>{this.props.error}</Text>
           {this.renderButton()}
         </Content>
       </Container>
@@ -99,14 +114,16 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: 'red'
   },
-  buttonStyle: {},
+  buttonStyle: {
+    backgroundColor: '#afeeeeaa',
+    marginHorizontal: '10%'
+  },
   textStyle: {
     fontSize: 18,
     marginRight: 10
   },
   backgroundImage: {
     backgroundColor: '#ccc',
-    flex: 1,
     position: 'absolute',
     width: '100%',
     height: '100%',

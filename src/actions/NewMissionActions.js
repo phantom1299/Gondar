@@ -11,6 +11,7 @@ import {
   NEW_MISSION_FORM_ADD_MISSION_SUCCESS,
   NEW_MISSION_FORM_ADD_MISSION_FAIL
 } from '../actions/types';
+import { data } from '../data';
 
 export const newMissionFormWillMount = () => {
   return {
@@ -58,8 +59,7 @@ export const newMissionFormDescriptionChanged = text => {
 export const newMissionAdd = ({ name, employer, budged, deadline, description, tags }) => {
   return dispatch => {
     dispatch({ type: NEW_MISSION_FORM_ADD_MISSION });
-    console.log('fetchleniyor');
-    fetch('https://gondar.herokuapp.com/isTeklifleri', {
+    fetch(`${data.url}/isTeklifleri`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -79,14 +79,19 @@ export const newMissionAdd = ({ name, employer, budged, deadline, description, t
         durum: 'Oluşturuldu'
       })
     })
-    .then(stats => console.log(stats))
-    .catch(console.log);
-    newMissionAddSuccess(dispatch);
+      .then(stats => {
+        console.log(stats);
+        newMissionAddSuccess(dispatch);
+      })
+      .catch(err => {
+        console.log(err);
+        newMissionAddFail(dispatch);
+      });
   };
 };
 
 //İş başarılı bir şekilde oluşturulduysa, verileri database gir,
-const newMissionAddSuccess = (dispatch) => {
+const newMissionAddSuccess = dispatch => {
   dispatch({
     type: NEW_MISSION_FORM_ADD_MISSION_SUCCESS
   });
