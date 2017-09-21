@@ -57,3 +57,7 @@ jsconfig.json
 .vscode
 .babelrc
 data.js
+.expo/settings.json
+.expo/packager-info.json
+android/app/src/main/assets/index.android.bundle
+android/app/src/main/assets/index.android.bundle.meta
