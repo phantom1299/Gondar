@@ -12,10 +12,10 @@ import {
 
 const INITIAL_STATE = {
     name: '',
-    employer: '',
+    description: '',
     budget: '',
     deadline: '',
-    description: '',
+    employer: '',
     tags: [],
     error: '',
     loading: false

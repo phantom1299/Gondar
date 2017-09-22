@@ -13,7 +13,7 @@ import {
   Button,
   Icon
 } from 'native-base';
-import { ListView, View } from 'react-native';
+import { ListView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { data } from '../../data';
 
@@ -21,50 +21,50 @@ String.prototype.capitalize = function () {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-const kisiler = [
+const users = [
   {
     tcKimlikNo: '59653468490',
-    profilFotografiUrl: 'https://randomuser.me/api/portraits/men/29.jpg',
-    isim: 'Berat Karas',
-    unvan: 'Yönetici',
+    avatarU: 'https://randomuser.me/api/portraits/men/29.jpg',
+    name: 'Berat',
+    surname: 'Karas',
     email: 'berat.karas@gmail.com',
-    telefon: '589 923 5656',
-    adres: 'Cihangir mah. Bozdağ sok. Avcılar İstanbul',
+    telephone: '589 923 5656',
+    address: 'Cihangir mah. Bozdağ sok. Avcılar İstanbul',
     tags: ['yönetici', 'iş veren']
   },
   {
     tcKimlikNo: '59653468490',
-    profilFotografiUrl: 'https://randomuser.me/api/portraits/men/82.jpg',
-    isim: 'Şamil Er',
-    unvan: 'Çalışan',
+    avatarU: 'https://randomuser.me/api/portraits/men/82.jpg',
+    name: 'Şamil Er',
+    surname: 'Er',
     email: 'samil.er@gmail.com',
-    telefon: '598 932 6565',
-    adres: 'Cihangir mah. Bozdağ sok. Taksim İstanbul',
+    telephone: '598 932 6565',
+    address: 'Cihangir mah. Bozdağ sok. Taksim İstanbul',
     tags: ['grafiker', 'tasarımcı']
   },
   {
     tcKimlikNo: '59653468490',
-    profilFotografiUrl: 'https://randomuser.me/api/portraits/men/17.jpg',
-    isim: 'Kerem Asya',
-    unvan: 'Çalışan',
+    avatarU: 'https://randomuser.me/api/portraits/men/17.jpg',
+    name: 'Kerem',
+    surname: 'Asya',
     email: 'kreme.asya@gmail.com',
-    telefon: '598 932 6565',
-    adres: 'Cihangir mah. Bozdağ sok. Yok İstanbul',
+    telephone: '598 932 6565',
+    address: 'Cihangir mah. Bozdağ sok. Yok İstanbul',
     tags: ['grafiker', 'tasarımcı', 'editör']
   },
   {
     tcKimlikNo: '59653468490',
-    profilFotografiUrl: 'https://randomuser.me/api/portraits/women/49.jpg',
-    isim: 'Aslı Dağdelen',
-    unvan: 'Çalışan',
+    avatarU: 'https://randomuser.me/api/portraits/women/49.jpg',
+    name: 'Aslı',
+    surname: 'Dağdelen',
     email: 'asli.dagdelen@gmail.com',
-    telefon: '598 932 6565',
-    adres: 'Cihangir mah. Bozdağ sok. Taksim İstanbul',
+    telephone: '598 932 6565',
+    address: 'Cihangir mah. Bozdağ sok. Taksim İstanbul',
     tags: ['grafiker', 'tasarımcı']
   }
 ];
 
-class KisilerList extends Component {
+class UserList extends Component {
   constructor() {
     super();
     this.pressed = false;
@@ -72,7 +72,7 @@ class KisilerList extends Component {
     this.state = {
       basic: true,
       loading: true,
-      listViewData: kisiler
+      listViewData: users
     };
   }
 
@@ -83,29 +83,29 @@ class KisilerList extends Component {
         response
           .json()
           .then(response1 =>
-            this.setState({ listViewData: kisiler.concat(response1), loading: false })
+            this.setState({ listViewData: users.concat(response1), loading: false })
           );
       })
       .catch(console.log);
   }
 
-  onPressInfo(kisi) {
+  onPressInfo(user) {
     if (!this.pressed) {
       this.pressed = true;
       setTimeout(() => {
         this.pressed = false;
       }, 2000);
-      Actions.kisiProfili({ kisi, title: kisi.isim });
+      Actions.userProfile({ user, title: `${user.name} ${user.surname}` });
     }
   }
 
-  onPressChat(kisi) {
+  onPressChat(user) {
     if (!this.pressed) {
       this.pressed = true;
       setTimeout(() => {
         this.pressed = false;
       }, 2000);
-      Actions.mesajlar({ title: kisi.isim });
+      Actions.messages({ title: user.name });
     }
   }
 
@@ -121,29 +121,32 @@ class KisilerList extends Component {
         <Content>
           <List
             dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-            renderRow={kisi => (
-              <ListItem avatar button onPress={this.onPressInfo.bind(this, kisi)}>
+            renderRow={user => (
+              <ListItem avatar button onPress={this.onPressInfo.bind(this, user)}>
                 <Left>
                   <Thumbnail
                     source={{
-                      uri: kisi.profilFotografiUrl || 'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png'
+                      uri:
+                        user.avatarU ||
+                        'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png'
                     }}
                   />
                 </Left>
                 <Body>
-                  <Text>{kisi.isim}</Text>
-                  <Text note>{kisi.unvan ? kisi.unvan.capitalize() : null}</Text>
+                  <Text>
+                    {user.name} {user.surname}
+                  </Text>
                 </Body>
               </ListItem>
             )}
             renderLeftHiddenRow={() => null}
-            renderRightHiddenRow={(kisi, secId, rowId, rowMap) => (
+            renderRightHiddenRow={(user, secId, rowId, rowMap) => (
               <Body style={{ flexDirection: 'row' }}>
                 {/* <Left>
                   <Button
                     full
                     style={{ height: '100%' }}
-                    onPress={this.onPressInfo.bind(this, kisi)}
+                    onPress={this.onPressInfo.bind(this, user)}
                   >
                     <Icon active name="information-circle" />
                   </Button>
@@ -153,7 +156,7 @@ class KisilerList extends Component {
                     full
                     success
                     style={{ height: '100%' }}
-                    onPress={this.onPressChat.bind(this, kisi)}
+                    onPress={this.onPressChat.bind(this, user)}
                   >
                     <Icon active name="ios-chatbubbles" />
                   </Button>
@@ -170,4 +173,4 @@ class KisilerList extends Component {
   }
 }
 
-export default KisilerList;
+export default UserList;

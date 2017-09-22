@@ -15,27 +15,27 @@ import {
 import { connect } from 'react-redux';
 import { deleteUser } from '../../actions';
 
-class KisiProfili extends Component {
+class UserProfile extends Component {
   onDelete() {
     Alert.alert('Dikkat!', 'Kişiyi silmek istediğinizden emin misiniz?', [
       { text: 'İptal', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-      { text: 'Evet', onPress: () => this.props.deleteUser(this.props.kisi._id) },
+      { text: 'Evet', onPress: () => this.props.deleteUser(this.props.user._id) },
       ''
     ]);
   }
 
   render() {
     console.log(this.props);
-    const { kisi } = this.props;
+    const { user } = this.props;
     return (
       <Container>
         <Content>
           <Card>
             <Body>
-              <Thumbnail large source={{ uri: kisi.profilFotografiUrl || 'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png' }} />
-              <Text style={{ fontSize: 28 }}>{kisi.isim}</Text>
+              <Thumbnail large source={{ uri: user.avatarU || 'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png' }} />
+              <Text style={{ fontSize: 28 }}>{user.name} {user.surname}</Text>
               <Text style={{ color: 'steelblue', fontSize: 18 }}>
-                {kisi.tags.map(tag => `#${tag} `)}
+                {user.tags.map(tag => `#${tag} `)}
               </Text>
             </Body>
             <CardItem>
@@ -47,7 +47,7 @@ class KisiProfili extends Component {
               </Col>
               <Col size={3}>
                 <Text note style={{ fontSize: 16 }}>
-                  {kisi.email}
+                  {user.email}
                 </Text>
               </Col>
             </Row>
@@ -57,7 +57,7 @@ class KisiProfili extends Component {
               </Col>
               <Col size={3}>
                 <Text note style={{ fontSize: 16 }}>
-                  {kisi.telefon}
+                  {user.telephone}
                 </Text>
               </Col>
             </Row>
@@ -67,7 +67,7 @@ class KisiProfili extends Component {
               </Col>
               <Col size={3}>
                 <Text note style={{ fontSize: 16 }}>
-                  {kisi.adres}
+                  {user.address}
                 </Text>
               </Col>
             </Row>
@@ -81,4 +81,4 @@ class KisiProfili extends Component {
   }
 }
 
-export default connect(null, { deleteUser })(KisiProfili);
+export default connect(null, { deleteUser })(UserProfile);

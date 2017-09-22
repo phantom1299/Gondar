@@ -7,13 +7,14 @@ import { connect } from 'react-redux';
 import {
   newUserAdd,
   newUserNameChanged,
+  newUserSurnameChanged,
   newUserEmailChanged,
   newUserPasswordChanged,
   newUserFormWillMount
 } from '../../actions';
 import { CardSection, Spinner } from '../common';
 
-class KisiEkle extends Component {
+class NewUser extends Component {
   constructor() {
     super();
     this.onNameChange = this.onNameChange.bind(this);
@@ -32,16 +33,20 @@ class KisiEkle extends Component {
     Keyboard.dismiss();
   }
 
-  onNameChange(isim) {
-    this.props.newUserNameChanged(isim);
+  onNameChange(name) {
+    this.props.newUserNameChanged(name);
+  }
+
+  onSurnameChange(surname) {
+    this.props.newUserSurnameChanged(surname);
   }
 
   onEmailChange(email) {
     this.props.newUserEmailChanged(email);
   }
 
-  onPasswordChange(sifre) {
-    this.props.newUserPasswordChanged(sifre);
+  onPasswordChange(password) {
+    this.props.newUserPasswordChanged(password);
   }
 
   onTagChange(tag) {
@@ -63,8 +68,8 @@ class KisiEkle extends Component {
 
   onButtonPress() {
     Keyboard.dismiss();
-    const { isim, email, sifre, loading, unvan, tags } = this.props;
-    this.props.newUserAdd({ isim, email, sifre, unvan, tags, loading });
+    const { name, email, password, loading, surname, tags } = this.props;
+    this.props.newUserAdd({ name, email, password, surname, tags, loading });
   }
 
   renderTags() {
@@ -89,9 +94,7 @@ class KisiEkle extends Component {
       return (
         <View style={styles.errorContainerStyle}>
           <Icon name={'error'} color={'#D8000C'} />
-          <Text style={styles.errorTextStyle}>
-            {this.props.error}
-          </Text>
+          <Text style={styles.errorTextStyle}>{this.props.error}</Text>
         </View>
       );
     }
@@ -116,7 +119,7 @@ class KisiEkle extends Component {
   }
 
   render() {
-    const { isim, email, sifre, unvan } = this.props;
+    const { name, email, password, surname } = this.props;
     const {
       labelStyle,
       labelContainerStyle,
@@ -138,11 +141,25 @@ class KisiEkle extends Component {
                 inputStyle={inputStyle}
                 containerStyle={inputContainerStyle}
                 ref="form1"
-                containerRef="isimInputContainer"
-                textInputRef="isimInput"
+                containerRef="nameInputContainer"
+                textInputRef="nameInput"
                 onChangeText={this.onNameChange}
-                value={isim}
+                value={name}
                 autoCapitalize="words"
+              />
+            </View>
+            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+              <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
+                Soyisim
+              </FormLabel>
+              <FormInput
+                inputStyle={inputStyle}
+                containerStyle={inputContainerStyle}
+                ref="form1"
+                containerRef="surnameInputContainer"
+                textInputRef="surnameInput"
+                value={surname}
+                onChangeText={this.onSurnameChange}
               />
             </View>
             <View style={{ flexDirection: 'row', marginVertical: 5 }}>
@@ -169,24 +186,10 @@ class KisiEkle extends Component {
                 inputStyle={inputStyle}
                 containerStyle={inputContainerStyle}
                 ref="form1"
-                containerRef="sifreInputContainer"
-                textInputRef="sifreInput"
-                value={sifre}
+                containerRef="passwordInputContainer"
+                textInputRef="passwordInput"
+                value={password}
                 onChangeText={this.onPasswordChange}
-              />
-            </View>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
-                Ünvan
-              </FormLabel>
-              <FormInput
-                inputStyle={inputStyle}
-                containerStyle={inputContainerStyle}
-                ref="form1"
-                containerRef="unvanInputContainer"
-                textInputRef="unvanInput"
-                value={unvan}
-                onChangeText={this.onUnvanChange}
               />
             </View>
             <View style={{ flexDirection: 'row', marginVertical: 5 }}>
@@ -208,13 +211,9 @@ class KisiEkle extends Component {
                 onPress={this.onTagAdd}
               />
             </View>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-              {this.renderTags()}
-            </View>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>{this.renderTags()}</View>
             {this.renderError()}
-            <CardSection>
-              {this.renderButton()}
-            </CardSection>
+            <CardSection>{this.renderButton()}</CardSection>
           </Card>
         </Content>
       </Container>
@@ -286,15 +285,16 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ newUserForm }) => {
-  const { isim, email, sifre, tags, error, loading } = newUserForm;
+  const { name, surname, email, password, tags, error, loading } = newUserForm;
 
-  return { isim, email, sifre, tags, error, loading };
+  return { name, surname, email, password, tags, error, loading };
 };
 
 export default connect(mapStateToProps, {
   newUserAdd,
   newUserEmailChanged,
   newUserNameChanged,
+  newUserSurnameChanged,
   newUserPasswordChanged,
   newUserFormWillMount
-})(KisiEkle);
+})(NewUser);

@@ -3,7 +3,7 @@ import { Actions } from 'react-native-router-flux';
 import { Card, CardItem, Thumbnail, Text, Left, Body, Right, Button } from 'native-base';
 import { TouchableOpacity } from 'react-native';
 
-class IsTeklifleriItem extends Component {
+class JobsItem extends Component {
   constructor() {
     super();
     this.onPress = this.onPress.bind(this);
@@ -12,25 +12,22 @@ class IsTeklifleriItem extends Component {
   onPress() {
     if (!this.pressed) {
       this.pressed = true;
-      Actions.isDetaylari({ ...this.props, title: this.props.mission.baslik });
+      Actions.jobDetails({ job: this.props.job, title: this.props.job.title });
     }
     setTimeout(() => { this.pressed = false; }, 2000);
   }
 
   render() {
-    const { baslik, butce, detay, tags, deadline, isVeren } = this.props.mission;
+    const { title, budget, detail, tags, deadline, employer } = this.props.job;
     return (
       <TouchableOpacity onPress={this.onPress}>
         <Card style={{ flex: 0, marginLeft: 5, marginRight: 5 }}>
           <CardItem>
             <Left style={{ flex: 2 }}>
-              <Thumbnail source={{ uri: isVeren.profilFotografiUrl }} />
+              <Thumbnail source={{ uri: employer.avatarU }} />
               <Body>
                 <Text>
-                  {isVeren.isim}
-                </Text>
-                <Text note>
-                  {isVeren.unvan}
+                  {employer.name} {employer.surname}
                 </Text>
               </Body>
             </Left>
@@ -44,10 +41,10 @@ class IsTeklifleriItem extends Component {
           <CardItem>
             <Body>
               <Text style={{ fontSize: 20, marginBottom: 10 }}>
-                {baslik}
+                {title}
               </Text>
               <Text style={{ padding: 10 }}>
-                {detay}
+                {detail}
               </Text>
             </Body>
           </CardItem>
@@ -66,4 +63,4 @@ class IsTeklifleriItem extends Component {
   }
 }
 
-export default IsTeklifleriItem;
+export default JobsItem;

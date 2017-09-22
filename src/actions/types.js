@@ -7,9 +7,9 @@ export const LOGOUT_USER = 'logout_user';
 
 export const NEW_USER_FORM_WILL_MOUNT = 'new_user_form_will_mount';
 export const NEW_USER_FORM_NAME_CHANGED = 'new_user_name_changed';
+export const NEW_USER_FORM_SURNAME_CHANGED = 'new_user_surname_changed';
 export const NEW_USER_FORM_EMAIL_CHANGED = 'new_user_email_changed';
 export const NEW_USER_FORM_PASSWORD_CHANGED = 'new_user_password_changed';
-export const NEW_USER_FORM_UNVAN_CHANGED = 'new_user_unvan_changed';
 export const NEW_USER_FORM_TAG_CHANGED = 'new_user_tag_changed';
 export const NEW_USER_FORM_ADD_USER = 'new_user_add';
 export const NEW_USER_FORM_ADD_USER_SUCCESS = 'new_user_add_success';

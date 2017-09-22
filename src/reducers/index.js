@@ -9,6 +9,6 @@ export default combineReducers({
     auth: AuthReducer,
     newUserForm: NewUserReducer,
     newMissionForm: NewMissionReducer,
-    missions: MissionReducer,
+    jobs: MissionReducer,
     user: UserReducer
 });

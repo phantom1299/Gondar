@@ -34,10 +34,10 @@ const İletişim = [
 ];
 const CANCEL_INDEX = 4;
 
-class IsDetaylari extends Component {
+class JobDetails extends Component {
   constructor() {
     super();
-    this.state = { selectedBasvuru: null, selectedOnay: null, visible: false };
+    this.state = { selectedApplication: null, selectedParticipant: null, visible: false };
   }
 
   componentWillMount() {
@@ -60,11 +60,11 @@ class IsDetaylari extends Component {
   //TODO eğer ilan sahibi girdiyse, ona göre başvuranları görebilip seçebilecek (tamamlanmadı daha)
   //TODO eğer başka biri girdiyse, başvur seçeneğini ve iletişim seçeneğini görebilecek (yapılacak)
   renderUserDependingContent() {
-    //if (user.tcKimlikNo === this.props.mission.isVeren.tcKimlikNo)
+    //if (user.tcKimlikNo === this.props.job.employer.tcKimlikNo)
     return (
       <View>
-        {this.renderBasvurular(this.props.mission.basvurular)}
-        {this.renderOnaylananlar(this.props.mission.onaylananlar)}
+        {this.renderApplications(this.props.job.applications)}
+        {this.renderParticipants(this.props.job.participants)}
       </View>
     );
   }
@@ -79,8 +79,8 @@ class IsDetaylari extends Component {
     );
   }
 
-  renderBasvuruOptions(selectedBasvuru) {
-    if (this.state.selectedBasvuru === selectedBasvuru) {
+  renderApplicationOptions(selectedApplication) {
+    if (this.state.selectedApplication === selectedApplication) {
       return (
         <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 10 }}>
           <Button
@@ -138,8 +138,8 @@ class IsDetaylari extends Component {
     }
   }
 
-  renderOnayOptions(selectedOnay) {
-    if (this.state.selectedOnay === selectedOnay) {
+  renderParticipantOptions(selectedParticipant) {
+    if (this.state.selectedParticipant === selectedParticipant) {
       return (
         <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 10 }}>
           <Button
@@ -153,7 +153,7 @@ class IsDetaylari extends Component {
             onPress={() =>
               Alert.alert(
                 'Dikkat!',
-                'Kişiyi onaylananlardan çıkarmak istediğinizden emin misiniz?',
+                'Kişiyi katılımcılardan çıkarmak istediğinizden emin misiniz?',
                 [
                   { text: 'İptal', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
                   { text: 'Evet', onPress: () => console.log('OK Pressed') }
@@ -185,36 +185,36 @@ class IsDetaylari extends Component {
     }
   }
 
-  renderBasvurular(basvurular) {
-    if (basvurular.length > 0) {
+  renderApplications(applications) {
+    if (applications.length > 0) {
       return (
         <Card>
           <CardItem header style={{ justifyContent: 'center' }}>
             <Text style={{ fontSize: 20 }}>Basvurular</Text>
           </CardItem>
           <List
-            key={this.state.selectedBasvuru}
-            dataArray={basvurular}
-            renderRow={(basvuru, k, i) =>
+            key={this.state.selectedApplication}
+            dataArray={applications}
+            renderRow={(application, k, i) =>
               <View key={i}>
                 <ListItem
                   button
                   onPress={() => {
-                    this.state.selectedBasvuru === i
-                      ? this.setState({ selectedBasvuru: null })
-                      : this.setState({ selectedBasvuru: i, selectedOnay: null });
+                    this.state.selectedApplication === i
+                      ? this.setState({ selectedApplication: null })
+                      : this.setState({ selectedApplication: i, selectedParticipant: null });
                   }}
                   avatar
                 >
                   <Left>
-                    <Thumbnail source={{ uri: basvuru.profilFotografiUrl }} />
+                    <Thumbnail source={{ uri: application.avatarU }} />
                   </Left>
                   <Body>
                     <Text style={{ fontSize: 20 }}>
-                      {basvuru.isim}
+                      {application.name} {application.surname}
                     </Text>
                     <Text style={{ color: 'steelblue', marginLeft: 5 }}>
-                      {basvuru.tags.map(tag => {
+                      {application.tags.map(tag => {
                         return `#${tag} `;
                       })}
                     </Text>
@@ -222,13 +222,13 @@ class IsDetaylari extends Component {
                   <Right style={{ justifyContent: 'center' }}>
                     <Icon1
                       name={
-                        this.state.selectedBasvuru === i ? 'keyboard-arrow-down' : 'chevron-right'
+                        this.state.selectedApplication === i ? 'keyboard-arrow-down' : 'chevron-right'
                       }
                       size={28}
                     />
                   </Right>
                 </ListItem>
-                {this.renderBasvuruOptions(i)}
+                {this.renderApplicationOptions(i)}
               </View>}
           />
         </Card>
@@ -236,48 +236,48 @@ class IsDetaylari extends Component {
     }
   }
 
-  renderOnaylananlar(onaylananlar) {
-    if (onaylananlar.length > 0) {
+  renderParticipants(participants) {
+    if (participants.length > 0) {
       return (
         <Card>
           <CardItem header style={{ justifyContent: 'center' }}>
-            <Text style={{ fontSize: 20 }}>Onaylananlar</Text>
+            <Text style={{ fontSize: 20 }}>Katılımcılar</Text>
           </CardItem>
           <List
-            key={this.state.selectedOnay}
-            dataArray={onaylananlar}
-            renderRow={(onay, k, i) =>
+            key={this.state.selectedParticipant}
+            dataArray={participants}
+            renderRow={(participant, k, i) =>
               <View key={i}>
                 <ListItem
                   button
                   onPress={() => {
-                    this.state.selectedOnay === i
-                      ? this.setState({ selectedOnay: null })
-                      : this.setState({ selectedOnay: i, selectedBasvuru: null });
+                    this.state.selectedParticipant === i
+                      ? this.setState({ selectedParticipant: null })
+                      : this.setState({ selectedParticipant: i, selectedApplication: null });
                   }}
                   avatar
                 >
                   <Left>
-                    <Thumbnail source={{ uri: onay.profilFotografiUrl }} />
+                    <Thumbnail source={{ uri: participant.avatarU }} />
                   </Left>
                   <Body>
                     <Text style={{ fontSize: 20 }}>
-                      {onay.isim}
+                      {participant.name}
                     </Text>
                     <Text style={{ color: 'steelblue', marginLeft: 5 }}>
-                      {onay.tags.map(tag => {
+                      {participant.tags.map(tag => {
                         return `#${tag} `;
                       })}
                     </Text>
                   </Body>
                   <Right style={{ justifyContent: 'center' }}>
                     <Icon1
-                      name={this.state.selectedOnay === i ? 'keyboard-arrow-down' : 'chevron-right'}
+                      name={this.state.selectedParticipant === i ? 'keyboard-arrow-down' : 'chevron-right'}
                       size={28}
                     />
                   </Right>
                 </ListItem>
-                {this.renderOnayOptions(i)}
+                {this.renderParticipantOptions(i)}
               </View>}
           />
         </Card>
@@ -286,22 +286,22 @@ class IsDetaylari extends Component {
   }
 
   render() {
-    const { butce, detay, tags, deadline, isVeren } = this.props.mission;
-    const { propDefStyle, detayStyle, deadlineStyle, butceStyle, tagStyle } = styles;
+    const { budget, detail, tags, deadline, employer } = this.props.job;
+    const { propDefStyle, detailStyle, deadlineStyle, budgetStyle, tagStyle } = styles;
     return (
       <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
         <Card style={{ padding: 15 }}>
           <Text style={propDefStyle}>İş Veren: </Text>
           <ListItem iconRight avatar>
             <Left>
-              <Thumbnail source={{ uri: isVeren.profilFotografiUrl }} />
+              <Thumbnail source={{ uri: employer.avatarU }} />
             </Left>
             <Body style={{ borderBottomWidth: 0 }}>
               <Text style={{ fontSize: 20 }}>
-                {isVeren.isim}
+                {employer.name}
               </Text>
               <Text style={{ color: 'steelblue', marginLeft: 5 }}>
-                {isVeren.tags.map(tag => {
+                {employer.tags.map(tag => {
                   return `#${tag} `;
                 })}
               </Text>
@@ -326,8 +326,8 @@ class IsDetaylari extends Component {
           <View style={{ flexDirection: 'row', marginTop: 10 }}>
             <Text style={[propDefStyle, { flex: 1 }]}>Bütçe:</Text>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={butceStyle}>
-                {butce}{' '}
+              <Text style={budgetStyle}>
+                {budget}{' '}
               </Text>
               <Icon
                 size={16}
@@ -346,8 +346,8 @@ class IsDetaylari extends Component {
           </View>
           <View>
             <Text style={[propDefStyle, {}]}>Açıklama:</Text>
-            <Text style={detayStyle}>
-              {detay}
+            <Text style={detailStyle}>
+              {detail}
             </Text>
           </View>
           <View>
@@ -378,12 +378,12 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     paddingBottom: 10
   },
-  detayStyle: {
+  detailStyle: {
     fontSize: 16,
     padding: 10,
     paddingTop: 0
   },
-  butceStyle: {
+  budgetStyle: {
     fontSize: 18,
     justifyContent: 'flex-end'
   },
@@ -402,4 +402,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default IsDetaylari;
+export default JobDetails;

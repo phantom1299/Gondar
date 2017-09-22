@@ -3,9 +3,9 @@ import { Toast } from 'native-base';
 import {
   NEW_USER_FORM_WILL_MOUNT,
   NEW_USER_FORM_NAME_CHANGED,
+  NEW_USER_FORM_SURNAME_CHANGED,
   NEW_USER_FORM_EMAIL_CHANGED,
   NEW_USER_FORM_PASSWORD_CHANGED,
-  NEW_USER_FORM_UNVAN_CHANGED,
   NEW_USER_FORM_ADD_USER,
   NEW_USER_FORM_ADD_USER_SUCCESS,
   NEW_USER_FORM_ADD_USER_FAIL
@@ -30,6 +30,13 @@ export const newUserNameChanged = text => {
   };
 };
 
+export const newUserSurnameChanged = text => {
+  return {
+    type: NEW_USER_FORM_SURNAME_CHANGED,
+    payload: text
+  };
+};
+
 export const newUserEmailChanged = text => {
   return {
     type: NEW_USER_FORM_EMAIL_CHANGED,
@@ -44,21 +51,14 @@ export const newUserPasswordChanged = text => {
   };
 };
 
-export const newUserUnvanChanged = text => {
-  return {
-    type: NEW_USER_FORM_UNVAN_CHANGED,
-    payload: text
-  };
-};
-
 //Kişi Ekleme burda yapılacak
-export const newUserAdd = ({ isim, email, sifre, unvan, tags }) => {
+export const newUserAdd = ({ name, surname, email, password, tags }) => {
   return dispatch => {
     dispatch({ type: NEW_USER_FORM_ADD_USER });
     auth0.auth
       .createUser({
         email,
-        password: sifre,
+        password,
         connection: 'Username-Password-Authentication'
       })
       .then(user => {
@@ -69,14 +69,12 @@ export const newUserAdd = ({ isim, email, sifre, unvan, tags }) => {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            profilFotografiUrl: 'https://randomuser.me/api/portraits/lego/5.jpg',
-            isim,
-            unvan,
+            _id: user.Id,
+            avatarU: 'https://randomuser.me/api/portraits/lego/5.jpg',
+            name,
+            surname,
             email,
-            telefon: null,
-            adres: null,
-            tags,
-            _id: user.Id
+            tags
           })
         })
           .then(() => newUserAddSuccess(dispatch))

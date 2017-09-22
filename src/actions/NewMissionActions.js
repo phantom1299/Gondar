@@ -1,4 +1,3 @@
-import { Actions } from 'react-native-router-flux';
 import { Toast } from 'native-base';
 import {
   NEW_MISSION_FORM_WILL_MOUNT,
@@ -66,17 +65,15 @@ export const newMissionAdd = ({ name, employer, budged, deadline, description, t
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        baslik: name,
-        isVeren: employer,
-        butce: budged,
+        title: name,
+        description,
+        budged,
         deadline,
-        detay: description,
+        employer,
         tags,
-        basvurular: null,
-        //onaylananlar: null,
         ekler: null,
         notlar: null,
-        durum: 'Oluşturuldu'
+        durum: 'created'
       })
     })
       .then(stats => {

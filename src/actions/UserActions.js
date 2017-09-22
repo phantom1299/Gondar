@@ -24,7 +24,8 @@ export const deleteUser = id => {
       })
       .catch(err => {
         Toast.show({
-          text: `Kişi eklenemedi:${err}`,
+          text: `Kişiyi silerken bir hata oluştu:
+                ${err}`,
           position: 'bottom',
           buttonText: 'Tamam',
           type: 'danger',

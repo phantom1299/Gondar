@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Container, Tab, Tabs, TabHeading, Icon, Text, Badge, Button } from 'native-base';
-import AktifIslerim from './AktifIslerim';
-import Sohbetler from './chat/Sohbetler';
+import ActiveJobs from './ActiveJobs';
+import Chats from './chat/Chats';
 
-class AnaSayfa extends Component {
+class Dashboard extends Component {
   render() {
     return (
       <Tabs initialPage={0} tabBarPosition="bottom">
@@ -15,7 +15,7 @@ class AnaSayfa extends Component {
             </TabHeading>
           }
         >
-          <AktifIslerim />
+          <ActiveJobs />
         </Tab>
         <Tab
           heading={
@@ -28,11 +28,11 @@ class AnaSayfa extends Component {
             </TabHeading>
           }
         >
-          <Sohbetler />
+          <Chats />
         </Tab>
       </Tabs>
     );
   }
 }
 
-export default AnaSayfa;
+export default Dashboard;

@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ListView } from 'react-native';
-import ListItem from './IsTeklifleriItem';
+import ListItem from './JobsItem';
 import { Content, Container } from 'native-base';
 
-class IsTeklifleri extends Component {
+class JobsList extends Component {
   componentWillMount() {
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2
     });
 
-    this.DataSource = ds.cloneWithRows(this.props.missions);
+    this.DataSource = ds.cloneWithRows(this.props.jobs);
   }
 
-  renderRow(mission) {
-    return <ListItem mission={mission} />;
+  renderRow(job) {
+    return <ListItem job={job} />;
   }
 
   render() {
@@ -33,7 +33,7 @@ class IsTeklifleri extends Component {
 }
 
 const mapStateToProps = state => {
-  return { missions: state.missions };
+  return { jobs: state.jobs };
 };
 
-export default connect(mapStateToProps)(IsTeklifleri);
+export default connect(mapStateToProps)(JobsList);

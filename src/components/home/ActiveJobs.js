@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Container, Content, Card, Text,  } from 'native-base';
 import { Slider } from 'react-native-elements';
 
-class AktifIslerim extends Component {
+class ActiveJobs extends Component {
   constructor() {
     super();
     this.state = { value: 65 };
@@ -38,4 +38,4 @@ class AktifIslerim extends Component {
   }
 }
 
-export default AktifIslerim;
+export default ActiveJobs;

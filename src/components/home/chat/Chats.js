@@ -50,7 +50,7 @@ const chats = [
   }
 ];
 
-class Sohbetler extends Component {
+class Chats extends Component {
   render() {
     return (
       <Container>
@@ -59,7 +59,7 @@ class Sohbetler extends Component {
             dataArray={chats}
             renderRow={chat =>
               <List>
-                <ListItem avatar button onPress={() => Actions.mesajlar({ title: chat.name })}>
+                <ListItem avatar button onPress={() => Actions.messages({ title: chat.name })}>
                   <Left>
                     <Thumbnail source={{ uri: chat.thumbnail }} />
                   </Left>
@@ -85,4 +85,4 @@ class Sohbetler extends Component {
   }
 }
 
-export default Sohbetler;
+export default Chats;

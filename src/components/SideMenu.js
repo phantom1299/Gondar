@@ -17,12 +17,12 @@ String.prototype.capitalize = function () {
 class SideMenu extends Component {
   constructor() {
     super();
-    this.onProfil = this.onProfil.bind(this);
-    this.onAnasayfa = this.onAnasayfa.bind(this);
-    this.onIsTeklifleri = this.onIsTeklifleri.bind(this);
-    this.onKisiler = this.onKisiler.bind(this);
-    this.onYeniIsEkle = this.onYeniIsEkle.bind(this);
-    this.onAyarlar = this.onAyarlar.bind(this);
+    this.onProfile = this.onProfile.bind(this);
+    this.onDashboard = this.onDashboard.bind(this);
+    this.onJobs = this.onJobs.bind(this);
+    this.onUsers = this.onUsers.bind(this);
+    this.onNewJob = this.onNewJob.bind(this);
+    this.onSettings = this.onSettings.bind(this);
     this.onLogout = this.onLogout.bind(this);
   }
 
@@ -33,46 +33,45 @@ class SideMenu extends Component {
     }, 500);
   }
 
-  onProfil() {
+  onProfile() {
     if (!pressed) {
       pressed = true;
-      // Actions.jump('profil', { type: 'replace', kullanici: this.props.user });
-      Actions.profil({ type: 'replace', kullanici: this.props.user });
+      Actions.profile({ type: 'replace', kullanici: this.props.user });
     }
   }
 
-  onAnasayfa() {
+  onDashboard() {
     if (!pressed) {
       pressed = true;
-      Actions.anaSayfa({ type: 'replace' });
+      Actions.dashboard({ type: 'replace' });
     }
   }
 
-  onIsTeklifleri() {
+  onJobs() {
     if (!pressed) {
       pressed = true;
-      Actions.isTeklifleri({ type: 'replace' });
+      Actions.jobsList({ type: 'replace' });
     }
   }
 
-  onKisiler() {
+  onUsers() {
     if (!pressed) {
       pressed = true;
-      Actions.kisilerList({ type: 'replace' });
+      Actions.userList({ type: 'replace' });
     }
   }
 
-  onYeniIsEkle() {
+  onNewJob() {
     if (!pressed) {
       pressed = true;
-      Actions.yeniIsEkle({ type: 'replace' });
+      Actions.newJob({ type: 'replace' });
     }
   }
 
-  onAyarlar() {
+  onSettings() {
     if (!pressed) {
       pressed = true;
-      Actions.ayarlar({ type: 'replace' });
+      Actions.settings({ type: 'replace' });
     }
   }
 
@@ -88,22 +87,20 @@ class SideMenu extends Component {
     return (
       <View style={[styles.viewContainer, this.props.sceneStyle]}>
         <ListItem iconRight avatar>
-          <TouchableOpacity onPress={this.onProfil} style={{ flexDirection: 'row', flex: 5 }}>
+          <TouchableOpacity onPress={this.onProfile} style={{ flexDirection: 'row', flex: 5 }}>
             <Left>
               <Thumbnail
                 large
                 source={{
                   uri:
-                    user.profilFotografiUrl ||
+                    user.avatarU ||
                     'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png'
                 }}
               />
             </Left>
             <Body>
-              <Text style={{ fontSize: 20 }}>{user.isim}</Text>
-              <Text note style={{ fontSize: 16 }}>
-                {user.unvan.capitalize()}
-              </Text>
+              <Text style={{ fontSize: 20 }}>{user.name}</Text>
+              <Text style={{ fontSize: 20 }}>{user.surname}</Text>
             </Body>
           </TouchableOpacity>
           <TouchableOpacity
@@ -141,7 +138,7 @@ class SideMenu extends Component {
             color="#555"
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
-            onPress={this.onAnasayfa}
+            onPress={this.onDashboard}
           />
           <Button
             Component={TouchableOpacity}
@@ -157,7 +154,7 @@ class SideMenu extends Component {
             color="#555"
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
-            onPress={this.onIsTeklifleri}
+            onPress={this.onJobs}
           />
           <Button
             Component={TouchableOpacity}
@@ -173,7 +170,7 @@ class SideMenu extends Component {
             color="#555"
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
-            onPress={this.onKisiler}
+            onPress={this.onUsers}
           />
         </CardSection>
 
@@ -199,7 +196,7 @@ class SideMenu extends Component {
             color="#555"
             buttonStyle={styles.buttonStyle}
             containerViewStyle={{ marginLeft: 0 }}
-            onPress={this.onAyarlar}
+            onPress={this.onSettings}
           />
         </CardSection>
       </View>
@@ -223,7 +220,7 @@ const styles = StyleSheet.create({
   viewContainer: {
     flex: 1
   },
-  profilButtonContainer: {
+  profileButtonContainer: {
     flexDirection: 'row'
   },
   logOutIconStyle: {

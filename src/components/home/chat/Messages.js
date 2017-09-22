@@ -52,7 +52,7 @@ const messages2 = [
   }
 ];
 
-export default class Mesajlar extends Component {
+export default class Messages extends Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -34,7 +34,7 @@ String.prototype.capitalize = function () {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-class Profil extends Component {
+class Profile extends Component {
   constructor() {
     super();
     console.log(this.props);
@@ -78,7 +78,7 @@ class Profil extends Component {
     }
   }
 
-  renderContactInfo(email, telefon, adres) {
+  renderContactInfo(email, telephone, address) {
     const {
       contactInfoContainerStyle,
       contactPropStyle,
@@ -109,7 +109,7 @@ class Profil extends Component {
               containerRef="telInputContainer"
               textInputRef="telInput"
               placeholder="555 545 5454"
-              value={telefon}
+              value={telephone}
               editable={this.props.editable}
               keyboardType="phone-pad"
             />
@@ -146,12 +146,12 @@ class Profil extends Component {
               inputStyle={contactInfoStyle}
               containerStyle={contactInfoContainerStyle}
               ref="form3"
-              containerRef="adresInputContainer"
-              textInputRef="adresInput"
+              containerRef="addressInputContainer"
+              textInputRef="addressInput"
               placeholder="Adres"
               editable={this.props.editable}
               multiline
-              value={adres}
+              value={address}
               onChangeText={text => {
                 this.setState({ text });
               }}
@@ -268,16 +268,16 @@ class Profil extends Component {
 
   render() {
     const {
-      adres,
+      address,
       email,
-      isim,
-      profilFotografiUrl,
+      name,
+      surname,
+      avatarU,
       tags,
-      tcKimlikNo,
-      telefon,
-      unvan
+      tcid,
+      telephone,
     } = this.props.kullanici;
-    const { nameStyle, unvanStyle } = styles;
+    const { nameStyle } = styles;
     return (
       <Container>
         <Content>
@@ -306,7 +306,7 @@ class Profil extends Component {
                   showEditButton
                   onEditPress={() => console.log('Works!')}
                   title="BK"
-                  source={{ uri: profilFotografiUrl }}
+                  source={{ uri: avatarU }}
                   overlayContainerStyle={{ width: 100, height: 100, borderRadius: 50 }}
                   containerStyle={{ width: 100, height: 100, borderRadius: 50 }}
                   avatarStyle={{ width: 100, height: 100, borderRadius: 50 }}
@@ -319,7 +319,8 @@ class Profil extends Component {
                   justifyContent: 'space-around'
                 }}
               >
-                <Text style={nameStyle}>{isim}</Text>
+                <Text style={nameStyle}>{name}</Text>
+                <Text style={nameStyle}>{surname}</Text>
                 <Text>{this.renderTags(tags)}</Text>
               </View>
             </View>
@@ -333,13 +334,7 @@ class Profil extends Component {
               flex: 1
             }}
           >
-            <View>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={{ flex: 1, fontSize: 20, color: '#000' }}>Unvan</Text>
-                <Text style={unvanStyle}>{unvan.capitalize()}</Text>
-              </View>
-            </View>
-            {this.renderContactInfo(email, telefon, adres)}
+            {this.renderContactInfo(email, telephone, address)}
             {this.renderSocialMediaAccs()}
           </Card1>
         </Content>
@@ -386,4 +381,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Profil;
+export default Profile;
