@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, Linking, Alert, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Linking, Alert, Modal } from 'react-native';
 import { Card as Card1, ListItem, FormLabel, FormInput, Avatar } from 'react-native-elements';
 import {
   Container,
@@ -272,9 +272,9 @@ class Profile extends Component {
       email,
       name,
       surname,
-      avatarU,
+      avatarUrl,
       tags,
-      tcid,
+      tcId,
       telephone,
     } = this.props.kullanici;
     const { nameStyle } = styles;
@@ -306,7 +306,7 @@ class Profile extends Component {
                   showEditButton
                   onEditPress={() => console.log('Works!')}
                   title="BK"
-                  source={{ uri: avatarU }}
+                  source={{ uri: avatarUrl }}
                   overlayContainerStyle={{ width: 100, height: 100, borderRadius: 50 }}
                   containerStyle={{ width: 100, height: 100, borderRadius: 50 }}
                   avatarStyle={{ width: 100, height: 100, borderRadius: 50 }}

@@ -11,6 +11,7 @@ const INITIAL_STATE = {
   email: 'mba@gmail.com',
   password: 'asd123',
   error: '',
+  user: {},
   loading: false
 };
 

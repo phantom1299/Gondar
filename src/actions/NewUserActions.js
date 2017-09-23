@@ -70,7 +70,7 @@ export const newUserAdd = ({ name, surname, email, password, tags }) => {
           },
           body: JSON.stringify({
             _id: user.Id,
-            avatarU: 'https://randomuser.me/api/portraits/lego/5.jpg',
+            avatarUrl: 'https://randomuser.me/api/portraits/lego/5.jpg',
             name,
             surname,
             email,

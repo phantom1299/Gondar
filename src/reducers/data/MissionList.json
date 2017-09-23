@@ -7,8 +7,8 @@
     "progress": 0,
     "tags": ["tasarımcı", "grafiker", "editör"],
     "employer": {
-      "tcid": "59653468490",
-      "avatarU": "https://randomuser.me/api/portraits/men/29.jpg",
+      "tcId": "59653468490",
+      "avatarUrl": "https://randomuser.me/api/portraits/men/29.jpg",
       "name": "Berat",
       "surname": "Karas",
       "email": "berat.karas@gmail.com",
@@ -18,8 +18,8 @@
     },
     "applications": [
       {
-        "tcid": "59653468490",
-        "avatarU": "https://randomuser.me/api/portraits/men/82.jpg",
+        "tcId": "59653468490",
+        "avatarUrl": "https://randomuser.me/api/portraits/men/82.jpg",
         "name": "Şamil",
         "surname": "Er",
         "email": "samil.er@gmail.com",
@@ -28,8 +28,8 @@
         "tags": ["grafiker", "tasarımcı"]
       },
       {
-        "tcid": "59653468490",
-        "avatarU": "https://randomuser.me/api/portraits/men/17.jpg",
+        "tcId": "59653468490",
+        "avatarUrl": "https://randomuser.me/api/portraits/men/17.jpg",
         "name": "Kerem",
         "surname": "Asya",
         "email": "kreme.asya@gmail.com",
@@ -40,8 +40,8 @@
     ],
     "participants": [
       {
-        "tcid": "59653468490",
-        "avatarU": "https://randomuser.me/api/portraits/women/49.jpg",
+        "tcId": "59653468490",
+        "avatarUrl": "https://randomuser.me/api/portraits/women/49.jpg",
         "name": "Aslı",
         "surname": "Dağdelen",
         "email": "asli.dagdelen@gmail.com",
@@ -65,8 +65,8 @@
       "wolfofwallstreetizlemiş"
     ],
     "employer": {
-      "tcid": "59653468490",
-      "avatarU": "http://cdn.images.express.co.uk/img/dynamic/36/590x/Leonardo-DiCaprio-in-Wolf-of-Wall-Street-691981.jpg",
+      "tcId": "59653468490",
+      "avatarUrl": "http://cdn.images.express.co.uk/img/dynamic/36/590x/Leonardo-DiCaprio-in-Wolf-of-Wall-Street-691981.jpg",
       "name": "Leonrdo",
       "surname": "Decaprio",
       "email": "leo.decaprio@gmail.com",
@@ -80,8 +80,8 @@
     },
     "applications": [
       {
-        "tcid": "59653468490",
-        "avatarU": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
+        "tcId": "59653468490",
+        "avatarUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
         "name": "Kerem",
         "surname": "Asya",
         "email": "kreme.asya@gmail.com",
@@ -107,7 +107,7 @@
     "tags": ["editör", "tasarımcı"],
     "employer": {
       "tcKimlikNo": "59653468490",
-      "avatarU": "https://randomuser.me/api/portraits/men/29.jpg",
+      "avatarUrl": "https://randomuser.me/api/portraits/men/29.jpg",
       "name": "Berat",
       "surname": "Karas",
       "email": "berat.karas@gmail.com",
@@ -118,7 +118,7 @@
     "applications": [
       {
         "tcKimlikNo": "59653468490",
-        "avatarU": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
+        "avatarUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
         "name": "Şamil",
         "surname": "Er",
         "email": "samil.er@gmail.com",
@@ -128,7 +128,7 @@
       },
       {
         "tcKimlikNo": "59653468490",
-        "avatarU": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
+        "avatarUrl": "https://cdn.pixabay.com/photo/2012/04/13/21/07/user-33638_640.png",
         "name": "Kerem",
         "surname": "Asya",
         "email": "kreme.asya@gmail.com",

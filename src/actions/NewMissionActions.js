@@ -55,7 +55,7 @@ export const newMissionFormDescriptionChanged = text => {
 
 //İş Ekleme burda yapılacak
 //TODO Dosya ekleme
-export const newMissionAdd = ({ name, employer, budged, deadline, description, tags }) => {
+export const newMissionAdd = ({ title, employer, budged, deadline, description, tags }) => {
   return dispatch => {
     dispatch({ type: NEW_MISSION_FORM_ADD_MISSION });
     fetch(`${data.url}/isTeklifleri`, {
@@ -65,15 +65,16 @@ export const newMissionAdd = ({ name, employer, budged, deadline, description, t
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        title: name,
+        title,
         description,
         budged,
         deadline,
         employer,
         tags,
-        ekler: null,
-        notlar: null,
-        durum: 'created'
+        progress: 0,
+        files: null,
+        notes: null,
+        status: 'created'
       })
     })
       .then(stats => {

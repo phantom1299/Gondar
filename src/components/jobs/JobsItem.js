@@ -24,7 +24,7 @@ class JobsItem extends Component {
         <Card style={{ flex: 0, marginLeft: 5, marginRight: 5 }}>
           <CardItem>
             <Left style={{ flex: 2 }}>
-              <Thumbnail source={{ uri: employer.avatarU }} />
+              <Thumbnail source={{ uri: employer.avatarUrl }} />
               <Body>
                 <Text>
                   {employer.name} {employer.surname}

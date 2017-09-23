@@ -29,6 +29,8 @@ build/
 .gradle
 local.properties
 *.iml
+android/app/src/main/assets/index.android.bundle
+android/app/src/main/assets/index.android.bundle.meta
 
 # node.js
 #
@@ -59,5 +61,5 @@ jsconfig.json
 data.js
 .expo/settings.json
 .expo/packager-info.json
-android/app/src/main/assets/index.android.bundle
-android/app/src/main/assets/index.android.bundle.meta
+app.json
+package-lock.json

@@ -23,8 +23,8 @@ String.prototype.capitalize = function () {
 
 const users = [
   {
-    tcKimlikNo: '59653468490',
-    avatarU: 'https://randomuser.me/api/portraits/men/29.jpg',
+    tcId: '59653468490',
+    avatarUrl: 'https://randomuser.me/api/portraits/men/29.jpg',
     name: 'Berat',
     surname: 'Karas',
     email: 'berat.karas@gmail.com',
@@ -33,8 +33,8 @@ const users = [
     tags: ['yönetici', 'iş veren']
   },
   {
-    tcKimlikNo: '59653468490',
-    avatarU: 'https://randomuser.me/api/portraits/men/82.jpg',
+    tcId: '59653468490',
+    avatarUrl: 'https://randomuser.me/api/portraits/men/82.jpg',
     name: 'Şamil Er',
     surname: 'Er',
     email: 'samil.er@gmail.com',
@@ -43,8 +43,8 @@ const users = [
     tags: ['grafiker', 'tasarımcı']
   },
   {
-    tcKimlikNo: '59653468490',
-    avatarU: 'https://randomuser.me/api/portraits/men/17.jpg',
+    tcId: '59653468490',
+    avatarUrl: 'https://randomuser.me/api/portraits/men/17.jpg',
     name: 'Kerem',
     surname: 'Asya',
     email: 'kreme.asya@gmail.com',
@@ -53,8 +53,8 @@ const users = [
     tags: ['grafiker', 'tasarımcı', 'editör']
   },
   {
-    tcKimlikNo: '59653468490',
-    avatarU: 'https://randomuser.me/api/portraits/women/49.jpg',
+    tcId: '59653468490',
+    avatarUrl: 'https://randomuser.me/api/portraits/women/49.jpg',
     name: 'Aslı',
     surname: 'Dağdelen',
     email: 'asli.dagdelen@gmail.com',
@@ -70,14 +70,12 @@ class UserList extends Component {
     this.pressed = false;
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      basic: true,
       loading: true,
       listViewData: users
     };
   }
 
   componentWillMount() {
-    console.log(this.props);
     fetch(`${data.url}/kullanicilar`) //default olarak get on
       .then(response => {
         response
@@ -127,7 +125,7 @@ class UserList extends Component {
                   <Thumbnail
                     source={{
                       uri:
-                        user.avatarU ||
+                        user.avatarUrl ||
                         'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png'
                     }}
                   />

@@ -32,7 +32,7 @@ class UserProfile extends Component {
         <Content>
           <Card>
             <Body>
-              <Thumbnail large source={{ uri: user.avatarU || 'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png' }} />
+              <Thumbnail large source={{ uri: user.avatarUrl || 'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png' }} />
               <Text style={{ fontSize: 28 }}>{user.name} {user.surname}</Text>
               <Text style={{ color: 'steelblue', fontSize: 18 }}>
                 {user.tags.map(tag => `#${tag} `)}

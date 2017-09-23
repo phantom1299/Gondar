@@ -207,7 +207,7 @@ class JobDetails extends Component {
                   avatar
                 >
                   <Left>
-                    <Thumbnail source={{ uri: application.avatarU }} />
+                    <Thumbnail source={{ uri: application.avatarUrl }} />
                   </Left>
                   <Body>
                     <Text style={{ fontSize: 20 }}>
@@ -258,7 +258,7 @@ class JobDetails extends Component {
                   avatar
                 >
                   <Left>
-                    <Thumbnail source={{ uri: participant.avatarU }} />
+                    <Thumbnail source={{ uri: participant.avatarUrl }} />
                   </Left>
                   <Body>
                     <Text style={{ fontSize: 20 }}>
@@ -294,7 +294,7 @@ class JobDetails extends Component {
           <Text style={propDefStyle}>İş Veren: </Text>
           <ListItem iconRight avatar>
             <Left>
-              <Thumbnail source={{ uri: employer.avatarU }} />
+              <Thumbnail source={{ uri: employer.avatarUrl }} />
             </Left>
             <Body style={{ borderBottomWidth: 0 }}>
               <Text style={{ fontSize: 20 }}>

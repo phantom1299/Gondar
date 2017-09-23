@@ -93,7 +93,7 @@ class SideMenu extends Component {
                 large
                 source={{
                   uri:
-                    user.avatarU ||
+                    user.avatarUrl ||
                     'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png'
                 }}
               />

@@ -11,7 +11,7 @@ const INITIAL_STATE = {
   telephone: '',
   address: '',
   tags: [],
-  avatarU: ''
+  avatarUrl: ''
 };
 
 // export default (state = INITIAL_STATE, action) => {

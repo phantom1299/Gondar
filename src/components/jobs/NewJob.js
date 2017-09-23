@@ -18,7 +18,7 @@ import { CardSection, Spinner } from '../common';
 class IsEkle extends Component {
   constructor() {
     super();
-    this.onNameChange = this.onNameChange.bind(this);
+    this.onTitleChange = this.onTitleChange.bind(this);
     this.onEmployerChange = this.onEmployerChange.bind(this);
     this.onBudgetChange = this.onBudgetChange.bind(this);
     this.onDeadlineChange = this.onDeadlineChange.bind(this);
@@ -33,12 +33,8 @@ class IsEkle extends Component {
     this.props.newMissionFormWillMount();
   }
 
-  onNameChange(name) {
-    this.props.newMissionFormNameChanged(name);
-  }
-
-  onEmployerChange(employer) {
-    this.props.newMissionFormEmployerChanged(employer);
+  onTitleChange(title) {
+    this.props.newMissionFormNameChanged(title);
   }
 
   onBudgetChange(budget) {
@@ -54,9 +50,9 @@ class IsEkle extends Component {
   }
 
   onButtonPress() {
-    const { name, employer, budged, deadline, description, tags } = this.props;
+    const { title, employer, budged, deadline, description, tags } = this.props;
     Keyboard.dismiss();
-    this.props.newMissionAdd({ name, employer, budged, deadline, description, tags });
+    this.props.newMissionAdd({ title, employer, budged, deadline, description, tags });
   }
 
   onTagChange(tag) {
@@ -100,7 +96,7 @@ class IsEkle extends Component {
   }
 
   render() {
-    const { name, employer, deadline, description, budget } = this.props;
+    const { name, deadline, description, budget } = this.props;
     const {
       errorTextStyle,
       labelStyle,
@@ -125,24 +121,8 @@ class IsEkle extends Component {
               ref="form1"
               containerRef="isimInputContainer"
               textInputRef="isimInput"
-              onChangeText={this.onNameChange}
+              onChangeText={this.onTitleChange}
               value={name}
-              autoCapitalize="words"
-            />
-          </View>
-          <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-            <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
-              İş Veren
-            </FormLabel>
-            <FormInput
-              placeholder="İş Verenin ismini giriniz"
-              inputStyle={inputStyle}
-              containerStyle={inputContainerStyle}
-              ref="form1"
-              containerRef="isimInputContainer"
-              textInputRef="isimInput"
-              onChangeText={this.onEmployerChange}
-              value={employer}
               autoCapitalize="words"
             />
           </View>
@@ -214,16 +194,10 @@ class IsEkle extends Component {
               onPress={this.onTagAdd}
             />
           </View>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-            {this.renderTags()}
-          </View>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>{this.renderTags()}</View>
           <Button title="Dosya (yapılacak)" buttonStyle={{ marginTop: 10 }} />
-          <Text style={errorTextStyle}>
-            {this.props.error}
-          </Text>
-          <CardSection>
-            {this.renderButton()}
-          </CardSection>
+          <Text style={errorTextStyle}>{this.props.error}</Text>
+          <CardSection>{this.renderButton()}</CardSection>
         </Card>
       </Content>
     );
@@ -293,16 +267,16 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ newMissionForm }) => {
-  const { name, employer, budget, deadline, description, tags, error, loading } = newMissionForm;
+const mapStateToProps = ({ newMissionForm, auth }) => {
+  const { title, budget, deadline, description, tags, error, loading } = newMissionForm;
+  const employer = { ...auth.user };
 
-  return { name, employer, budget, deadline, description, tags, error, loading };
+  return { title, employer, budget, deadline, description, tags, error, loading };
 };
 
 export default connect(mapStateToProps, {
   newMissionFormWillMount,
   newMissionFormNameChanged,
-  newMissionFormEmployerChanged,
   newMissionFormBudgetChanged,
   newMissionFormDeadlineChanged,
   newMissionFormDescriptionChanged,

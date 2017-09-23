@@ -48,6 +48,7 @@ const loginUserFail = dispatch => {
     type: LOGIN_USER_FAIL
   });
 };
+
 const loginUserSuccess = (dispatch, user) => {
   auth0.auth
     .userInfo({ token: user.accessToken })

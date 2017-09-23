@@ -83,7 +83,14 @@ class LoginForm extends Component {
               >
                 Email
               </Label>
-              <Input onChangeText={this.onEmailChange} value={this.props.email} placeholder="birisi@örnek.com" placeholderTextColor="#fffa" />
+              <Input
+                editable={!this.props.loading}
+                onChangeText={this.onEmailChange}
+                keyboardType="email-address"
+                value={this.props.email}
+                placeholder="birisi@örnek.com"
+                placeholderTextColor="#fffa"
+              />
             </Item>
             <Item inlineLabel>
               <Label
@@ -94,6 +101,7 @@ class LoginForm extends Component {
                 Şifre
               </Label>
               <Input
+                editable={!this.props.loading}
                 secureTextEntry
                 onChangeText={this.onPasswordChange}
                 value={this.props.password}
