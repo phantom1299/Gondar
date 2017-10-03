@@ -2,7 +2,7 @@
 
 # Nedir, neyin nesidir
 Gondar, React-Native ve MongoDB kullanılarak geliştirilen bir Mobil Uygulamadır.
-Bu uygulama ile freelance çalışan ve iş veren, bir mobil uygulama çatısı altında toplamak hedeflenmektedir.
+Bu uygulama ile freelance çalışan ve iş vereni, bir mobil uygulama çatısı altında toplamayı hedefliyoruz.
 
 Uygulama 3 bileşenden oluşuyor;
   Freelance iş yapan kişiler / social media influencer
