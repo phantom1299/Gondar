@@ -16,7 +16,7 @@ export const NEW_USER_FORM_ADD_USER_SUCCESS = 'new_user_add_success';
 export const NEW_USER_FORM_ADD_USER_FAIL = 'new_user_add_fail';
 
 export const NEW_MISSION_FORM_WILL_MOUNT = 'new_mission_form_will_mount';
-export const NEW_MISSION_FORM_NAME_CHANGED = 'new_mission_name_changed';
+export const NEW_MISSION_FORM_TITLE_CHANGED = 'new_mission_title_changed';
 export const NEW_MISSION_FORM_EMPLOYER_CHANGED = 'new_mission_employer_changed';
 export const NEW_MISSION_FORM_BUDGET_CHANGED = 'new_mission_budget_changed';
 export const NEW_MISSION_FORM_DEADLINE_CHANGED = 'new_mission_deadline_changed';

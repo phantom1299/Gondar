@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { Text, Keyboard, View, StyleSheet } from 'react-native';
-import { Container, Content } from 'native-base';
+import { Content } from 'native-base';
 import { connect } from 'react-redux';
 import { Card, Button, FormLabel, FormInput, Icon } from 'react-native-elements';
+import DatePicker from 'react-native-datepicker';
+import moment from 'moment';
+import trLocale from 'moment/locale/tr';
 
 import {
   newMissionFormWillMount,
-  newMissionFormNameChanged,
-  newMissionFormEmployerChanged,
+  newMissionFormTitleChanged,
   newMissionFormBudgetChanged,
   newMissionFormDeadlineChanged,
   newMissionFormDescriptionChanged,
@@ -15,18 +17,19 @@ import {
 } from '../../actions';
 import { CardSection, Spinner } from '../common';
 
-class IsEkle extends Component {
+moment.updateLocale('tr', trLocale);
+
+class NewJob extends Component {
   constructor() {
     super();
     this.onTitleChange = this.onTitleChange.bind(this);
-    this.onEmployerChange = this.onEmployerChange.bind(this);
     this.onBudgetChange = this.onBudgetChange.bind(this);
     this.onDeadlineChange = this.onDeadlineChange.bind(this);
     this.onDescriptionChange = this.onDescriptionChange.bind(this);
     this.onTagAdd = this.onTagAdd.bind(this);
     this.onTagChange = this.onTagChange.bind(this);
     this.onButtonPress = this.onButtonPress.bind(this);
-    this.state = { height: 0, tag: '' };
+    this.state = { height: 0, tag: '', date: moment() };
   }
 
   componentWillMount() {
@@ -34,7 +37,7 @@ class IsEkle extends Component {
   }
 
   onTitleChange(title) {
-    this.props.newMissionFormNameChanged(title);
+    this.props.newMissionFormTitleChanged(title);
   }
 
   onBudgetChange(budget) {
@@ -50,9 +53,10 @@ class IsEkle extends Component {
   }
 
   onButtonPress() {
-    const { title, employer, budged, deadline, description, tags } = this.props;
+    const { title, employerId, budget, description, tags } = this.props;
+    const deadline = moment(this.state.date, 'DD MMM YY').toDate();
     Keyboard.dismiss();
-    this.props.newMissionAdd({ title, employer, budged, deadline, description, tags });
+    this.props.newMissionAdd({ title, employerId, deadline, budget, description, tags });
   }
 
   onTagChange(tag) {
@@ -96,7 +100,7 @@ class IsEkle extends Component {
   }
 
   render() {
-    const { name, deadline, description, budget } = this.props;
+    const { title, description, budget } = this.props;
     const {
       errorTextStyle,
       labelStyle,
@@ -122,7 +126,7 @@ class IsEkle extends Component {
               containerRef="isimInputContainer"
               textInputRef="isimInput"
               onChangeText={this.onTitleChange}
-              value={name}
+              value={title}
               autoCapitalize="words"
             />
           </View>
@@ -145,17 +149,30 @@ class IsEkle extends Component {
             <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
               Deadline
             </FormLabel>
-            <FormInput
-              placeholder="28/07/2017"
-              inputStyle={inputStyle}
-              containerStyle={inputContainerStyle}
-              ref="form1"
-              containerRef="isimInputContainer"
-              textInputRef="isimInput"
-              onChangeText={this.onDeadlineChange}
-              value={deadline}
+            <DatePicker
+              style={{ width: '65%' }}
+              date={this.state.date}
+              mode="date"
+              format="DD MMM YY"
+              showIcon={false}
+              androidMode="calendar"
+              minDate={moment().format('DD MMM YY')}
+              customStyles={{
+                dateInput: {
+                  marginRight: 18,
+                  borderWidth: 0,
+                  borderBottomWidth: 1,
+                  borderBottomColor: 'grey'
+                },
+                dateTouchBody: {}
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={date => {
+                this.setState({ date });
+              }}
             />
           </View>
+
           <View style={{ flexDirection: 'row', marginVertical: 5 }}>
             <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
               Açıklama
@@ -254,7 +271,7 @@ const styles = StyleSheet.create({
   },
   tagStyle: {
     fontSize: 16,
-    color: '#05f',
+    color: 'white',
     marginRight: 5
   },
   tagContainerStyle: {
@@ -262,23 +279,23 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     padding: 8,
     elevation: 1,
-    backgroundColor: '#BDE5F8',
+    backgroundColor: '#228b22aa',
     borderRadius: 8
   }
 });
 
 const mapStateToProps = ({ newMissionForm, auth }) => {
   const { title, budget, deadline, description, tags, error, loading } = newMissionForm;
-  const employer = { ...auth.user };
+  const employerId = auth.user._id;
 
-  return { title, employer, budget, deadline, description, tags, error, loading };
+  return { title, employerId, budget, deadline, description, tags, error, loading };
 };
 
 export default connect(mapStateToProps, {
   newMissionFormWillMount,
-  newMissionFormNameChanged,
+  newMissionFormTitleChanged,
   newMissionFormBudgetChanged,
   newMissionFormDeadlineChanged,
   newMissionFormDescriptionChanged,
   newMissionAdd
-})(IsEkle);
+})(NewJob);

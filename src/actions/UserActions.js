@@ -5,7 +5,7 @@ import { data } from '../data';
 
 export const deleteUser = id => {
   return dispatch => {
-    fetch(`${data.url}/kullanicilar/${id}`, {
+    fetch(`${data.url}/users/${id}`, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
@@ -13,16 +13,10 @@ export const deleteUser = id => {
       }
     })
       .then(() => {
-        Toast.show({
-          text: 'Kişi başarıyla silindi!',
-          position: 'bottom',
-          buttonText: 'Tamam',
-          type: 'success',
-          duration: 2000
-        });
-        Actions.kisilerList({ type: 'replace' });
+        Actions.userList({ type: 'replace', userDeleted: true });
       })
       .catch(err => {
+        console.log(err);
         Toast.show({
           text: `Kişiyi silerken bir hata oluştu:
                 ${err}`,

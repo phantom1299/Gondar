@@ -1,7 +1,7 @@
 import { Toast } from 'native-base';
 import {
   NEW_MISSION_FORM_WILL_MOUNT,
-  NEW_MISSION_FORM_NAME_CHANGED,
+  NEW_MISSION_FORM_TITLE_CHANGED,
   NEW_MISSION_FORM_EMPLOYER_CHANGED,
   NEW_MISSION_FORM_BUDGET_CHANGED,
   NEW_MISSION_FORM_DEADLINE_CHANGED,
@@ -18,9 +18,9 @@ export const newMissionFormWillMount = () => {
   };
 };
 
-export const newMissionFormNameChanged = text => {
+export const newMissionFormTitleChanged = text => {
   return {
-    type: NEW_MISSION_FORM_NAME_CHANGED,
+    type: NEW_MISSION_FORM_TITLE_CHANGED,
     payload: text
   };
 };
@@ -55,10 +55,12 @@ export const newMissionFormDescriptionChanged = text => {
 
 //İş Ekleme burda yapılacak
 //TODO Dosya ekleme
-export const newMissionAdd = ({ title, employer, budged, deadline, description, tags }) => {
+export const newMissionAdd = ({ title, employerId, budget, deadline, description, tags }) => {
   return dispatch => {
+    console.log(budget);
+    console.log(typeof budget);
     dispatch({ type: NEW_MISSION_FORM_ADD_MISSION });
-    fetch(`${data.url}/isTeklifleri`, {
+    fetch(`${data.url}/job`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -67,14 +69,15 @@ export const newMissionAdd = ({ title, employer, budged, deadline, description, 
       body: JSON.stringify({
         title,
         description,
-        budged,
+        budget,
         deadline,
-        employer,
+        employer: employerId,
         tags,
         progress: 0,
         files: null,
         notes: null,
-        status: 'created'
+        status: 'created',
+        creationDate: new Date()
       })
     })
       .then(stats => {

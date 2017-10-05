@@ -82,7 +82,7 @@ class NewUser extends Component {
             name={'clear'}
             size={20}
             onPress={this.onTagDelete.bind(this, i)}
-            color={'#222'}
+            color={'#000'}
           />
         </Card>
       );
@@ -100,7 +100,7 @@ class NewUser extends Component {
     }
   }
 
-  renderButton() {
+  renderButtonOrLoading() {
     if (this.props.loading) {
       return <Spinner />;
     }
@@ -213,7 +213,7 @@ class NewUser extends Component {
             </View>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>{this.renderTags()}</View>
             {this.renderError()}
-            <CardSection>{this.renderButton()}</CardSection>
+            <CardSection>{this.renderButtonOrLoading()}</CardSection>
           </Card>
         </Content>
       </Container>
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
   },
   tagStyle: {
     fontSize: 16,
-    color: '#05f',
+    color: 'white',
     marginRight: 5
   },
   tagContainerStyle: {
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     padding: 8,
     elevation: 1,
-    backgroundColor: '#BDE5F8',
+    backgroundColor: '#228b22aa',
     borderRadius: 8
   }
 });

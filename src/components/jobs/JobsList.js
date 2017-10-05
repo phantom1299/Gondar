@@ -1,39 +1,42 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ListView } from 'react-native';
-import ListItem from './JobsItem';
-import { Content, Container } from 'native-base';
+import { Container, Content, Tab, Tabs, Text } from 'native-base';
+
+import OpportunitiesList from './opportunity/OpportunityJobList';
+import ActiveList from './active/ActiveJobList';
 
 class JobsList extends Component {
-  componentWillMount() {
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2
-    });
-
-    this.DataSource = ds.cloneWithRows(this.props.jobs);
-  }
-
-  renderRow(job) {
-    return <ListItem job={job} />;
-  }
-
   render() {
     return (
       <Container>
-        <Content>
-          <ListView
-            contentContainerStyle={{ paddingBottom: 20 }}
-            dataSource={this.DataSource}
-            renderRow={this.renderRow}
-          />
-        </Content>
+        <Tabs initialPage={0}>
+          <Tab heading="Aktif">
+            <ActiveList jobsId={this.props.user.activeJobs} />
+          </Tab>
+          <Tab heading="Fırsatlar">
+            <OpportunitiesList tags={this.props.user.tags} />
+          </Tab>
+          <Tab jobsId={this.props.user.finishedJobs} heading="Tamamlanmış">
+            <Container style={{ alignItems: 'center' }}>
+              <Content>
+                <Text style={{ marginTop: '50%', fontSize: 16, color: 'grey' }}>
+                  Şuan tamamlanmış bir iş teklifiniz
+                </Text>
+                <Text style={{ fontSize: 16, alignSelf: 'center', color: 'grey' }}>
+                  bulunmamaktadır.
+                </Text>
+              </Content>
+            </Container>
+          </Tab>
+        </Tabs>
       </Container>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return { jobs: state.jobs };
+  const user = state.auth.user;
+  return { user };
 };
 
 export default connect(mapStateToProps)(JobsList);

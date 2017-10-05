@@ -11,7 +11,8 @@ import {
   Thumbnail,
   Text,
   Button,
-  Icon
+  Icon,
+  Toast
 } from 'native-base';
 import { ListView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
@@ -68,6 +69,7 @@ class UserList extends Component {
   constructor() {
     super();
     this.pressed = false;
+    this.renderRow = this.renderRow.bind(this);
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       loading: true,
@@ -76,13 +78,13 @@ class UserList extends Component {
   }
 
   componentWillMount() {
-    fetch(`${data.url}/kullanicilar`) //default olarak get on
+    console.log(this.props.userDeleted);
+    fetch(`${data.url}/users`) //default olarak get on
       .then(response => {
-        response
-          .json()
-          .then(response1 =>
-            this.setState({ listViewData: users.concat(response1), loading: false })
-          );
+        response.json().then(response1 => {
+          this.setState({ listViewData: users.concat(response1), loading: false });
+          this.showToast();
+        });
       })
       .catch(console.log);
   }
@@ -107,10 +109,51 @@ class UserList extends Component {
     }
   }
 
+  showToast() {
+    if (this.props.userDeleted) {
+      Toast.show({
+        text: 'Kişi başarıyla silindi!',
+        position: 'bottom',
+        buttonText: 'Tamam',
+        type: 'success',
+        duration: 2000
+      });
+    } else if (this.props.userAdded) {
+      Toast.show({
+        text: 'Kişi başarıyla eklendi!',
+        position: 'bottom',
+        buttonText: 'Tamam',
+        type: 'success',
+        duration: 2000
+      });
+    }
+  }
+
   renderLoading() {
     if (this.state.loading) {
       return <Spinner />;
     }
+  }
+
+  renderRow(user) {
+    return (
+      <ListItem avatar button onPress={() => this.onPressInfo(user)}>
+        <Left>
+          <Thumbnail
+            source={{
+              uri:
+                user.avatarUrl ||
+                'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png'
+            }}
+          />
+        </Left>
+        <Body>
+          <Text>
+            {user.name} {user.surname}
+          </Text>
+        </Body>
+      </ListItem>
+    );
   }
 
   render() {
@@ -119,49 +162,15 @@ class UserList extends Component {
         <Content>
           <List
             dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-            renderRow={user => (
-              <ListItem avatar button onPress={this.onPressInfo.bind(this, user)}>
-                <Left>
-                  <Thumbnail
-                    source={{
-                      uri:
-                        user.avatarUrl ||
-                        'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png'
-                    }}
-                  />
-                </Left>
-                <Body>
-                  <Text>
-                    {user.name} {user.surname}
-                  </Text>
-                </Body>
-              </ListItem>
-            )}
+            renderRow={this.renderRow}
             renderLeftHiddenRow={() => null}
             renderRightHiddenRow={(user, secId, rowId, rowMap) => (
-              <Body style={{ flexDirection: 'row' }}>
-                {/* <Left>
-                  <Button
-                    full
-                    style={{ height: '100%' }}
-                    onPress={this.onPressInfo.bind(this, user)}
-                  >
-                    <Icon active name="information-circle" />
-                  </Button>
-                </Left> */}
-                <Right>
-                  <Button
-                    full
-                    success
-                    style={{ height: '100%' }}
-                    onPress={this.onPressChat.bind(this, user)}
-                  >
-                    <Icon active name="ios-chatbubbles" />
-                  </Button>
-                </Right>
-              </Body>
+              <Button full success onPress={() => this.onPressChat(user)}>
+                <Icon active name="ios-chatbubbles" />
+              </Button>
             )}
             disableRightSwipe
+            closeOnRowBeginSwipe
             rightOpenValue={-75}
           />
           {this.renderLoading()}

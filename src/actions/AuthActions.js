@@ -54,7 +54,7 @@ const loginUserSuccess = (dispatch, user) => {
     .userInfo({ token: user.accessToken })
     .then(user1 => {
       const id = user1.sub.split('|')[1];
-      fetch(`${data.url}/kullanicilar/${id}`)
+      fetch(`${data.url}/users/${id}`)
         .then(response => response.json())
         .then(response => {
           dispatch({

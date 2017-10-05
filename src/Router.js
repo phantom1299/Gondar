@@ -1,7 +1,7 @@
 import React from 'react';
 import { Scene, Router, Actions } from 'react-native-router-flux';
 import LoginForm from './components/LoginForm';
-import Dashboard from './components/home/Dashboard';
+import Timeline from './components/home/Timeline';
 import SideMenu from './components/SideMenu';
 import UserList from './components/users/UserList';
 import UserProfile from './components/users/UserProfile';
@@ -10,7 +10,8 @@ import NewJob from './components/jobs/NewJob';
 import Settings from './components/Settings';
 import Profile from './components/Profile';
 import JobsList from './components/jobs/JobsList';
-import JobDetails from './components//jobs/JobDetails';
+import OppurtunityJobDetails from './components//jobs/opportunity/OppurtunityJobDetails';
+import ActiveJobTab from './components/jobs/active/ActiveJobTab';
 import Messages from './components/home/chat/Messages';
 
 import Image from '../img/menu_burger.png';
@@ -21,13 +22,7 @@ const RouterComponent = () => {
   return (
     <Router>
       <Scene overlay>
-        <Scene
-          key="lightbox"
-          lightbox
-          leftButtonTextStyle={{ color: 'green' }}
-          backButtonTextStyle={{ color: 'red' }}
-          initial
-        >
+        <Scene key="lightbox" lightbox initial>
           <Scene key="modal" modal hideNavBar>
             <Scene key="auth" initial>
               <Scene
@@ -48,7 +43,7 @@ const RouterComponent = () => {
               rightButtonTextStyle={{ color: 'white', padding: 10 }}
             >
               <Scene key="main">
-                <Scene key="dashboard" component={Dashboard} title="Pano" initial />
+                <Scene key="timeline" component={Timeline} title="Pano" initial />
                 <Scene key="messages" component={Messages} title="Mesajlar" back />
                 <Scene
                   key="jobsList"
@@ -57,7 +52,18 @@ const RouterComponent = () => {
                   rightTitle="Yeni"
                   onRight={() => Actions.newJob()}
                 />
-                <Scene key="jobDetails" component={JobDetails} title="İş Detayları" back />
+                <Scene
+                  key="opportunityJobDetails"
+                  component={OppurtunityJobDetails}
+                  title="İş Detayları"
+                  back
+                />
+                <Scene
+                  key="activeJobTab"
+                  component={ActiveJobTab}
+                  title="İş Detayları"
+                  back
+                />
                 <Scene key="newJob" component={NewJob} title="Yeni İş Ekle" back />
                 <Scene
                   key="userList"

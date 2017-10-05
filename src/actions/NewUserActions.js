@@ -1,5 +1,7 @@
 import Auth0 from 'react-native-auth0';
 import { Toast } from 'native-base';
+import { Actions } from 'react-native-router-flux';
+
 import {
   NEW_USER_FORM_WILL_MOUNT,
   NEW_USER_FORM_NAME_CHANGED,
@@ -62,7 +64,7 @@ export const newUserAdd = ({ name, surname, email, password, tags }) => {
         connection: 'Username-Password-Authentication'
       })
       .then(user => {
-        fetch(`${data.url}/kullanicilar`, {
+        fetch(`${data.url}/users`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -95,13 +97,7 @@ const newUserAddSuccess = dispatch => {
   dispatch({
     type: NEW_USER_FORM_ADD_USER_SUCCESS
   });
-  Toast.show({
-    text: 'Kişi eklendi!',
-    position: 'bottom',
-    buttonText: 'Tamam',
-    type: 'success',
-    duration: 2000
-  });
+  Actions.userList({ type: 'replace', userAdded: true });
 };
 
 //Kişi ekleme başarısız olduysa hata mesajı göster

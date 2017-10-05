@@ -36,14 +36,14 @@ class SideMenu extends Component {
   onProfile() {
     if (!pressed) {
       pressed = true;
-      Actions.profile({ type: 'replace', kullanici: this.props.user });
+      Actions.profile({ type: 'replace', user: this.props.user });
     }
   }
 
   onDashboard() {
     if (!pressed) {
       pressed = true;
-      Actions.dashboard({ type: 'replace' });
+      Actions.timeline({ type: 'replace' });
     }
   }
 

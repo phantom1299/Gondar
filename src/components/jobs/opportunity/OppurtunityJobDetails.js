@@ -10,8 +10,6 @@ import {
   Alert
 } from 'react-native';
 import {
-  Container,
-  Content,
   Card,
   CardItem,
   List,
@@ -25,6 +23,11 @@ import {
 } from 'native-base';
 import Icon1 from 'react-native-vector-icons/MaterialIcons';
 import { Icon, Button } from 'react-native-elements';
+import moment from 'moment';
+import trLocale from 'moment/locale/tr';
+import { data } from '../../../data';
+
+moment.updateLocale('tr', trLocale);
 
 const İletişim = [
   { text: 'Telefon', icon: 'call', iconColor: '#2c8ef4' },
@@ -37,13 +40,21 @@ const CANCEL_INDEX = 4;
 class JobDetails extends Component {
   constructor() {
     super();
-    this.state = { selectedApplication: null, selectedParticipant: null, visible: false };
+    this.state = {
+      selectedApplication: null,
+      selectedParticipant: null,
+      visible: false,
+      applications: [],
+      participants: []
+    };
   }
 
   componentWillMount() {
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
+    this.getApplications();
+    this.getParticipants();
   }
 
   componentWillUpdate() {
@@ -57,16 +68,40 @@ class JobDetails extends Component {
     // });
   }
 
+  getApplications() {
+    this.props.job.participants.map(participantsId => {
+      fetch(`${data.url}/users/${participantsId}`)
+        .then(response => {
+          response.json().then(responseJson => {
+            this.setState({ participants: this.state.participants.concat(responseJson) });
+          });
+        })
+        .catch(console.log);
+      return null;
+    });
+  }
+
+  getParticipants() {
+    this.props.job.applications.map(applicationId => {
+      fetch(`${data.url}/users/${applicationId}`)
+        .then(response => {
+          response.json().then(responseJson => {
+            this.setState({ applications: this.state.applications.concat(responseJson) });
+          });
+        })
+        .catch(console.log);
+      return null;
+    });
+  }
+
   //TODO eğer ilan sahibi girdiyse, ona göre başvuranları görebilip seçebilecek (tamamlanmadı daha)
   //TODO eğer başka biri girdiyse, başvur seçeneğini ve iletişim seçeneğini görebilecek (yapılacak)
   renderUserDependingContent() {
     //if (user.tcKimlikNo === this.props.job.employer.tcKimlikNo)
-    return (
-      <View>
-        {this.renderApplications(this.props.job.applications)}
-        {this.renderParticipants(this.props.job.participants)}
-      </View>
-    );
+    return [
+      this.renderApplications(this.state.applications),
+      this.renderParticipants(this.state.participants)
+    ];
   }
 
   renderUserDependingContentTags(tags) {
@@ -94,7 +129,7 @@ class JobDetails extends Component {
             onPress={() =>
               Alert.alert('Dikkat!', 'Kişiyi reddetmek istediğinizden emin misiniz?', [
                 { text: 'İptal', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                { text: 'Evet', onPress: () => console.log('OK Pressed') },
+                { text: 'Evet', onPress: () => this.addParticipant(selectedApplication) },
                 ''
               ])}
           />
@@ -185,8 +220,53 @@ class JobDetails extends Component {
     }
   }
 
+  renderApplication(application, k, i) {
+    return (
+      <View key={i}>
+        <ListItem
+          button
+          onPress={() => {
+            this.state.selectedApplication === application._id
+              ? this.setState({ selectedApplication: null })
+              : this.setState({ selectedApplication: application._id, selectedParticipant: null });
+          }}
+          avatar
+        >
+          <Left>
+            <Thumbnail source={{ uri: application.avatarUrl }} />
+          </Left>
+          <Body>
+            <Text style={{ fontSize: 20 }}>
+              {application.name} {application.surname}
+            </Text>
+            <Text style={{ color: 'steelblue', marginLeft: 5 }}>
+              {application.tags ? (
+                application.tags.map(tag => {
+                  return `#${tag} `;
+                })
+              ) : null}
+            </Text>
+          </Body>
+          <Right style={{ justifyContent: 'center' }}>
+            <Icon1
+              name={
+                this.state.selectedApplication === application._id ? (
+                  'keyboard-arrow-down'
+                ) : (
+                  'chevron-right'
+                )
+              }
+              size={28}
+            />
+          </Right>
+        </ListItem>
+        {this.renderApplicationOptions(application._id)}
+      </View>
+    );
+  }
+
   renderApplications(applications) {
-    if (applications.length > 0) {
+    if (applications && applications.length > 0) {
       return (
         <Card>
           <CardItem header style={{ justifyContent: 'center' }}>
@@ -195,45 +275,29 @@ class JobDetails extends Component {
           <List
             key={this.state.selectedApplication}
             dataArray={applications}
-            renderRow={(application, k, i) =>
-              <View key={i}>
-                <ListItem
-                  button
-                  onPress={() => {
-                    this.state.selectedApplication === i
-                      ? this.setState({ selectedApplication: null })
-                      : this.setState({ selectedApplication: i, selectedParticipant: null });
-                  }}
-                  avatar
-                >
-                  <Left>
-                    <Thumbnail source={{ uri: application.avatarUrl }} />
-                  </Left>
-                  <Body>
-                    <Text style={{ fontSize: 20 }}>
-                      {application.name} {application.surname}
-                    </Text>
-                    <Text style={{ color: 'steelblue', marginLeft: 5 }}>
-                      {application.tags.map(tag => {
-                        return `#${tag} `;
-                      })}
-                    </Text>
-                  </Body>
-                  <Right style={{ justifyContent: 'center' }}>
-                    <Icon1
-                      name={
-                        this.state.selectedApplication === i ? 'keyboard-arrow-down' : 'chevron-right'
-                      }
-                      size={28}
-                    />
-                  </Right>
-                </ListItem>
-                {this.renderApplicationOptions(i)}
-              </View>}
+            renderRow={(application, k, i) => this.renderApplication(application, k, i)}
           />
         </Card>
       );
     }
+    return (
+      <Card>
+        <CardItem header style={{ justifyContent: 'center' }}>
+          <Text style={{ fontSize: 20 }}>Basvurular</Text>
+        </CardItem>
+        <Text
+          style={{
+            fontSize: 16,
+            alignSelf: 'center',
+            marginBottom: 20,
+            color: 'grey',
+            fontStyle: 'italic'
+          }}
+        >
+          Bekleyen başvuru yok.
+        </Text>
+      </Card>
+    );
   }
 
   renderParticipants(participants) {
@@ -246,14 +310,17 @@ class JobDetails extends Component {
           <List
             key={this.state.selectedParticipant}
             dataArray={participants}
-            renderRow={(participant, k, i) =>
+            renderRow={(participant, k, i) => (
               <View key={i}>
                 <ListItem
                   button
                   onPress={() => {
-                    this.state.selectedParticipant === i
+                    this.state.selectedParticipant === participant._id
                       ? this.setState({ selectedParticipant: null })
-                      : this.setState({ selectedParticipant: i, selectedApplication: null });
+                      : this.setState({
+                          selectedParticipant: participant._id,
+                          selectedApplication: null
+                        });
                   }}
                   avatar
                 >
@@ -261,9 +328,7 @@ class JobDetails extends Component {
                     <Thumbnail source={{ uri: participant.avatarUrl }} />
                   </Left>
                   <Body>
-                    <Text style={{ fontSize: 20 }}>
-                      {participant.name}
-                    </Text>
+                    <Text style={{ fontSize: 20 }}>{participant.name}</Text>
                     <Text style={{ color: 'steelblue', marginLeft: 5 }}>
                       {participant.tags.map(tag => {
                         return `#${tag} `;
@@ -272,22 +337,49 @@ class JobDetails extends Component {
                   </Body>
                   <Right style={{ justifyContent: 'center' }}>
                     <Icon1
-                      name={this.state.selectedParticipant === i ? 'keyboard-arrow-down' : 'chevron-right'}
+                      name={
+                        this.state.selectedParticipant === participant._id ? (
+                          'keyboard-arrow-down'
+                        ) : (
+                          'chevron-right'
+                        )
+                      }
                       size={28}
                     />
                   </Right>
                 </ListItem>
-                {this.renderParticipantOptions(i)}
-              </View>}
+                {this.renderParticipantOptions(participant._id)}
+              </View>
+            )}
           />
         </Card>
       );
     }
+    return (
+      <Card>
+        <CardItem header style={{ justifyContent: 'center' }}>
+          <Text style={{ fontSize: 20 }}>Katılımcılar</Text>
+        </CardItem>
+        <Text
+          style={{
+            fontSize: 16,
+            alignSelf: 'center',
+            marginBottom: 20,
+            color: 'grey',
+            fontStyle: 'italic'
+          }}
+        >
+          İş teklifinde katılımcı yok.
+        </Text>
+      </Card>
+    );
   }
 
   render() {
-    const { budget, detail, tags, deadline, employer } = this.props.job;
-    const { propDefStyle, detailStyle, deadlineStyle, budgetStyle, tagStyle } = styles;
+    console.log(this.props);
+    const { budget, description, tags, deadline } = this.props.job;
+    const { employer } = this.props;
+    const { propDefStyle, descriptionStyle, deadlineStyle, budgetStyle, tagStyle } = styles;
     return (
       <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
         <Card style={{ padding: 15 }}>
@@ -297,9 +389,7 @@ class JobDetails extends Component {
               <Thumbnail source={{ uri: employer.avatarUrl }} />
             </Left>
             <Body style={{ borderBottomWidth: 0 }}>
-              <Text style={{ fontSize: 20 }}>
-                {employer.name}
-              </Text>
+              <Text style={{ fontSize: 20 }}>{employer.name}</Text>
               <Text style={{ color: 'steelblue', marginLeft: 5 }}>
                 {employer.tags.map(tag => {
                   return `#${tag} `;
@@ -326,29 +416,23 @@ class JobDetails extends Component {
           <View style={{ flexDirection: 'row', marginTop: 10 }}>
             <Text style={[propDefStyle, { flex: 1 }]}>Bütçe:</Text>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={budgetStyle}>
-                {budget}{' '}
-              </Text>
               <Icon
                 size={16}
                 type="font-awesome"
                 name="try"
-                containerStyle={{ paddingBottom: 15 }}
+                containerStyle={{ paddingRight: 2, paddingTop: 2 }}
                 color="#444"
               />
+              <Text style={budgetStyle}>{budget} </Text>
             </View>
           </View>
           <View style={{ flexDirection: 'row' }}>
             <Text style={[propDefStyle, { flex: 1 }]}>Son Teslim Tarihi: </Text>
-            <Text style={deadlineStyle}>
-              {deadline}
-            </Text>
+            <Text style={deadlineStyle}>{moment(deadline).format('DD MMM YYYY')}</Text>
           </View>
           <View>
             <Text style={[propDefStyle, {}]}>Açıklama:</Text>
-            <Text style={detailStyle}>
-              {detail}
-            </Text>
+            <Text style={descriptionStyle}>{description}</Text>
           </View>
           <View>
             <Text style={propDefStyle}>Etiketler: </Text>
@@ -375,21 +459,23 @@ class JobDetails extends Component {
 const styles = StyleSheet.create({
   propDefStyle: {
     fontSize: 18,
-    fontWeight: '500',
-    paddingBottom: 10
+    fontWeight: '400'
   },
-  detailStyle: {
+  descriptionStyle: {
     fontSize: 16,
     padding: 10,
     paddingTop: 0
   },
   budgetStyle: {
     fontSize: 18,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    alignSelf: 'center'
   },
   deadlineStyle: {
     fontSize: 18,
-    justifyContent: 'flex-end'
+    color: 'grey',
+    justifyContent: 'flex-end',
+    borderBottomWidth: 1
   },
   tagStyle: {
     fontSize: 18,

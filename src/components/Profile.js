@@ -15,21 +15,6 @@ import {
   Input
 } from 'native-base';
 
-const data = [
-  {
-    site: 'facebook',
-    url: 'https://www.facebook.com/muhammedbahaeddin.aydemir'
-  },
-  {
-    site: 'instagram',
-    url: 'https://www.instagram.com/muhammedbahaeddinaydemir/'
-  },
-  {
-    site: 'twitter',
-    url: 'https://www.twitter.com/muhammedbahaeddinaydemir/'
-  }
-];
-
 String.prototype.capitalize = function () {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
@@ -37,15 +22,10 @@ String.prototype.capitalize = function () {
 class Profile extends Component {
   constructor() {
     super();
-    console.log(this.props);
     this.state = {
       height: 0,
       modalVisible: false
     };
-  }
-
-  componentWillMount() {
-    console.log(this.props);
   }
 
   onSocial(acc) {
@@ -69,13 +49,14 @@ class Profile extends Component {
   }
 
   checkSocial(url) {
-    if (url.includes('facebook')) {
+    if (url.includes('www.facebook.com/')) {
       return { name: 'logo-facebook', color: '#4267b2' };
-    } else if (url.includes('instagram')) {
+    } else if (url.includes('www.instagram.com/')) {
       return { name: 'logo-instagram', color: '#f50' };
-    } else if (url.includes('twitter')) {
+    } else if (url.includes('www.twitter.com/')) {
       return { name: 'logo-twitter', color: '#1DA1F2' };
     }
+    return { name: 'logo-twitter', color: '#1DA1F2' };
   }
 
   renderContactInfo(email, telephone, address) {
@@ -261,22 +242,14 @@ class Profile extends Component {
           <Text style={{ fontSize: 18, flex: 9 }}>Sosyal Medya Hesapları</Text>
           {this.renderSocialAddIcon()}
         </CardItem>
-        {data.map((acc, i) => this.renderSocialAcc(acc, i))}
+        {this.props.user.socialAccounts.map((acc, i) => this.renderSocialAcc(acc, i))}
       </View>
     );
   }
 
   render() {
-    const {
-      address,
-      email,
-      name,
-      surname,
-      avatarUrl,
-      tags,
-      tcId,
-      telephone,
-    } = this.props.kullanici;
+    console.log(this.props);
+    const { address, email, name, surname, avatarUrl, tags, tcId, telephone } = this.props.user;
     const { nameStyle } = styles;
     return (
       <Container>
@@ -292,31 +265,38 @@ class Profile extends Component {
           >
             <View
               style={{
-                flexDirection: 'row',
-                padding: 20,
-                paddingBottom: 40,
-                paddingTop: 40,
+                flexDirection: 'column',
+                marginTop: 10,
+                borderRadius: 20,
+                padding: 10,
+                paddingBottom: 20,
+                paddingTop: 20,
                 backgroundColor: 'deepskyblue'
               }}
             >
-              <View style={{ marginRight: 20, flex: 1, alignSelf: 'center' }}>
+              <View style={{ alignSelf: 'center' }}>
                 <Avatar
                   rounded
                   large
-                  showEditButton
+                  showEditButton={this.props.editable}
                   onEditPress={() => console.log('Works!')}
                   title="BK"
                   source={{ uri: avatarUrl }}
-                  overlayContainerStyle={{ width: 100, height: 100, borderRadius: 50 }}
-                  containerStyle={{ width: 100, height: 100, borderRadius: 50 }}
-                  avatarStyle={{ width: 100, height: 100, borderRadius: 50 }}
+                  overlayContainerStyle={{
+                    width: 125,
+                    height: 125,
+                    borderRadius: 63,
+                    backgroundColor: 'white'
+                  }}
+                  containerStyle={{ width: 125, height: 125, borderRadius: 63 }}
+                  avatarStyle={{ width: 125, height: 125, borderRadius: 63 }}
                 />
               </View>
               <View
                 style={{
                   flexDirection: 'column',
-                  flex: 2,
-                  justifyContent: 'space-around'
+                  justifyContent: 'center',
+                  alignItems: 'center'
                 }}
               >
                 <Text style={nameStyle}>{name}</Text>
@@ -345,8 +325,7 @@ class Profile extends Component {
 
 const styles = StyleSheet.create({
   nameStyle: {
-    fontSize: 24,
-    marginTop: 10
+    fontSize: 24
   },
   tagStyle: {
     color: 'steelblue',

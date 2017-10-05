@@ -10,30 +10,62 @@ import {
   Text,
   Row,
   Col,
-  Button
+  Button,
+  Spinner
 } from 'native-base';
 import { connect } from 'react-redux';
 import { deleteUser } from '../../actions';
 
 class UserProfile extends Component {
+  constructor() {
+    super();
+    this.state = {
+      loading: false
+    };
+  }
   onDelete() {
     Alert.alert('Dikkat!', 'Kişiyi silmek istediğinizden emin misiniz?', [
       { text: 'İptal', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-      { text: 'Evet', onPress: () => this.props.deleteUser(this.props.user._id) },
+      {
+        text: 'Evet',
+        onPress: () => {
+          this.props.deleteUser(this.props.user._id);
+          this.setState({ loading: true });
+        }
+      },
       ''
     ]);
   }
 
+  renderButtonOrLoading() {
+    if (this.state.loading) {
+      return <Spinner />;
+    }
+    return (
+      <Button danger block style={{ margin: 10 }} onPress={() => this.onDelete()}>
+        <Text>Sil</Text>
+      </Button>
+    );
+  }
+
   render() {
-    console.log(this.props);
     const { user } = this.props;
     return (
       <Container>
         <Content>
           <Card>
             <Body>
-              <Thumbnail large source={{ uri: user.avatarUrl || 'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png' }} />
-              <Text style={{ fontSize: 28 }}>{user.name} {user.surname}</Text>
+              <Thumbnail
+                large
+                source={{
+                  uri:
+                    user.avatarUrl ||
+                    'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png'
+                }}
+              />
+              <Text style={{ fontSize: 28 }}>
+                {user.name} {user.surname}
+              </Text>
               <Text style={{ color: 'steelblue', fontSize: 18 }}>
                 {user.tags.map(tag => `#${tag} `)}
               </Text>
@@ -71,9 +103,7 @@ class UserProfile extends Component {
                 </Text>
               </Col>
             </Row>
-            <Button danger block style={{ margin: 10 }} onPress={() => this.onDelete()}>
-              <Text>Sil</Text>
-            </Button>
+            {this.renderButtonOrLoading()}
           </Card>
         </Content>
       </Container>
