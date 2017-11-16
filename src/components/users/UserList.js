@@ -14,13 +14,8 @@ import {
   Icon,
   Toast
 } from 'native-base';
-import { ListView } from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import { data } from '../../data';
-
-String.prototype.capitalize = function () {
-  return this.charAt(0).toUpperCase() + this.slice(1);
-};
+import { ListView, Dimensions } from 'react-native';
+import { getUsers } from '../../data';
 
 const users = [
   {
@@ -36,7 +31,7 @@ const users = [
   {
     tcId: '59653468490',
     avatarUrl: 'https://randomuser.me/api/portraits/men/82.jpg',
-    name: 'Şamil Er',
+    name: 'Şamil',
     surname: 'Er',
     email: 'samil.er@gmail.com',
     telephone: '598 932 6565',
@@ -65,7 +60,33 @@ const users = [
   }
 ];
 
+const deviceWidth = Dimensions.get('window').width;
+
 class UserList extends Component {
+  static navigationOptions = ({ navigation }) => {
+    const headerLeft = (
+      <Icon
+        ios="ios-menu"
+        android="md-menu"
+        style={{ fontSize: 28, color: 'white', marginLeft: 15 }}
+        onPress={() => navigation.navigate('DrawerOpen')}
+      />
+    );
+    const headerRight = (
+      <Button transparent small onPress={() => navigation.navigate('NewUser')}>
+        <Text style={{ fontSize: deviceWidth / 30, color: 'lightblue' }}>Yeni</Text>
+      </Button>
+    );
+    return {
+      headerStyle: { backgroundColor: '#4C3E54' },
+      headerTintColor: 'white',
+      headerTitle: 'Kişiler',
+      headerTitleStyle: { alignSelf: 'center', fontSize: deviceWidth / 24 },
+      headerLeft,
+      headerRight
+    };
+  };
+
   constructor() {
     super();
     this.pressed = false;
@@ -78,8 +99,7 @@ class UserList extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.userDeleted);
-    fetch(`${data.url}/users`) //default olarak get on
+    getUsers()
       .then(response => {
         response.json().then(response1 => {
           this.setState({ listViewData: users.concat(response1), loading: false });
@@ -89,13 +109,19 @@ class UserList extends Component {
       .catch(console.log);
   }
 
+  componentDidMount() {
+    this.props.navigation.setParams({
+      handleNew: this._handleNew
+    });
+  }
+
   onPressInfo(user) {
     if (!this.pressed) {
       this.pressed = true;
       setTimeout(() => {
         this.pressed = false;
       }, 2000);
-      Actions.userProfile({ user, title: `${user.name} ${user.surname}` });
+      this.props.navigation.navigate('UserProfile', { user });
     }
   }
 
@@ -105,12 +131,16 @@ class UserList extends Component {
       setTimeout(() => {
         this.pressed = false;
       }, 2000);
-      Actions.messages({ title: user.name });
+      this.props.navigation.navigate('Messages', { user });
     }
   }
 
+  _handleNew = () => {
+    this.props.navigation.navigate('NewUser');
+  };
+
   showToast() {
-    if (this.props.userDeleted) {
+    if (this.props.navigation.state.params.userDeleted) {
       Toast.show({
         text: 'Kişi başarıyla silindi!',
         position: 'bottom',
@@ -118,7 +148,7 @@ class UserList extends Component {
         type: 'success',
         duration: 2000
       });
-    } else if (this.props.userAdded) {
+    } else if (this.props.navigation.state.params.userAdded) {
       Toast.show({
         text: 'Kişi başarıyla eklendi!',
         position: 'bottom',
@@ -140,6 +170,7 @@ class UserList extends Component {
       <ListItem avatar button onPress={() => this.onPressInfo(user)}>
         <Left>
           <Thumbnail
+            small
             source={{
               uri:
                 user.avatarUrl ||
@@ -148,7 +179,7 @@ class UserList extends Component {
           />
         </Left>
         <Body>
-          <Text>
+          <Text style={{ fontSize: deviceWidth / 26 }}>
             {user.name} {user.surname}
           </Text>
         </Body>

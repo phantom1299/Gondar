@@ -10,7 +10,7 @@ import {
   Thumbnail,
   Text
 } from 'native-base';
-import { Actions } from 'react-native-router-flux';
+import { NavigationActions } from 'react-navigation';
 
 const chats = [
   {
@@ -59,7 +59,7 @@ class Chats extends Component {
             dataArray={chats}
             renderRow={chat =>
               <List>
-                <ListItem avatar button onPress={() => Actions.messages({ title: chat.name })}>
+                <ListItem avatar button onPress={() => this.props.navigation.navigate('Messages', {})}>
                   <Left>
                     <Thumbnail source={{ uri: chat.thumbnail }} />
                   </Left>

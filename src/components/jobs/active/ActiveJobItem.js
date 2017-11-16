@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import { Card, CardItem, Spinner, Text, ListItem } from 'native-base';
-import { Slider } from 'react-native-elements';
+import { Dimensions } from 'react-native';
+import { Card, CardItem, Spinner, ListItem, View } from 'native-base';
 import moment from 'moment';
 import trLocale from 'moment/locale/tr';
+import * as Progress from 'react-native-progress';
 
-import { data } from '../../../data';
+import { getJobById } from '../../../data';
+import { AutoText as Text } from '../../common';
 
+const deviceWidth = Dimensions.get('window').width;
 moment.updateLocale('tr', trLocale);
 
 class ActiveJobItem extends Component {
@@ -22,64 +23,65 @@ class ActiveJobItem extends Component {
   }
 
   componentWillMount() {
-    fetch(`${data.url}/jobs/${this.props.jobId}`)
+    getJobById(this.props.jobId)
       .then(response => {
-        response.json().then(responseJson => this.setState({ job: responseJson, loading: false }));
+        if (response.status === 200) {
+          response
+            .json()
+            .then(responseJson => this.setState({ job: responseJson, loading: false }));
+        }
       })
       .catch(console.log);
   }
 
   onPress() {
-    if (!this.pressed) {
+    if (!this.pressed && !this.state.loading) {
       this.pressed = true;
-      Actions.activeJobTab({
+      this.props.navigation.navigate('ActiveJob', {
         job: this.state.job,
         employer: this.state.employer,
-        title: this.state.job.title
+        title: this.state.job.title,
+        userId: this.props.userId
       });
     }
     setTimeout(() => {
       this.pressed = false;
     }, 2000);
   }
-
-  renderLoading() {
-    if (this.state.loading) {
-      return <Spinner />;
-    }
-  }
-
+  
   render() {
     const { title, description, deadline, progress } = this.state.job;
-    if (this.state.loading) {
-      return (
-        <ListItem avatar button onPress={this.onPress}>
-          <Card style={{ padding: 10, marginLeft: 10, marginRight: 10, marginTop: 10 }}>
-            <Spinner />
-          </Card>
-        </ListItem>
-      );
-    }
     return (
-      <ListItem avatar button onPress={this.onPress}>
-        <Card style={{ padding: 10, marginLeft: 10, marginRight: 10, marginTop: 10 }}>
-          <CardItem style={{ paddingLeft: 2, paddingRight: 2 }}>
-            <Text style={{ flex: 1, justifyContent: 'flex-start', fontSize: 18 }}>{title}</Text>
-            <Text style={{ alignSelf: 'flex-start' }}>{moment(deadline).fromNow()}</Text>
-          </CardItem>
-          <CardItem>
-            <Text style={{ fontSize: 14 }}>{description}</Text>
-          </CardItem>
-          <Slider
-            value={progress || 55}
-            thumbStyle={{ marginBottom: 0, paddingBottom: 0, width: 0, height: 0 }}
-            thumbTouchSize={{ width: 0, height: 0 }}
-            minimumTrackTintColor="green"
-            maximumValue={100}
-            disabled
-          />
-          <Text style={{ alignSelf: 'center', paddingTop: 0 }}>%{progress || '55'}</Text>
-        </Card>
+      <ListItem
+        button
+        disabled={this.state.loading}
+        onPress={this.onPress}
+        style={{ borderBottomWidth: 0, alignSelf: 'center', padding: '2%' }}
+      >
+        <Progress.Circle
+          size={deviceWidth / 2}
+          indeterminate={this.state.loading}
+          thickness={10}
+          color={'#332324'}
+          progress={0.5}
+          borderWidth={progress === 0 ? 1 : 0}
+          showsText
+        >
+          <View style={{ flex: 1, justifyContent: 'space-around', margin: '8%' }}>
+            <Text
+              style={{
+                alignSelf: 'center',
+                textAlign: 'center',
+                fontSize: deviceWidth / 15
+              }}
+            >
+              {title}
+            </Text>
+            <Text style={{ textAlign: 'center', fontSize: deviceWidth / 30 }}>
+              {moment(deadline).fromNow()}
+            </Text>
+          </View>
+        </Progress.Circle>
       </ListItem>
     );
   }

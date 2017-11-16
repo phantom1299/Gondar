@@ -3,7 +3,7 @@ import { ListView } from 'react-native';
 import { Content, List, Spinner } from 'native-base';
 
 import OpportunityJobItem from './OpportunityJobItem';
-import { data } from '../../../data';
+import { getJobsByTags } from '../../../data';
 
 class OpportunitiesList extends Component {
   constructor() {
@@ -21,25 +21,18 @@ class OpportunitiesList extends Component {
 
     this.DataSource = ds.cloneWithRows(this.state.jobs);
 
-    fetch(`${data.url}/jobs/tags`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        tags: this.props.tags
+    getJobsByTags(this.props.user._id, this.props.user.tags)
+      .then(response => {
+        response.json().then(responseJson => {
+          this.setState({ jobs: responseJson, loading: false });
+          this.DataSource = ds.cloneWithRows(this.state.jobs);
+        });
       })
-    }).then(response => {
-      response.json().then(responseJson => {
-        this.setState({ jobs: responseJson, loading: false });
-        this.DataSource = ds.cloneWithRows(this.state.jobs);
-      });
-    });
+      .catch(console.log);
   }
 
   renderRow(job) {
-    return <OpportunityJobItem job={job} />;
+    return <OpportunityJobItem navigation={this.props.navigation} job={job} />;
   }
 
   renderLoading() {
@@ -54,7 +47,13 @@ class OpportunitiesList extends Component {
         <List
           style={{ backgroundColor: '#eaeaf5' }}
           dataArray={this.state.jobs.reverse()}
-          renderRow={this.renderRow}
+          renderRow={job => (
+            <OpportunityJobItem
+              navigation={this.props.navigation}
+              job={job}
+              userId={this.props.user._id}
+            />
+          )}
         />
         {this.renderLoading()}
       </Content>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Keyboard, View, StyleSheet } from 'react-native';
+import { Text, Keyboard, View, StyleSheet, Dimensions } from 'react-native';
 import { Content } from 'native-base';
 import { connect } from 'react-redux';
 import { Card, Button, FormLabel, FormInput, Icon } from 'react-native-elements';
@@ -19,7 +19,19 @@ import { CardSection, Spinner } from '../common';
 
 moment.updateLocale('tr', trLocale);
 
+const deviceWidth = Dimensions.get('window').width;
+
 class NewJob extends Component {
+  static navigationOptions = ({ navigation }) => {
+    const headerRight = <View />;
+    return {
+      headerStyle: { backgroundColor: '#4C3E54' },
+      headerTintColor: 'white',
+      headerTitle: 'Yeni İş Teklifi',
+      headerTitleStyle: { alignSelf: 'center', fontSize: deviceWidth / 26 },
+      headerRight
+    };
+  };
   constructor() {
     super();
     this.onTitleChange = this.onTitleChange.bind(this);
@@ -81,7 +93,12 @@ class NewJob extends Component {
       return (
         <Card flexDirection={'row'} containerStyle={styles.tagContainerStyle} key={i}>
           <Text style={styles.tagStyle}>{`#${tag}`}</Text>
-          <Icon name={'clear'} size={20} onPress={this.onTagDelete.bind(this, i)} color={'#222'} />
+          <Icon
+            name={'clear'}
+            size={deviceWidth / 24}
+            onPress={this.onTagDelete.bind(this, i)}
+            color={'#222'}
+          />
         </Card>
       );
     });
@@ -94,7 +111,13 @@ class NewJob extends Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <Button title={'Kaydet'} onPress={this.onButtonPress} backgroundColor={'#397af8'} />
+        <Button
+          title={'Kaydet'}
+          buttonStyle={{ padding: '3%' }}
+          onPress={this.onButtonPress}
+          backgroundColor={'#397af8'}
+          fontSize={deviceWidth / 26}
+        />
       </View>
     );
   }
@@ -204,7 +227,7 @@ class NewJob extends Component {
             />
             <Icon
               name={'add-circle'}
-              size={30}
+              size={deviceWidth / 18}
               color={'#28f'}
               iconStyle={iconStyle}
               containerStyle={iconContainerStyle}
@@ -212,7 +235,11 @@ class NewJob extends Component {
             />
           </View>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>{this.renderTags()}</View>
-          <Button title="Dosya (yapılacak)" buttonStyle={{ marginTop: 10 }} />
+          <Button
+            title="Dosya (yapılacak)"
+            buttonStyle={{ padding: '3%', marginTop: '8%' }}
+            fontSize={deviceWidth / 26}
+          />
           <Text style={errorTextStyle}>{this.props.error}</Text>
           <CardSection>{this.renderButton()}</CardSection>
         </Card>
@@ -223,7 +250,7 @@ class NewJob extends Component {
 
 const styles = StyleSheet.create({
   errorTextStyle: {
-    fontSize: 18,
+    fontSize: deviceWidth / 26,
     alignSelf: 'center',
     color: '#D8000C',
     marginLeft: 5
@@ -238,7 +265,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   labelStyle: {
-    fontSize: 18,
+    fontSize: deviceWidth / 26,
     fontWeight: '200',
     color: '#777',
     marginRight: 0,
@@ -252,14 +279,14 @@ const styles = StyleSheet.create({
     marginLeft: 0
   },
   inputStyle: {
-    fontSize: 18,
+    fontSize: deviceWidth / 26,
     height: 20,
     color: '#888',
     marginTop: 2,
     width: '100%'
   },
   tagInputStyle: {
-    fontSize: 18,
+    fontSize: deviceWidth / 26,
     height: 20,
     width: 150,
     color: '#888',
@@ -267,10 +294,10 @@ const styles = StyleSheet.create({
   },
   iconStyle: {},
   iconContainerStyle: {
-    marginTop: 10
+    marginTop: 13
   },
   tagStyle: {
-    fontSize: 16,
+    fontSize: deviceWidth / 28,
     color: 'white',
     marginRight: 5
   },

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Keyboard, Image, StyleSheet } from 'react-native';
+import { Keyboard, Image, StyleSheet, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Container, Content, Button, Spinner, Form, Item, Label, Input, Text } from 'native-base';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
+
+const deviceWidth = Dimensions.get('window').width;
 
 class LoginForm extends Component {
   constructor() {
@@ -33,26 +35,19 @@ class LoginForm extends Component {
 
   renderButton() {
     if (this.props.loading) {
-      return <Spinner color="steelblue" />;
+      return <Spinner size={45} color="steelblue" />;
     }
 
     return (
-      <Button style={styles.buttonStyle} iconRight rounded block onPress={this.onButtonPress}>
-        <Text style={styles.textStyle}>Giriş Yap</Text>
+      <Button style={styles.buttonStyle} iconRight block onPress={this.onButtonPress}>
+        <Text style={{ fontSize: deviceWidth / 26 }}>Giriş Yap</Text>
         <Icon name="sign-in" size={28} />
       </Button>
     );
   }
-  // <Image
-  //   source={{
-  //     uri:
-  //       'https://s-media-cache-ak0.pinimg.com/originals/f0/00/4d/f0004d555447885c1d24e89afe58ad6e.jpg'
-  //   }}
-  //   style={styles.backgroundImage}
-  // />
   render() {
     return (
-      <Container>
+      <Container style={{ justifyContent: 'center' }}>
         <Image
           source={{
             uri:
@@ -60,29 +55,25 @@ class LoginForm extends Component {
           }}
           style={styles.backgroundImage}
         />
-        <Content style={{ paddingTop: '20%' }}>
+        <Content
+          contentContainerStyle={{ flex: 1, justifyContent: 'center', paddingBottom: '10%' }}
+        >
           <Image
             source={require('./../../img/picturetopeople.org-7f0cbca054fd418cb65f8c80d9c5d973d2203920f3c044a386.png')}
-            style={{ width: 300, resizeMode: 'contain', alignSelf: 'center' }}
+            style={{ width: '70%', marginBottom: '5%', resizeMode: 'contain', alignSelf: 'center' }}
           />
           <Form
             style={{
               padding: 10,
               marginRight: '8%',
+              marginLeft: '6%',
               margin: 10,
               paddingBottom: 30,
-              opacity: 0.8,
               borderRadius: 10
             }}
           >
             <Item inlineLabel>
-              <Label
-                style={{
-                  color: '#fff'
-                }}
-              >
-                Email
-              </Label>
+              <Label style={[styles.textStyle, { color: '#fff', flex: 1 }]}>Email</Label>
               <Input
                 editable={!this.props.loading}
                 onChangeText={this.onEmailChange}
@@ -90,25 +81,22 @@ class LoginForm extends Component {
                 value={this.props.email}
                 placeholder="birisi@örnek.com"
                 placeholderTextColor="#fffa"
+                style={[styles.textStyle, { opacity: this.props.loading ? 0.7 : 1 }]}
               />
             </Item>
             <Item inlineLabel>
-              <Label
-                style={{
-                  color: '#fff'
-                }}
-              >
-                Şifre
-              </Label>
+              <Label style={[styles.textStyle, { color: '#fff', flex: 1 }]}>Şifre</Label>
               <Input
                 editable={!this.props.loading}
                 secureTextEntry
                 onChangeText={this.onPasswordChange}
                 value={this.props.password}
+                style={[styles.textStyle, { opacity: this.props.loading ? 0.7 : 1 }]}
               />
+              {/* {Object.prototype.} */}
             </Item>
           </Form>
-          <Text style={styles.errosTextStyle}>{this.props.error}</Text>
+          {/* <Text style={styles.errosTextStyle}>{this.props.error}</Text> */}
           {this.renderButton()}
         </Content>
       </Container>
@@ -118,24 +106,27 @@ class LoginForm extends Component {
 
 const styles = StyleSheet.create({
   errosTextStyle: {
-    fontSize: 20,
+    fontSize: deviceWidth / 28,
     alignSelf: 'center',
-    color: 'red'
+    color: 'red',
+    backgroundColor: '#326459a5'
   },
   buttonStyle: {
     backgroundColor: '#afeeeeaa',
-    marginHorizontal: '10%'
+    marginHorizontal: '25%',
+    padding: 0,
+    marginTop: 35,
+    borderRadius: 15
   },
   textStyle: {
-    fontSize: 18,
-    marginRight: 10
+    fontSize: deviceWidth / 26,
+    marginRight: 10,
+    flex: 5
   },
   backgroundImage: {
-    backgroundColor: '#ccc',
     position: 'absolute',
     width: '100%',
-    height: '100%',
-    justifyContent: 'center'
+    height: '100%'
   }
 });
 

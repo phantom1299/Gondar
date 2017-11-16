@@ -1,22 +1,9 @@
 import React, { Component } from 'react';
 import { Dimensions, Platform, UIManager, LayoutAnimation, TouchableOpacity } from 'react-native';
-import {
-  Container,
-  Content,
-  Card,
-  CardItem,
-  View,
-  ListItem,
-  Left,
-  Body,
-  Right,
-  Thumbnail
-} from 'native-base';
+import { Content, Card, View, Thumbnail, Left } from 'native-base';
 import * as Progress from 'react-native-progress';
-import { AutoText as Text } from './common';
 
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
+import { AutoText as Text } from '../../common';
 
 const missions = [
   {
@@ -56,7 +43,9 @@ const missions = [
   }
 ];
 
-export default class DrawerExample extends Component {
+const deviceWidth = Dimensions.get('window').width;
+
+class Missions extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,26 +63,16 @@ export default class DrawerExample extends Component {
     LayoutAnimation.spring();
   }
 
-  onPress = id => {
-    this.setState({ selected: id });
-    console.log(this.state.selected);
-  };
-
   getcolor(x = 0) {
-    if (x > 0.75) return '#5cb85c';
-    else if (x > 0.5) return '#5bc0de';
-    else if (x > 0.25) return '#f0ad4e';
-    return '#d9534f';
+    if (x >= 0.5) return '#5cb85c';
+    return '#5bc0de';
   }
 
   renderDetails(mission) {
     if (mission._id === this.state.selected) {
       return (
         <Card>
-          <Text>Hey</Text>
-          <Text>Hey</Text>
-          <Text>Hey</Text>
-          <Text>Hey</Text>
+          <Text>{mission.description}</Text>
         </Card>
       );
     }
@@ -121,7 +100,8 @@ export default class DrawerExample extends Component {
       <Card key={_id} style={{ paddingHorizontal: '5%' }}>
         <TouchableOpacity
           onPress={() => {
-            this.setState({ selected: _id });
+            if (this.state.selected === _id) this.setState({ selected: null });
+            else this.setState({ selected: _id });
             console.log(this.state.selected);
           }}
         >
@@ -170,3 +150,5 @@ export default class DrawerExample extends Component {
     return <Content>{missions.map(this.renderMission)}</Content>;
   }
 }
+
+export default Missions;

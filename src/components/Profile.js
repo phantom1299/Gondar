@@ -1,32 +1,162 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, Linking, Alert, Modal } from 'react-native';
-import { Card as Card1, ListItem, FormLabel, FormInput, Avatar } from 'react-native-elements';
+import { View, StyleSheet, Linking, Alert, Modal, Dimensions, Image } from 'react-native';
+import { FormLabel, FormInput } from 'react-native-elements';
 import {
   Container,
   Content,
   Card,
   CardItem,
-  Text,
   Icon,
   Button,
   Form,
   Item,
-  Input
+  Input,
+  Label,
+  Spinner,
+  Thumbnail
 } from 'native-base';
 
-String.prototype.capitalize = function () {
-  return this.charAt(0).toUpperCase() + this.slice(1);
-};
+import { AutoText as Text } from './common';
 
-class Profile extends Component {
+import {
+  userReset,
+  editUser,
+  editUserCancel,
+  updateUser,
+  userAvatarChanged,
+  userNameChanged,
+  userSurnameChanged,
+  userTelephoneChanged,
+  userEmailChanged,
+  userAddressChanged,
+  userSocialAccountsChanged,
+  onSocialAccountDelete
+} from '../actions';
+
+const nullfunc = () => null;
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
+
+class Profile extends React.PureComponent {
+  static navigationOptions = ({ navigation }) => {
+    const { params = {} } = navigation.state;
+    let headerRight = (
+      <Button onPress={params.handleSave ? params.handleSave : nullfunc}>
+        <Text>Kaydet</Text>
+      </Button>
+    );
+    let headerLeft = (
+      <Icon
+        ios="ios-menu"
+        android="md-menu"
+        style={{ color: 'white', marginLeft: 15 }}
+        onPress={() => navigation.navigate('DrawerOpen')}
+      />
+    );
+    if (params.loading) {
+      headerRight = <Spinner style={{ marginRight: 10 }} />;
+    } else if (params.editable) {
+      headerRight = (
+        <Button small transparent onPress={() => params.handleSave(params.user)}>
+          <Text style={{ color: 'lightblue' }}>Kaydet</Text>
+        </Button>
+      );
+      headerLeft = (
+        <Button small transparent onPress={() => params.handleCancel()}>
+          <Text style={{ color: 'lightblue' }}>Vazgeç</Text>
+        </Button>
+      );
+    } else {
+      headerRight = (
+        <Button small transparent onPress={() => params.handleEdit()}>
+          <Text style={{ color: 'lightblue' }}>Düzenle</Text>
+        </Button>
+      );
+    }
+    return {
+      headerStyle: { backgroundColor: '#4C3E54' },
+      headerTintColor: 'white',
+      headerTitle: 'Profilim',
+      headerTitleStyle: { alignSelf: 'center' },
+      headerLeft,
+      headerRight
+    };
+  };
+
+  _handleEdit = () => {
+    this.props.navigation.setParams({ editable: true });
+    this.props.editUser();
+  };
+
+  _handleCancel = () => {
+    this.props.navigation.setParams({ editable: false });
+    this.props.editUserCancel();
+    console.log(this.props.user.socialAccounts);
+    console.log(this.props.backup.socialAccounts);
+  };
+
+  _handleSave = () => {
+    this.props.navigation.setParams({ loading: true });
+
+    this.props
+      .updateUser(this.props.user)
+      .then(() => this.props.navigation.setParams({ loading: false, editable: false }));
+  };
+
   constructor() {
     super();
     this.state = {
-      height: 0,
-      modalVisible: false
+      height: 20,
+      modalVisible: false,
+      socailAccountName: '',
+      socailAccountUrl: ''
     };
   }
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      loading: this.props.loading,
+      handleSave: this._handleSave,
+      handleEdit: this._handleEdit,
+      handleCancel: this._handleCancel,
+      editable: this.props.editable,
+      user: this.props.user,
+      updateUser: this.props.updateUser,
+      editUser: this.props.editUser,
+      editUserCancel: this.props.editUserCancel,
+      rightTitle: this.props.rightTitle
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.userReset();
+  }
+
+  onAvatarChange = avatarUrl => {
+    this.props.userAvatarChanged(avatarUrl);
+  };
+  onNameChange = name => {
+    this.props.userNameChanged(name);
+  };
+  onSurnameChange = surname => {
+    this.props.userSurnameChanged(surname);
+  };
+  onTelephoneChange = telephone => {
+    this.props.userTelephoneChanged(telephone);
+  };
+  onEmailChange = email => {
+    this.props.userEmailChanged(email);
+  };
+  onAddressChange = address => {
+    this.props.userAddressChanged(address);
+  };
+  onAddressSizeChange = event => {
+    this.setState({ height: event.nativeEvent.contentSize.height });
+  };
+  onSocialAccountsChange = socialAccount => {
+    this.props.userSocialAccountsChanged(socialAccount);
+  };
 
   onSocial(acc) {
     Alert.alert('Devam edilsin mi?', 'Sayfa cihazın web tarayıcısında açılacak.', [
@@ -72,7 +202,7 @@ class Profile extends Component {
           style={{ backgroundColor: 'transparent', paddingLeft: 0, paddingBottom: 5 }}
           header
         >
-          <Text style={{ fontSize: 18 }}>İletişim Bilgileriniz</Text>
+          <Text style={{}}>İletişim Bilgileriniz</Text>
         </CardItem>
         <View style={{ paddingLeft: 17 }}>
           <View style={{ flexDirection: 'row' }}>
@@ -84,7 +214,7 @@ class Profile extends Component {
               Telefon
             </FormLabel>
             <FormInput
-              inputStyle={contactInfoStyle}
+              inputStyle={[contactInfoStyle, { color: this.props.editable ? '#222' : '#999' }]}
               containerStyle={contactInfoContainerStyle}
               ref="form1"
               containerRef="telInputContainer"
@@ -93,6 +223,7 @@ class Profile extends Component {
               value={telephone}
               editable={this.props.editable}
               keyboardType="phone-pad"
+              onChangeText={this.onTelephoneChange}
             />
           </View>
           <View style={{ flexDirection: 'row' }}>
@@ -104,7 +235,7 @@ class Profile extends Component {
               Email
             </FormLabel>
             <FormInput
-              inputStyle={contactInfoStyle}
+              inputStyle={[contactInfoStyle, { color: this.props.editable ? '#222' : '#999' }]}
               containerStyle={contactInfoContainerStyle}
               ref="form2"
               containerRef="emailInputContainer"
@@ -113,6 +244,7 @@ class Profile extends Component {
               value={email}
               editable={this.props.editable}
               keyboardType="email-address"
+              onChangeText={this.onEmailChange}
             />
           </View>
           <View style={{ flexDirection: 'row' }}>
@@ -124,7 +256,11 @@ class Profile extends Component {
               Adres
             </FormLabel>
             <FormInput
-              inputStyle={contactInfoStyle}
+              inputStyle={[
+                contactInfoStyle,
+                { color: this.props.editable ? '#222' : '#999', marginTop: '3%' },
+                { height: Math.max(10, this.state.height) }
+              ]}
               containerStyle={contactInfoContainerStyle}
               ref="form3"
               containerRef="addressInputContainer"
@@ -133,13 +269,8 @@ class Profile extends Component {
               editable={this.props.editable}
               multiline
               value={address}
-              onChangeText={text => {
-                this.setState({ text });
-              }}
-              onContentSizeChange={event => {
-                this.setState({ height: event.nativeEvent.contentSize.height });
-              }}
-              style={[{ marginTop: 4 }, { height: Math.max(10, this.state.height) }]}
+              onChangeText={this.onAddressChange}
+              onContentSizeChange={this.onAddressSizeChange}
             />
           </View>
         </View>
@@ -153,17 +284,21 @@ class Profile extends Component {
     });
   }
 
-  renderDeleteIcon(i) {
+  onDeleteSocialAccount(i) {
+    this.props.onSocialAccountDelete(i);
+  }
+
+  renderDeleteIcon = i => {
     if (this.props.editable) {
       return (
         <Icon
-          style={{ marginLeft: 10, color: '#f22' }}
+          style={{ marginLeft: 10, color: '#f22', fontSize: deviceWidth / 20 }}
           name="close-circle"
-          onPress={() => console.log(i)}
+          onPress={this.onDeleteSocialAccount.bind(this, i)}
         />
       );
     }
-  }
+  };
 
   renderSocialAcc(acc, i) {
     const { name, color } = this.checkSocial(acc.url);
@@ -174,8 +309,11 @@ class Profile extends Component {
         button
         onPress={() => this.onSocial(acc)}
       >
-        <Icon active name={name} style={{ color, paddingTop: 0 }} />
-        <Input style={{ fontSize: 14, marginBottom: 3 }} editable={this.props.editable}>
+        <Icon active name={name} style={{ color, paddingTop: 0, fontSize: deviceWidth / 20 }} />
+        <Input
+          style={[styles.inputStyle, { color: this.props.editable ? 'black' : 'grey' }]}
+          editable={this.props.editable}
+        >
           {acc.url}
         </Input>
         {this.renderDeleteIcon(i)}
@@ -188,12 +326,20 @@ class Profile extends Component {
       return (
         <Icon
           name="add-circle"
-          style={{ flex: 1, color: 'steelblue', paddingHorizontal: 10 }}
+          style={{ flex: 1, color: 'steelblue', paddingHorizontal: 10, fontSize: deviceWidth / 20 }}
           onPress={() => this.setState({ modalVisible: true })}
         />
       );
     }
   }
+
+  onChangeSocialAccountName = text => {
+    this.setState({ socialAccountName: text });
+  };
+
+  onChangeSocialAccountUrl = text => {
+    this.setState({ socialAccountUrl: text });
+  };
 
   renderSocialMediaAccs() {
     return (
@@ -219,16 +365,33 @@ class Profile extends Component {
               style={{ backgroundColor: '#eee', flex: 1, marginHorizontal: 10, borderRadius: 10 }}
             >
               <Item>
-                <Input placeholder="İsim" />
+                <Input
+                  value={this.state.socialAccountName}
+                  onChangeText={this.onChangeSocialAccountName}
+                  placeholder="İsim"
+                />
               </Item>
               <Item last>
-                <Input placeholder="URL" />
+                <Input
+                  value={this.state.socialAccountUrl}
+                  onChangeText={this.onChangeSocialAccountUrl}
+                  placeholder="URL"
+                />
               </Item>
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
                 <Button transparent onPress={() => this.setState({ modalVisible: false })}>
                   <Text>İptal</Text>
                 </Button>
-                <Button transparent onPress={() => this.setState({ modalVisible: false })}>
+                <Button
+                  transparent
+                  onPress={() => {
+                    this.setState({ modalVisible: false });
+                    this.onSocialAccountsChange({
+                      site: this.state.socialAccountName,
+                      url: this.state.socialAccountUrl
+                    });
+                  }}
+                >
                   <Text>Ekle</Text>
                 </Button>
               </View>
@@ -239,7 +402,7 @@ class Profile extends Component {
           style={{ backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }}
           header
         >
-          <Text style={{ fontSize: 18, flex: 9 }}>Sosyal Medya Hesapları</Text>
+          <Text style={{ flex: 9 }}>Sosyal Medya Hesapları</Text>
           {this.renderSocialAddIcon()}
         </CardItem>
         {this.props.user.socialAccounts.map((acc, i) => this.renderSocialAcc(acc, i))}
@@ -248,75 +411,74 @@ class Profile extends Component {
   }
 
   render() {
-    console.log(this.props);
     const { address, email, name, surname, avatarUrl, tags, tcId, telephone } = this.props.user;
-    const { nameStyle } = styles;
     return (
       <Container>
         <Content>
-          <Card1
+          <Thumbnail
+            square
+            blurRadius={1}
+            source={{
+              uri:
+                'http://canadiancookingadventures.com/wp-content/uploads/2016/12/8ee1dac68e81aee04cc78b722e15fad8.jpg'
+            }}
+            style={styles.backgroundImage}
+          />
+          <View
             style={{
-              padding: 0,
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 3 },
-              shadowOpacity: 0.5,
-              elevation: 1
+              backgroundColor: 'transparent',
+              paddingVertical: '10%',
+              justifyContent: 'center'
             }}
           >
-            <View
-              style={{
-                flexDirection: 'column',
-                marginTop: 10,
-                borderRadius: 20,
-                padding: 10,
-                paddingBottom: 20,
-                paddingTop: 20,
-                backgroundColor: 'deepskyblue'
-              }}
-            >
-              <View style={{ alignSelf: 'center' }}>
-                <Avatar
-                  rounded
-                  large
-                  showEditButton={this.props.editable}
-                  onEditPress={() => console.log('Works!')}
-                  title="BK"
-                  source={{ uri: avatarUrl }}
-                  overlayContainerStyle={{
-                    width: 125,
-                    height: 125,
-                    borderRadius: 63,
-                    backgroundColor: 'white'
-                  }}
-                  containerStyle={{ width: 125, height: 125, borderRadius: 63 }}
-                  avatarStyle={{ width: 125, height: 125, borderRadius: 63 }}
-                />
-              </View>
-              <View
-                style={{
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center'
+            <View style={{ alignSelf: 'center', backgroundColor: '#fff2', borderRadius: 100 }}>
+              <Thumbnail
+                large
+                blurRadius={1}
+                source={{
+                  uri:
+                    avatarUrl ||
+                    'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png'
                 }}
-              >
-                <Text style={nameStyle}>{name}</Text>
-                <Text style={nameStyle}>{surname}</Text>
-                <Text>{this.renderTags(tags)}</Text>
-              </View>
+              />
             </View>
-          </Card1>
-          <Card1
+            <View style={{ alignItems: 'center', marginTop: '5%' }}>
+              <Text>{this.renderTags(tags)}</Text>
+            </View>
+          </View>
+          <View
             style={{
-              marginTop: 0,
               padding: 20,
-              backgroundColor: '#00a5b533',
-              borderTopWidth: 0,
+              backgroundColor: '#fff',
               flex: 1
             }}
           >
+            <Form style={{}}>
+              <Item style={{ borderBottomWidth: 0, marginLeft: 0 }}>
+                <Label style={{ fontSize: deviceWidth / 26, flex: 1, color: 'black' }}>İsim</Label>
+                <Input
+                  editable={this.props.editable}
+                  style={[styles.inputStyle, { color: this.props.editable ? 'black' : 'grey' }]}
+                  value={name}
+                  onChangeText={this.onNameChange}
+                />
+              </Item>
+              <Item style={{ borderBottomWidth: 0, marginLeft: 0, paddingTop: '3%' }}>
+                <Label style={{ fontSize: deviceWidth / 26, flex: 1, color: 'black' }}>
+                  Soyisim
+                </Label>
+                <Input
+                  underlineColorAndroid="black"
+                  editable={this.props.editable}
+                  style={[styles.inputStyle, { color: this.props.editable ? 'black' : 'grey' }]}
+                  value={surname}
+                  onChangeText={this.onSurnameChange}
+                />
+              </Item>
+            </Form>
             {this.renderContactInfo(email, telephone, address)}
             {this.renderSocialMediaAccs()}
-          </Card1>
+          </View>
         </Content>
       </Container>
     );
@@ -324,24 +486,17 @@ class Profile extends Component {
 }
 
 const styles = StyleSheet.create({
-  nameStyle: {
-    fontSize: 24
-  },
   tagStyle: {
     color: 'steelblue',
-    fontSize: 16,
     marginBottom: 10
   },
-  unvanStyle: {
-    fontSize: 20
-  },
+  unvanStyle: {},
   contactPropContainerStyle: {
     flex: 1,
     marginRight: 0,
     paddingRight: 0
   },
   contactPropStyle: {
-    fontSize: 16,
     color: '#000',
     fontWeight: '400',
     marginLeft: 0,
@@ -352,12 +507,43 @@ const styles = StyleSheet.create({
     marginLeft: 0
   },
   contactInfoStyle: {
-    fontSize: 16,
+    fontSize: deviceWidth / 28,
     height: 20,
     width: 198,
-    color: '#888',
     marginTop: 2
+  },
+  inputStyle: {
+    fontSize: deviceWidth / 26,
+    flex: 5,
+    height: deviceWidth / 20,
+    lineHeight: deviceWidth / 20,
+    paddingBottom: 0,
+    paddingTop: 0
+  },
+  backgroundImage: {
+    position: 'absolute',
+    width: '100%',
+    height: deviceHeight / 3,
+    
   }
 });
 
-export default Profile;
+const mapState = state => {
+  const { user, editable, rightTitle, loading, backup } = state.user;
+  return { user, editable, rightTitle, loading, backup };
+};
+
+export default connect(mapState, {
+  userReset,
+  editUser,
+  editUserCancel,
+  updateUser,
+  userAvatarChanged,
+  userNameChanged,
+  userSurnameChanged,
+  userTelephoneChanged,
+  userEmailChanged,
+  userAddressChanged,
+  userSocialAccountsChanged,
+  onSocialAccountDelete
+})(Profile);

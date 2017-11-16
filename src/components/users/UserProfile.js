@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert } from 'react-native';
+import { Alert, View, Dimensions } from 'react-native';
 import {
   Container,
   Content,
@@ -16,20 +16,34 @@ import {
 import { connect } from 'react-redux';
 import { deleteUser } from '../../actions';
 
+const deviceWidth = Dimensions.get('window').width;
+
 class UserProfile extends Component {
+  static navigationOptions = ({ navigation }) => {
+    const { params = {} } = navigation.state;
+    const headerTitle = params.user ? `${params.user.name} ${params.user.surname}` : '';
+    return {
+      headerStyle: { backgroundColor: '#4C3E54' },
+      headerTintColor: 'white',
+      headerTitle,
+      headerRight: <View />,
+      headerTitleStyle: { alignSelf: 'center', fontSize: deviceWidth / 22 }
+    };
+  };
   constructor() {
     super();
     this.state = {
       loading: false
     };
   }
+
   onDelete() {
     Alert.alert('Dikkat!', 'Kişiyi silmek istediğinizden emin misiniz?', [
       { text: 'İptal', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
       {
         text: 'Evet',
         onPress: () => {
-          this.props.deleteUser(this.props.user._id);
+          this.props.deleteUser(this.props.navigation.state.params.user._id);
           this.setState({ loading: true });
         }
       },
@@ -49,7 +63,7 @@ class UserProfile extends Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user } = this.props.navigation.state.params;
     return (
       <Container>
         <Content>

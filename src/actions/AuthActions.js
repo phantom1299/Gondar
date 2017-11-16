@@ -1,5 +1,5 @@
 import Auth0 from 'react-native-auth0';
-import { Actions } from 'react-native-router-flux';
+import { NavigationActions } from 'react-navigation';
 import {
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
@@ -8,12 +8,12 @@ import {
   LOGIN_USER,
   LOGOUT_USER
 } from './types';
+import { getUserById } from '../data';
 
 const auth0 = new Auth0({
   domain: 'mlx.eu.auth0.com',
   clientId: '5TURFeY22RUuFuWZbiYrgyvPOpu11fYH'
 });
-import { data } from '../data';
 
 export const emailChanged = text => {
   return {
@@ -30,42 +30,60 @@ export const passwordChanged = text => {
 };
 
 export const loginUser = ({ email, password }) => {
+  console.log('trying to login.');
   return dispatch => {
     dispatch({ type: LOGIN_USER });
 
     auth0.auth
       .passwordRealm({ username: email, password, realm: 'Username-Password-Authentication' })
-      .then(user => loginUserSuccess(dispatch, user))
+      .then(user => {
+        console.log('login done!');
+        loginUserSuccess(dispatch, user);
+      })
       .catch(error => {
-        console.log(error);
-        loginUserFail(dispatch);
+        loginUserFail(dispatch, error);
       });
   };
 };
 
-const loginUserFail = dispatch => {
+const loginUserFail = (dispatch, error) => {
+  console.log(error);
   dispatch({
-    type: LOGIN_USER_FAIL
+    type: LOGIN_USER_FAIL,
+    payload: error
   });
 };
 
 const loginUserSuccess = (dispatch, user) => {
+  console.log('getting user id!');
   auth0.auth
     .userInfo({ token: user.accessToken })
     .then(user1 => {
       const id = user1.sub.split('|')[1];
-      fetch(`${data.url}/users/${id}`)
-        .then(response => response.json())
+      console.log('getting user info!');
+      
+      getUserById(id)
+        .then(response => {
+          if (response.status === 200) {
+            return response.json();
+          } else if (response.status === 204) {
+            loginUserFail(dispatch, 'Hata! Kişi veritabanından silinmiş.');
+          }
+        })
         .then(response => {
           dispatch({
             type: LOGIN_USER_SUCCESS,
             payload: response
           });
-          Actions.drawer({ type: 'reset' });
+          dispatch(NavigationActions.navigate({ routeName: 'Drawer' }));
         })
-        .catch(console.log);
+        .catch(error => {
+          loginUserFail(dispatch, error);
+        });
     })
-    .catch(console.error);
+    .catch(error => {
+      loginUserFail(dispatch, error);
+    });
 };
 
 export const logoutUser = () => {
@@ -76,6 +94,9 @@ export const logoutUser = () => {
 
 export const getUserInfo = accessToken => {
   return dispatch => {
-    auth0.auth.userInfo({ token: accessToken }).then(console.log).catch(console.error);
+    auth0.auth
+      .userInfo({ token: accessToken })
+      .then(console.log)
+      .catch(console.error);
   };
 };

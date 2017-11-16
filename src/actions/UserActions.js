@@ -1,19 +1,15 @@
 import { Toast } from 'native-base';
-import { Actions } from 'react-native-router-flux';
+import { NavigationActions } from 'react-navigation';
 import { DELETE_USER } from '../actions/types';
-import { data } from '../data';
+import { deleteUser as deleteUserService } from '../data';
 
 export const deleteUser = id => {
   return dispatch => {
-    fetch(`${data.url}/users/${id}`, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
+    deleteUserService(id)
       .then(() => {
-        Actions.userList({ type: 'replace', userDeleted: true });
+        dispatch(
+          NavigationActions.navigate({ routeName: 'UserList', params: { userDeleted: true } })
+        );
       })
       .catch(err => {
         console.log(err);

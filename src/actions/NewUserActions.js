@@ -1,6 +1,6 @@
 import Auth0 from 'react-native-auth0';
 import { Toast } from 'native-base';
-import { Actions } from 'react-native-router-flux';
+import { NavigationActions } from 'react-navigation';
 
 import {
   NEW_USER_FORM_WILL_MOUNT,
@@ -12,7 +12,7 @@ import {
   NEW_USER_FORM_ADD_USER_SUCCESS,
   NEW_USER_FORM_ADD_USER_FAIL
 } from '../actions/types';
-import { data } from '../data';
+import { createUser } from '../data';
 
 const auth0 = new Auth0({
   domain: 'mlx.eu.auth0.com',
@@ -64,21 +64,7 @@ export const newUserAdd = ({ name, surname, email, password, tags }) => {
         connection: 'Username-Password-Authentication'
       })
       .then(user => {
-        fetch(`${data.url}/users`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            _id: user.Id,
-            avatarUrl: 'https://randomuser.me/api/portraits/lego/5.jpg',
-            name,
-            surname,
-            email,
-            tags
-          })
-        })
+        createUser({ _id: user.Id, name, surname, email, tags })
           .then(() => newUserAddSuccess(dispatch))
           .catch(err => {
             console.log(err);
@@ -97,7 +83,7 @@ const newUserAddSuccess = dispatch => {
   dispatch({
     type: NEW_USER_FORM_ADD_USER_SUCCESS
   });
-  Actions.userList({ type: 'replace', userAdded: true });
+  dispatch(NavigationActions.navigate({ routeName: 'UserList', params: { userAdded: true } }));
 };
 
 //Kişi ekleme başarısız olduysa hata mesajı göster

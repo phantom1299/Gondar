@@ -25,4 +25,18 @@ export const NEW_MISSION_FORM_ADD_MISSION = 'new_mission_add';
 export const NEW_MISSION_FORM_ADD_MISSION_SUCCESS = 'new_mission_add_success';
 export const NEW_MISSION_FORM_ADD_MISSION_FAIL = 'new_mission_add_fail';
 
+export const USER_RESET = 'user_reset';
+export const USER_EDIT = 'user_edit';
+export const USER_EDIT_CANCEL = 'user_edit_cancel';
+export const USER_UPDATE = 'user_update';
+export const USER_UPDATE_SUCCESS = 'user_update_success';
+export const USER_AVATAR_CHANGED = 'user_avatar_changed';
+export const USER_NAME_CHANGED = 'user_name_changed';
+export const USER_SURNAME_CHANGED = 'user_surname_changed';
+export const USER_TELEPHONE_CHANGED = 'user_telephone_changed';
+export const USER_EMAIL_CHANGED = 'user_email_changed';
+export const USER_ADDRESS_CHANGED = 'user_address_changed';
+export const USER_SOCIAL_ACCOUNTS_CHANGED = 'user_social_account_add';
+export const USER_SOCIAL_ACCOUNT_DELETE = 'user_social_account_delete';
+
 export const DELETE_USER = 'delete_user';

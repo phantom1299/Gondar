@@ -1,10 +1,26 @@
 import React, { Component } from 'react';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import { Root } from 'native-base';
-import Router from './Router';
+import { addNavigationHelpers } from 'react-navigation';
+import { Router } from './Router';
 import configureStore from './configureStore';
 
 console.ignoredYellowBox = ['Setting a timer'];
+
+const App1 = ({ dispatch, nav }) => (
+  <Router
+    navigation={addNavigationHelpers({
+      dispatch,
+      state: nav
+    })}
+  />
+);
+
+const mapStateToProps = state => ({
+  nav: state.nav
+});
+
+const AppWithNavigationState = connect(mapStateToProps)(App1);
 
 class App extends Component {
   state = {
@@ -15,7 +31,7 @@ class App extends Component {
     return (
       <Provider store={this.state.store}>
         <Root>
-          <Router />
+          <AppWithNavigationState />
         </Root>
       </Provider>
     );

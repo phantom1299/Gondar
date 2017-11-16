@@ -10,7 +10,7 @@ import {
   NEW_MISSION_FORM_ADD_MISSION_SUCCESS,
   NEW_MISSION_FORM_ADD_MISSION_FAIL
 } from '../actions/types';
-import { data } from '../data';
+import { createJob } from '../data';
 
 export const newMissionFormWillMount = () => {
   return {
@@ -55,31 +55,10 @@ export const newMissionFormDescriptionChanged = text => {
 
 //İş Ekleme burda yapılacak
 //TODO Dosya ekleme
-export const newMissionAdd = ({ title, employerId, budget, deadline, description, tags }) => {
+export const newMissionAdd = (job) => {
   return dispatch => {
-    console.log(budget);
-    console.log(typeof budget);
     dispatch({ type: NEW_MISSION_FORM_ADD_MISSION });
-    fetch(`${data.url}/job`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        title,
-        description,
-        budget,
-        deadline,
-        employer: employerId,
-        tags,
-        progress: 0,
-        files: null,
-        notes: null,
-        status: 'created',
-        creationDate: new Date()
-      })
-    })
+    createJob(job)
       .then(stats => {
         console.log(stats);
         newMissionAddSuccess(dispatch);

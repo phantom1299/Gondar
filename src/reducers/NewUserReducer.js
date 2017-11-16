@@ -31,7 +31,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, name: action.payload };
 
     case NEW_USER_FORM_SURNAME_CHANGED:
-      return { ...state, name: action.payload };
+      return { ...state, surname: action.payload };
 
     case NEW_USER_FORM_ADD_USER:
       return { ...state, loading: true, error: '' };

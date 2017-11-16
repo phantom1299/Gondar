@@ -1,8 +1,37 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, RefreshControl, ActivityIndicator } from 'react-native';
+import { Icon } from 'native-base';
+import {
+  StyleSheet,
+  Text,
+  View,
+  RefreshControl,
+  ActivityIndicator,
+  Dimensions
+} from 'react-native';
 import Timeline from 'react-native-timeline-listview';
 
+const deviceWidth = Dimensions.get('window').width;
+
 export default class Example extends Component {
+  static navigationOptions = ({ navigation }) => {
+    const headerLeft = (
+      <Icon
+        ios="ios-menu"
+        android="md-menu"
+        style={{ fontSize: 28, color: 'white', marginLeft: 15 }}
+        onPress={() => navigation.navigate('DrawerOpen')}
+      />
+    );
+    const headerRight = <View />;
+    return {
+      headerStyle: { backgroundColor: '#4C3E54' },
+      headerTintColor: 'white',
+      headerTitle: 'Ana Sayfa',
+      headerTitleStyle: { alignSelf: 'center', fontSize: deviceWidth / 26 },
+      headerLeft,
+      headerRight
+    };
+  };
   constructor() {
     super();
     this.onEndReached = this.onEndReached.bind(this);
@@ -120,7 +149,6 @@ export default class Example extends Component {
         }}
         descriptionStyle={{ color: 'gray' }}
         options={{
-          style: { paddingTop: 5 },
           refreshControl: (
             <RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.onRefresh} />
           ),
@@ -134,8 +162,5 @@ export default class Example extends Component {
 }
 
 const styles = StyleSheet.create({
-  list: {
-    padding: 20,
-    paddingTop: 2
-  }
+  list: {}
 });

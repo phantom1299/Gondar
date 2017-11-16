@@ -3,7 +3,7 @@ import { Container, Content, Spinner, List, Text } from 'native-base';
 
 import ActiveJobItem from './ActiveJobItem';
 
-const data = ['59c6d2695907990004e5828a', '59cdf5914c739200048e4876'];
+const data = ['59cdf5914c739200048e4876'];
 
 class ActiveList extends Component {
   renderLoading() {
@@ -13,11 +13,21 @@ class ActiveList extends Component {
   }
 
   render() {
-    if (this.props.jobsId === null || data) {
+    if (this.props.jobsId !== null) {
+      const unique = this.props.jobsId.filter((v, i, a) => a.indexOf(v) === i);
       return (
         <Container>
           <Content>
-            <List dataArray={data} renderRow={jobId => <ActiveJobItem jobId={jobId} />} />
+            <List
+              dataArray={unique}
+              renderRow={jobId => (
+                <ActiveJobItem
+                  navigation={this.props.navigation}
+                  jobId={jobId}
+                  userId={this.props.userId}
+                />
+              )}
+            />
           </Content>
         </Container>
       );

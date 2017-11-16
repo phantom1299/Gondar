@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Keyboard, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, Keyboard, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { Container, Content } from 'native-base';
 import { Card, Button, FormLabel, FormInput, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -14,10 +14,23 @@ import {
 } from '../../actions';
 import { CardSection, Spinner } from '../common';
 
+const deviceWidth = Dimensions.get('window').width;
+
 class NewUser extends Component {
+  static navigationOptions = ({ navigation }) => {
+    const headerRight = <View />;
+    return {
+      headerStyle: { backgroundColor: '#4C3E54' },
+      headerTintColor: 'white',
+      headerTitle: 'Yeni Kişi Oluştur',
+      headerTitleStyle: { alignSelf: 'center', fontSize: deviceWidth / 26 },
+      headerRight
+    };
+  };
   constructor() {
     super();
     this.onNameChange = this.onNameChange.bind(this);
+    this.onSurnameChange = this.onSurnameChange.bind(this);
     this.onEmailChange = this.onEmailChange.bind(this);
     this.onPasswordChange = this.onPasswordChange.bind(this);
     this.onTagChange = this.onTagChange.bind(this);
@@ -204,7 +217,7 @@ class NewUser extends Component {
               />
               <Icon
                 name={'add-circle'}
-                size={30}
+                size={deviceWidth / 15}
                 color={'#28f'}
                 iconStyle={iconStyle}
                 containerStyle={iconContainerStyle}
@@ -223,7 +236,7 @@ class NewUser extends Component {
 
 const styles = StyleSheet.create({
   errorTextStyle: {
-    fontSize: 18,
+    fontSize: deviceWidth / 18,
     alignSelf: 'center',
     color: '#D8000C',
     marginLeft: 5
@@ -238,7 +251,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   labelStyle: {
-    fontSize: 18,
+    fontSize: deviceWidth / 28,
     fontWeight: '200',
     color: '#777',
     marginRight: 0,
@@ -252,25 +265,27 @@ const styles = StyleSheet.create({
     marginLeft: 0
   },
   inputStyle: {
-    fontSize: 18,
+    fontSize: deviceWidth / 28,
     height: 20,
     color: '#888',
     marginTop: 2,
     width: '100%'
   },
   tagInputStyle: {
-    fontSize: 18,
+    fontSize: deviceWidth / 28,
     height: 20,
     width: 150,
     color: '#888',
     marginTop: 2
   },
-  iconStyle: {},
+  iconStyle: {
+    justifyContent: 'center'
+  },
   iconContainerStyle: {
-    marginTop: 10
+    marginTop: '4%'
   },
   tagStyle: {
-    fontSize: 16,
+    fontSize: deviceWidth / 30,
     color: 'white',
     marginRight: 5
   },
