@@ -32,6 +32,7 @@ export default class Example extends Component {
       headerRight
     };
   };
+  
   constructor() {
     super();
     this.onEndReached = this.onEndReached.bind(this);

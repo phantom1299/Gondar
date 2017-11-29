@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavigationActions } from 'react-navigation';
 import {
   View,
   StyleSheet,
@@ -21,15 +22,23 @@ import {
   Thumbnail,
   Text,
   Button,
-  ActionSheet
+  ActionSheet,
+  Spinner
 } from 'native-base';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { Icon, Button as Button1 } from 'react-native-elements';
 import moment from 'moment';
 import trLocale from 'moment/locale/tr';
+import { JOB_DELETE_SUCCESS } from '../../../actions/types';
 
 // import { AutoText as Text } from '../../common';
-import { acceptApplicant, rejectApplicant } from '../../../data';
+import {
+  acceptApplicant,
+  rejectApplicant,
+  deleteJob,
+  updateJobStatus,
+  updateJobHiring
+} from '../../../data';
 
 moment.updateLocale('tr', trLocale);
 
@@ -51,13 +60,25 @@ class EmployerContent extends Component {
     this.state = {
       selectedApplicant: null,
       selectedParticipant: null,
-      visible: false
+      loadingDelete: false,
+      loadingHiring: false
     };
   }
 
   componentWillMount() {
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+    if (
+      this.state.hiring === undefined &&
+      this.state.applicants === undefined &&
+      this.state.participants === undefined
+    ) {
+      this.setState({
+        hiring: this.props.hiring,
+        applicants: this.props.applicants,
+        participants: this.props.participants
+      });
     }
   }
 
@@ -72,18 +93,139 @@ class EmployerContent extends Component {
     // });
   }
 
+  onUpdateJobStatus(status) {
+    this.setState({ loadingStatus: true });
+    updateJobStatus(this.props.jobId, status)
+      .then(response => {
+        if (response.status === 200) {
+          this.setState({ loadingStatus: false });
+          this.props.navigation.state.params.updateJob();
+          this.props.navigation.goBack();
+        }
+        this.setState({ loadingStatus: false });
+      })
+      .catch(console.log);
+  }
+
+  onSetHiring(hiring) {
+    this.setState({ loadingHiring: true });
+    updateJobHiring(this.props.jobId, hiring)
+      .then(response => {
+        if (response.status === 200) {
+          this.setState({ loadingHiring: false, hiring });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  onDeleteJob() {
+    Alert.alert('Dikkat!', 'İş Teklifini kalıcı olarak silmek istediğinize emin misiniz??', [
+      { text: 'İptal', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+      {
+        text: 'Evet',
+        onPress: () => {
+          this.setState({ loadingDelete: true });
+          deleteJob(this.props.jobId)
+            .then(() => {
+              this.setState({ loadingDelete: false });
+              this.props.navigation.dispatch({
+                type: JOB_DELETE_SUCCESS,
+                payload: this.props.jobId
+              });
+              this.props.navigation.goBack();
+            })
+            .catch(console.log);
+        }
+      },
+      ''
+    ]);
+  }
+
   onAcceptApplicant = applicantId => {
     acceptApplicant(this.props.jobId, applicantId)
       .then(() => {
-        this.props.participants.push(this.props.applicants.find(el => (el._id === applicantId)));
-        this.props.applicants = this.props.applicants.filter(e => e._id !== applicantId);
+        this.setState({
+          participants: this.state.participants.concat(
+            this.state.applicants.find(el => el._id === applicantId)
+          ),
+          applicants: this.state.applicants.filter(e => e._id !== applicantId)
+        });
       })
       .catch(console.log);
   };
 
   onRejectApplicant = applicantId => {
-    rejectApplicant(this.props.jobId, applicantId);
+    rejectApplicant(this.props.jobId, applicantId)
+      .then(() => {
+        this.setState({
+          applicants: this.state.applicants.filter(e => e._id !== applicantId)
+        });
+      })
+      .catch(console.log);
   };
+
+  renderDeleteButtonOrLoading() {
+    if (this.state.loadingDelete) {
+      return <Spinner />;
+    }
+    return (
+      <Button danger block style={{ margin: 10 }} onPress={() => this.onDeleteJob()}>
+        <Text>İş Teklifini Sil</Text>
+      </Button>
+    );
+  }
+
+  renderHiringButtonOrLoading() {
+    if (this.state.loadingHiring) {
+      return <Spinner />;
+    }
+    return (
+      <Button
+        info
+        block
+        style={{ margin: 10 }}
+        onPress={() => this.onSetHiring(!this.state.hiring)}
+      >
+        {this.state.hiring ? <Text>İşİ Başvurulara Kapat</Text> : <Text>İşİ Başvurulara Aç</Text>}
+      </Button>
+    );
+  }
+
+  renderStartButtonOrLoading() {
+    if (this.state.loadingStatus) {
+      return <Spinner />;
+    }
+    return (
+      <Button
+        success
+        block
+        style={{ margin: 10 }}
+        onPress={() => this.onUpdateJobStatus('started')}
+      >
+        <Text>İşi Başlat</Text>
+      </Button>
+    );
+  }
+
+  renderEndButtonOrLoading() {
+    const disabled = this.props.progress !== 1;
+    if (this.state.loadingStatus) {
+      return <Spinner />;
+    }
+    return (
+      <Button
+        disabled={disabled}
+        success
+        block
+        style={{ margin: 10, opacity: disabled ? 0.5 : 1 }}
+        onPress={() => this.onUpdateJobStatus('finished')}
+      >
+        <Text>İşi Bitir</Text>
+      </Button>
+    );
+  }
 
   renderApplicantOptions(selectedApplicant) {
     if (this.state.selectedApplicant === selectedApplicant) {
@@ -147,15 +289,12 @@ class EmployerContent extends Component {
   renderParticipantOptions(selectedParticipant) {
     if (this.state.selectedParticipant === selectedParticipant) {
       return (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 10 }}>
-          <Button1
-            buttonStyle={styles.buttonStyle}
-            title={'Çıkar'}
-            backgroundColor={'#d9534f'}
-            icon={{
-              name: 'cancel',
-              size: 18
-            }}
+        <View
+          style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around', padding: 10 }}
+        >
+          <Button
+            style={styles.buttonStyle}
+            danger
             onPress={() =>
               Alert.alert(
                 'Dikkat!',
@@ -165,15 +304,12 @@ class EmployerContent extends Component {
                   { text: 'Evet', onPress: () => console.log('OK Pressed') }
                 ]
               )}
-          />
-          <Button1
-            buttonStyle={styles.buttonStyle}
-            title={'İletişim'}
-            backgroundColor={'#5bc0de'}
-            icon={{
-              name: 'contact-mail',
-              size: 18
-            }}
+          >
+            <Text>Çıkar</Text>
+          </Button>
+          <Button
+            style={styles.buttonStyle}
+            success
             onPress={() =>
               ActionSheet.show(
                 {
@@ -185,7 +321,9 @@ class EmployerContent extends Component {
                   this.setState({ clicked: Contact[buttonIndex] });
                 }
               )}
-          />
+          >
+            <Text>İletişim</Text>
+          </Button>
         </View>
       );
     }
@@ -352,8 +490,13 @@ class EmployerContent extends Component {
   render() {
     return (
       <View>
-        {this.renderApplicants(this.props.applicants)}
-        {this.renderParticipants(this.props.participants)}
+        {this.state.hiring ? this.renderApplicants(this.state.applicants) : null}
+        {this.renderParticipants(this.state.participants)}
+        {this.renderHiringButtonOrLoading()}
+        {this.props.status === 'created'
+          ? this.renderStartButtonOrLoading()
+          : this.renderEndButtonOrLoading()}
+        {this.renderDeleteButtonOrLoading()}
       </View>
     );
   }
@@ -388,8 +531,9 @@ const styles = StyleSheet.create({
     paddingBottom: 0
   },
   buttonStyle: {
-    borderRadius: 8,
-    width: 100
+    flex: 1,
+    justifyContent: 'center',
+    borderRadius: 0
   }
 });
 

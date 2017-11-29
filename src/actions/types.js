@@ -40,3 +40,5 @@ export const USER_SOCIAL_ACCOUNTS_CHANGED = 'user_social_account_add';
 export const USER_SOCIAL_ACCOUNT_DELETE = 'user_social_account_delete';
 
 export const DELETE_USER = 'delete_user';
+export const JOB_DELETE_SUCCESS = 'job_delete_success';
+export const APPLY_TO_JOB_SUCCESS = 'apply_to_job_success';

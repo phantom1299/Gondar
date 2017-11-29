@@ -10,163 +10,43 @@ import {
   Left,
   Body,
   Right,
-  Thumbnail
+  Thumbnail,
+  Icon
 } from 'native-base';
-import * as Progress from 'react-native-progress';
 import { AutoText as Text } from './common';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-const missions = [
-  {
-    _id: 1,
-    title: 'Dökümanları yaz', //işin başlığı
-    description: 'Örnek görev 1 açıklama', //işin açıklaması
-    participants: [{ name: 'Aslı', avatarUrl: 'https://randomuser.me/api/portraits/women/49.jpg' }], //iş teklifindeki çalışanın IDleri
-    progress: 0.2, //tamamlanma yüzdesi
-    notes: {} //notlar
-  },
-  {
-    _id: 2,
-    title: 'Yazılım Ücretlerini Araştır ve Raporla', //işin başlığı
-    description: 'Örnek görev 2 açıklama', //işin açıklaması
-    participants: [{ name: 'Halil', avatarUrl: 'https://randomuser.me/api/portraits/men/17.jpg' }], //iş teklifindeki çalışanın IDsi
-    progress: 0.3, //tamamlanma yüzdesi
-    notes: {} //notlar
-  },
-  {
-    _id: 3,
-    title: 'Örnek görev 3', //işin başlığı
-    description: 'Örnek görev 3 açıklama', //işin açıklaması
-    participants: [
-      { name: 'Ceyda', avatarUrl: 'https://randomuser.me/api/portraits/women/25.jpg' },
-      { name: 'Canıthın', avatarUrl: 'https://randomuser.me/api/portraits/men/82.jpg' }
-    ], //iş teklifindeki çalışanın IDsi
-    progress: 0.7, //tamamlanma yüzdesi
-    notes: {} //notlar
-  },
-  {
-    _id: 4,
-    title: 'Örnek görev 4', //işin başlığı
-    description: 'Örnek görev 4 açıklama', //işin açıklaması
-    participants: [{ name: 'Jack', avatarUrl: 'https://randomuser.me/api/portraits/men/29.jpg' }], //iş teklifindeki çalışanın IDsi
-    progress: 0.8, //tamamlanma yüzdesi
-    notes: {} //notlar
-  }
-];
-
 export default class DrawerExample extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selected: null
+  static navigationOptions = ({ navigation }) => {
+    const headerLeft = (
+      <Icon
+        ios="ios-menu"
+        android="md-menu"
+        style={{ fontSize: 28, color: 'white', marginLeft: 15 }}
+        onPress={() => navigation.navigate('DrawerOpen')}
+      />
+    );
+    return {
+      headerStyle: { backgroundColor: '#4C3E54' },
+      headerTintColor: 'white',
+      headerTitle: 'Ayarlar',
+      headerTitleStyle: { alignSelf: 'center', fontSize: deviceWidth / 24 },
+      headerLeft,
+      headerRight: <View />
     };
-  }
-
-  componentWillMount() {
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-  }
-
-  componentWillUpdate() {
-    LayoutAnimation.spring();
-  }
-
-  onPress = id => {
-    this.setState({ selected: id });
-    console.log(this.state.selected);
-  };
-
-  getcolor(x = 0) {
-    if (x > 0.75) return '#5cb85c';
-    else if (x > 0.5) return '#5bc0de';
-    else if (x > 0.25) return '#f0ad4e';
-    return '#d9534f';
-  }
-
-  renderDetails(mission) {
-    if (mission._id === this.state.selected) {
-      return (
-        <Card>
-          <Text>Hey</Text>
-          <Text>Hey</Text>
-          <Text>Hey</Text>
-          <Text>Hey</Text>
-        </Card>
-      );
-    }
-  }
-
-  renderParticipant(participant) {
-    return (
-      <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
-        <Thumbnail
-          style={{ width: deviceWidth / 15, height: deviceWidth / 15 }}
-          source={{
-            uri:
-              participant.avatarUrl ||
-              'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png'
-          }}
-        />
-        <Text style={{ color: '#000', margin: 5 }}>{participant.name}</Text>
-      </View>
-    );
-  }
-
-  renderMission = mission => {
-    const { _id, title, participants, progress } = mission;
-    return (
-      <Card key={_id} style={{ paddingHorizontal: '5%' }}>
-        <TouchableOpacity
-          onPress={() => {
-            this.setState({ selected: _id });
-            console.log(this.state.selected);
-          }}
-        >
-          <View style={{ paddingVertical: '2%', flexDirection: 'row' }}>
-            <Left>
-              <Text fontSizeMultiplier={1.1} style={{ color: '#000' }}>
-                {title}
-              </Text>
-            </Left>
-            <Text style={{ color: '#000' }} fontSizeMultiplier={1}>
-              2 gün kaldı
-            </Text>
-          </View>
-
-          <View style={{ flexDirection: 'row' }}>
-            {participants.map(participant => this.renderParticipant(participant))}
-          </View>
-          <Progress.Bar
-            style={{ marginVertical: '2%' }}
-            borderRadius={0}
-            borderWidth={0}
-            unfilledColor={`${this.getcolor(progress)}55`}
-            color={`${this.getcolor(progress)}aa`}
-            progress={progress}
-            width={deviceWidth / 1.1}
-            children={
-              <Text
-                style={{
-                  color: '#000',
-                  backgroundColor: '#fff',
-                  paddingLeft: `${progress * 100 - 2.5}%`,
-                  fontSize: deviceWidth / 30
-                }}
-              >
-                {`${progress * 100}%`}
-              </Text>
-            }
-          />
-        </TouchableOpacity>
-        {this.renderDetails(mission)}
-      </Card>
-    );
   };
 
   render() {
-    return <Content>{missions.map(this.renderMission)}</Content>;
+    return (
+      <Content>
+        <View style={{ alignSelf: 'center', justifyContent: 'center', height: deviceHeight }}>
+          <Text fontSizeMultiplier={1.5} style={{ justifyContent: 'center' }}>
+            (Yapılacak)
+          </Text>
+        </View>
+      </Content>
+    );
   }
 }

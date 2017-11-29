@@ -1,48 +1,40 @@
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
-import { Card, CardItem, Thumbnail, Text, Left, Body, Right } from 'native-base';
+import { Card, CardItem, Thumbnail, Left, Body, Right, Spinner } from 'native-base';
 import { TouchableOpacity, Dimensions } from 'react-native';
 import moment from 'moment';
 import trLocale from 'moment/locale/tr';
 
-import { getUserById } from '../../../data';
+import { getJobById } from '../../../data';
+import { AutoText as Text } from '../../common';
 
 const deviceWidth = Dimensions.get('window').width;
 moment.updateLocale('tr', trLocale);
 
-class OpportunityJobItem extends Component {
+class AppliedJobItem extends Component {
   constructor() {
     super();
     this.onPress = this.onPress.bind(this);
+    this.pressed = false;
     this.state = {
-      employer: {}
+      loading: true,
+      job: []
     };
   }
 
   componentWillMount() {
-    console.log(this.props);
-    getUserById(this.props.job.employer)
-      .then(response => {
-        response
-          .json()
-          .then(responseJson => this.setState({ employer: responseJson }))
-          .catch(err => {
-            this.setState({ employer: { name: err } });
-          });
-      })
-      .catch(console.log);
+    this.getJobDetails();
   }
 
   onPress() {
-    if (!this.pressed) {
+    if (!this.pressed && !this.state.loading) {
       this.pressed = true;
       this.props.navigation.navigate('OppurtunityJob', {
-        job: this.props.job,
-        employer: this.state.employer,
-        title: this.props.job.title,
+        job: this.state.job,
+        employer: this.state.job.employer,
+        title: this.state.job.title,
         userId: this.props.userId,
-        fromAppliedJobs: false,
-        updateJobs: this.props.updateJobs
+        fromAppliedJobs: true
       });
     }
     setTimeout(() => {
@@ -50,9 +42,21 @@ class OpportunityJobItem extends Component {
     }, 2000);
   }
 
+  getJobDetails() {
+    getJobById(this.props.jobId)
+      .then(response => {
+        if (response.status === 200) {
+          response
+            .json()
+            .then(responseJson => this.setState({ job: responseJson, loading: false }));
+        } else this.getJobDetails();
+      })
+      .catch(console.log);
+  }
+
   render() {
-    const { title, budget, description, tags, deadline, creationDate } = this.props.job;
-    const { employer } = this.state;
+    const { title, employer, budget, description, tags, deadline, creationDate } = this.state.job;
+    if (this.state.loading) return <Spinner />;
     return (
       <TouchableOpacity onPress={this.onPress}>
         <Card style={{ flex: 0, marginTop: 10, marginBottom: 10 }}>
@@ -98,4 +102,4 @@ class OpportunityJobItem extends Component {
   }
 }
 
-export default OpportunityJobItem;
+export default AppliedJobItem;

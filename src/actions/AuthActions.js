@@ -41,7 +41,7 @@ export const loginUser = ({ email, password }) => {
         loginUserSuccess(dispatch, user);
       })
       .catch(error => {
-        loginUserFail(dispatch, error);
+        loginUserFail(dispatch, `Login Failed. ${error}`);
       });
   };
 };
@@ -61,21 +61,22 @@ const loginUserSuccess = (dispatch, user) => {
     .then(user1 => {
       const id = user1.sub.split('|')[1];
       console.log('getting user info!');
-      
+
       getUserById(id)
         .then(response => {
           if (response.status === 200) {
-            return response.json();
+            return response.json().then(result => {
+              dispatch({
+                type: LOGIN_USER_SUCCESS,
+                payload: result
+              });
+              dispatch(NavigationActions.navigate({ routeName: 'Drawer' }));
+            });
           } else if (response.status === 204) {
             loginUserFail(dispatch, 'Hata! Kişi veritabanından silinmiş.');
+          } else {
+            loginUserFail(dispatch, `Sunucu ${response.status} hata kodunu döndürdü.`);
           }
-        })
-        .then(response => {
-          dispatch({
-            type: LOGIN_USER_SUCCESS,
-            payload: response
-          });
-          dispatch(NavigationActions.navigate({ routeName: 'Drawer' }));
         })
         .catch(error => {
           loginUserFail(dispatch, error);

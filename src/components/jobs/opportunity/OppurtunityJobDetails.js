@@ -1,35 +1,14 @@
 import React, { Component } from 'react';
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  LayoutAnimation,
-  UIManager,
-  Platform,
-  Alert,
-  Dimensions
-} from 'react-native';
-import {
-  Card,
-  CardItem,
-  List,
-  ListItem,
-  Left,
-  Body,
-  Right,
-  Thumbnail,
-  Text,
-  Button,
-  ActionSheet
-} from 'native-base';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { Icon, Button as Button1 } from 'react-native-elements';
+import { View, StyleSheet, ScrollView, UIManager, Platform, Dimensions } from 'react-native';
+import { NavigationActions } from 'react-navigation';
+import { Card, ListItem, Left, Thumbnail, Text, Button, Spinner, Toast } from 'native-base';
+import { Icon } from 'react-native-elements';
 import moment from 'moment';
 import trLocale from 'moment/locale/tr';
 
 // import { AutoText as Text } from '../../common';
 import { applyToJob } from '../../../data';
+import { APPLY_TO_JOB_SUCCESS } from '../../../actions/types';
 
 moment.updateLocale('tr', trLocale);
 
@@ -50,6 +29,10 @@ class JobDetails extends Component {
   constructor() {
     super();
     this.onApply = this.onApply.bind(this);
+    this.state = {
+      loading: false,
+      hasApplied: false
+    };
   }
 
   componentWillMount() {
@@ -70,29 +53,102 @@ class JobDetails extends Component {
   }
 
   onApply = (jobId, userId) => {
-    applyToJob(jobId, userId);
+    this.setState({ loading: true });
+    applyToJob(jobId, userId)
+      .then(response => {
+        if (response.status === 200) {
+          this.setState({ loading: false, hasApplied: true });
+          Toast.show({
+            text: 'Başvurunuz gerçekleşti!',
+            position: 'bottom',
+            buttonText: 'Tamam',
+            type: 'success',
+            duration: 2000
+          });
+          this.props.navigation.dispatch({
+            type: APPLY_TO_JOB_SUCCESS,
+            payload: jobId
+          });
+          this.props.navigation.state.params.updateJobs();
+          this.props.navigation.goBack();
+        } else {
+          this.setState({ loading: false });
+          Toast.show({
+            text: 'Başvuru işleminiz tamamlanamadı! Lütfen tekrar deneyin.',
+            position: 'bottom',
+            buttonText: 'Tamam',
+            type: 'danger',
+            duration: 5000
+          });
+        }
+      })
+      .catch(err => {
+        Toast.show({
+          text: err,
+          position: 'bottom',
+          buttonText: 'Tamam',
+          type: 'danger',
+          duration: 5000
+        });
+      });
   };
 
-  renderOptions() {
-    const { job, userId } = this.props.navigation.state.params;
-    return (
-      <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
+  onCancel = (jobId, userId) => {
+    console.log(jobId);
+    console.log(userId);
+  };
+
+  renderApllyOrCancel(jobId, userId) {
+    if (this.props.navigation.state.params && !this.props.navigation.state.params.fromAppliedJobs) {
+      return (
         <Button
-          style={{ flex: 1, justifyContent: 'center', borderRadius: 0 }}
-          textStyle={{ textAlign: 'center' }}
-          success
-        >
-          <Text>İletİşİme Geç</Text>
-        </Button>
-        <Button
-          onPress={() => this.onApply(job._id, userId)}
-          style={{ flex: 1, justifyContent: 'center', borderRadius: 0 }}
+          onPress={() => this.onApply(jobId, userId)}
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            borderRadius: 0,
+            opacity: this.state.hasApplied ? 0.8 : 1
+          }}
           primary
         >
           <Text>Başvur</Text>
         </Button>
-      </View>
+      );
+    }
+    return (
+      <Button
+        onPress={() => this.onCancel(jobId, userId)}
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          borderRadius: 0,
+          opacity: this.state.hasApplied ? 0.8 : 1
+        }}
+        primary
+      >
+        <Text>Vazgeç</Text>
+      </Button>
     );
+  }
+
+  renderOptions() {
+    const { job, userId } = this.props.navigation.state.params;
+    if (!this.state.loading) {
+      return (
+        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
+          <Button
+            style={{ flex: 1, justifyContent: 'center', borderRadius: 0 }}
+            onPress={() => console.log(this.props.navigation)}
+            textStyle={{ textAlign: 'center' }}
+            success
+          >
+            <Text>İletİşİme Geç</Text>
+          </Button>
+          {this.renderApllyOrCancel(job._id, userId)}
+        </View>
+      );
+    }
+    return <Spinner size={45} color="steelblue" />;
   }
 
   render() {

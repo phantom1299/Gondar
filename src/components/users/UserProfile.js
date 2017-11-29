@@ -7,7 +7,6 @@ import {
   CardItem,
   Body,
   Thumbnail,
-  Text,
   Row,
   Col,
   Button,
@@ -15,6 +14,7 @@ import {
 } from 'native-base';
 import { connect } from 'react-redux';
 import { deleteUser } from '../../actions';
+import { AutoText as Text } from '../common';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -43,7 +43,10 @@ class UserProfile extends Component {
       {
         text: 'Evet',
         onPress: () => {
-          this.props.deleteUser(this.props.navigation.state.params.user._id);
+          this.props.deleteUser(
+            this.props.navigation.state.params.user._id,
+            this.props.navigation.state.params.updateUsers
+          );
           this.setState({ loading: true });
         }
       },
@@ -77,15 +80,15 @@ class UserProfile extends Component {
                     'http://www.oldpotterybarn.co.uk/wp-content/uploads/2015/06/default-medium.png'
                 }}
               />
-              <Text style={{ fontSize: 28 }}>
+              <Text fontSizeMultiplier={1.5} style={{ textAlign: 'center' }}>
                 {user.name} {user.surname}
               </Text>
-              <Text style={{ color: 'steelblue', fontSize: 18 }}>
+              <Text fontSizeMultiplier={1.1} style={{ color: 'steelblue', textAlign: 'center' }}>
                 {user.tags.map(tag => `#${tag} `)}
               </Text>
             </Body>
             <CardItem>
-              <Text>İletişim Bilgileri:</Text>
+              <Text fontSizeMultiplier={1.3}>İletişim Bilgileri:</Text>
             </CardItem>
             <Row style={{ marginHorizontal: 20, marginVertical: 3 }}>
               <Col size={1}>

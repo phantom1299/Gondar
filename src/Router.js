@@ -50,7 +50,7 @@ const UserStack = StackNavigator({
 });
 
 const ProfileStack = new StackNavigator({
-  Profile: {
+  MyProfile: {
     screen: Profile
   }
 });

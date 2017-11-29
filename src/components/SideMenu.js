@@ -25,11 +25,11 @@ class SideMenu extends Component {
   onProfile() {
     if (!this.pressed) {
       this.pressed = true;
-
+      
       this.props.navigation.navigate('Profile');
       setTimeout(() => {
         this.pressed = false;
-      }, 1000);
+      }, 500);
     }
   }
 
@@ -40,8 +40,7 @@ class SideMenu extends Component {
       this.props.navigation.navigate('Home');
       setTimeout(() => {
         this.pressed = false;
-      }, 1000);
-      // Actions.timeline({ type: 'replace' });
+      }, 500);
     }
   }
 
@@ -52,8 +51,7 @@ class SideMenu extends Component {
       this.props.navigation.navigate('Jobs');
       setTimeout(() => {
         this.pressed = false;
-      }, 1000);
-      // Actions.jobsList({ type: 'replace' });
+      }, 500);
     }
   }
 
@@ -61,11 +59,10 @@ class SideMenu extends Component {
     if (!this.pressed) {
       this.pressed = true;
 
-      this.props.navigation.navigate('UserList');
+      this.props.navigation.navigate('Users');
       setTimeout(() => {
         this.pressed = false;
-      }, 1000);
-      // Actions.userList({ type: 'replace' });
+      }, 500);
     }
   }
 
@@ -76,8 +73,7 @@ class SideMenu extends Component {
       this.props.navigation.navigate('Settings');
       setTimeout(() => {
         this.pressed = false;
-      }, 1000);
-      // Actions.settings({ type: 'replace' });
+      }, 500);
     }
   }
 
@@ -91,7 +87,6 @@ class SideMenu extends Component {
         actions: [NavigationActions.navigate({ routeName: 'Auth' })]
       });
       this.props.navigation.dispatch(actionToDispatch);
-      // Actions.auth({ type: 'reset' });
     }
   }
 

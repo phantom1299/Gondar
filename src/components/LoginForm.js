@@ -39,7 +39,13 @@ class LoginForm extends Component {
     }
 
     return (
-      <Button style={styles.buttonStyle} iconRight block onPress={this.onButtonPress}>
+      <Button
+        disabled={this.props.email === '' || this.props.password === ''}
+        style={styles.buttonStyle}
+        iconRight
+        block
+        onPress={this.onButtonPress}
+      >
         <Text style={{ fontSize: deviceWidth / 26 }}>Giriş Yap</Text>
         <Icon name="sign-in" size={28} />
       </Button>

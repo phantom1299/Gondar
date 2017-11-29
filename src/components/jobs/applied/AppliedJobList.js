@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Container, Content, Spinner, List, Text } from 'native-base';
 
-import ActiveJobItem from './ActiveJobItem';
+import AppliedJobItem from './AppliedJobItem';
 
-class ActiveList extends Component {
+class AppliedJobList extends Component {
   render() {
     if (this.props.jobsId !== null && this.props.jobsId.length > 0) {
       const unique = this.props.jobsId.filter((v, i, a) => a.indexOf(v) === i);
@@ -13,10 +13,10 @@ class ActiveList extends Component {
             <List
               dataArray={unique}
               renderRow={jobId => (
-                <ActiveJobItem
+                <AppliedJobItem
                   navigation={this.props.navigation}
                   jobId={jobId}
-                  user={this.props.user}
+                  userId={this.props.userId}
                 />
               )}
             />
@@ -28,7 +28,7 @@ class ActiveList extends Component {
       <Container style={{ alignItems: 'center' }}>
         <Content>
           <Text style={{ marginTop: '10%', fontSize: 16, color: 'grey', textAlign: 'center' }}>
-            Şuan aktif bir iş teklifiniz bulunmamaktadır.
+            Şuanda bekleyen bir başvurunuz yok.
           </Text>
         </Content>
       </Container>
@@ -36,4 +36,4 @@ class ActiveList extends Component {
   }
 }
 
-export default ActiveList;
+export default AppliedJobList;

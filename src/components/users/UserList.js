@@ -60,10 +60,12 @@ const users = [
   }
 ];
 
+const nullfunc = () => null;
 const deviceWidth = Dimensions.get('window').width;
 
 class UserList extends Component {
   static navigationOptions = ({ navigation }) => {
+    const { params = {} } = navigation.state;
     const headerLeft = (
       <Icon
         ios="ios-menu"
@@ -73,7 +75,7 @@ class UserList extends Component {
       />
     );
     const headerRight = (
-      <Button transparent small onPress={() => navigation.navigate('NewUser')}>
+      <Button transparent small onPress={params.handleNew ? params.handleNew : nullfunc}>
         <Text style={{ fontSize: deviceWidth / 30, color: 'lightblue' }}>Yeni</Text>
       </Button>
     );
@@ -91,22 +93,16 @@ class UserList extends Component {
     super();
     this.pressed = false;
     this.renderRow = this.renderRow.bind(this);
+    this.getUserList = this.getUserList.bind(this);
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       loading: true,
-      listViewData: users
+      listViewData: []
     };
   }
 
   componentWillMount() {
-    getUsers()
-      .then(response => {
-        response.json().then(response1 => {
-          this.setState({ listViewData: users.concat(response1), loading: false });
-          this.showToast();
-        });
-      })
-      .catch(console.log);
+    this.getUserList();
   }
 
   componentDidMount() {
@@ -121,7 +117,7 @@ class UserList extends Component {
       setTimeout(() => {
         this.pressed = false;
       }, 2000);
-      this.props.navigation.navigate('UserProfile', { user });
+      this.props.navigation.navigate('UserProfile', { user, updateUsers: this.getUserList });
     }
   }
 
@@ -135,12 +131,35 @@ class UserList extends Component {
     }
   }
 
+  getUserList(newUserAdded) {
+    if (newUserAdded) {
+      this.setState({ newUserLoading: true });
+      this.showToast(true);
+    } else if (newUserAdded === false) {
+      this.setState({ newUserLoading: true });
+      this.showToast(false);
+    }
+    getUsers()
+      .then(response => {
+        if (response.status === 200) {
+          response.json().then(response1 => {
+            this.setState({
+              listViewData: [].concat(response1),
+              loading: false,
+              newUserLoading: false
+            });
+          });
+        } else this.getUserList();
+      })
+      .catch(() => this.getUserList());
+  }
+
   _handleNew = () => {
-    this.props.navigation.navigate('NewUser');
+    this.props.navigation.navigate('NewUser', { updateUsers: this.getUserList });
   };
 
-  showToast() {
-    if (this.props.navigation.state.params.userDeleted) {
+  showToast(userAdded) {
+    if (!userAdded) {
       Toast.show({
         text: 'Kişi başarıyla silindi!',
         position: 'bottom',
@@ -148,7 +167,7 @@ class UserList extends Component {
         type: 'success',
         duration: 2000
       });
-    } else if (this.props.navigation.state.params.userAdded) {
+    } else if (userAdded) {
       Toast.show({
         text: 'Kişi başarıyla eklendi!',
         position: 'bottom',
@@ -160,7 +179,7 @@ class UserList extends Component {
   }
 
   renderLoading() {
-    if (this.state.loading) {
+    if (this.state.loading || this.state.newUserLoading) {
       return <Spinner />;
     }
   }

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Content, Tab, Tabs, TabHeading, Text, Icon, Button } from 'native-base';
+import { Container, Content, Tab, Tabs, TabHeading, Text, Icon, Button, Toast } from 'native-base';
 
 import OpportunitiesList from './opportunity/OpportunityJobList';
 import ActiveList from './active/ActiveJobList';
+import AppliedJobList from './applied/AppliedJobList';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -19,7 +20,11 @@ class JobsList extends Component {
       />
     );
     const headerRight = (
-      <Button transparent small onPress={() => navigation.navigate('NewJob')}>
+      <Button
+        transparent
+        small
+        onPress={() => navigation.navigate('NewJob', { refresh: this.forceUpdate })}
+      >
         <Text style={{ fontSize: deviceWidth / 30, color: 'lightblue' }}>Yeni</Text>
       </Button>
     );
@@ -32,6 +37,42 @@ class JobsList extends Component {
       headerRight
     };
   };
+
+  componentWillMount() {
+    if (this.props.navigation.state.params) this.showToast();
+  }
+
+  showToast() {
+    if (this.props.navigation.state.params.jobAdded) {
+      Toast.show({
+        text: 'İş Teklifi eklendi!',
+        position: 'bottom',
+        buttonText: 'Tamam',
+        type: 'success',
+        duration: 2000
+      });
+      this.props.navigation.state.params.jobAdded = false;
+    } else if (this.props.navigation.state.params.jobDeleted) {
+      Toast.show({
+        text: 'İş Teklifi başarıyla silindi!',
+        position: 'bottom',
+        buttonText: 'Tamam',
+        type: 'success',
+        duration: 2000
+      });
+      this.props.navigation.state.params.jobDeleted = false;
+    } else if (this.props.navigation.state.params.jobStatusChanged) {
+      Toast.show({
+        text: 'İş Teklifinin durumu başarıyla değiştirildi!',
+        position: 'bottom',
+        buttonText: 'Tamam',
+        type: 'success',
+        duration: 2000
+      });
+      this.props.navigation.state.params.jobStatusChanged = false;
+    }
+  }
+
   render() {
     return (
       <Container>
@@ -46,7 +87,7 @@ class JobsList extends Component {
             <ActiveList
               navigation={this.props.navigation}
               jobsId={this.props.user.activeJobs}
-              userId={this.props.user._id}
+              user={this.props.user}
             />
           </Tab>
           <Tab
@@ -65,20 +106,15 @@ class JobsList extends Component {
             jobsId={this.props.user.finishedJobs}
             heading={
               <TabHeading style={{ backgroundColor: '#78909C' }}>
-                <Text style={{ fontSize: deviceWidth / 26 }}>Tamamlanmış</Text>
+                <Text style={{ fontSize: deviceWidth / 26 }}>Başvurular</Text>
               </TabHeading>
             }
           >
-            <Container style={{ alignItems: 'center' }}>
-              <Content>
-                <Text style={{ marginTop: '50%', fontSize: 16, color: 'grey' }}>
-                  Şuan tamamlanmış bir iş teklifiniz
-                </Text>
-                <Text style={{ fontSize: 16, alignSelf: 'center', color: 'grey' }}>
-                  bulunmamaktadır.
-                </Text>
-              </Content>
-            </Container>
+            <AppliedJobList
+              navigation={this.props.navigation}
+              jobsId={this.props.user.appliedJobs}
+              userId={this.props.user._id}
+            />
           </Tab>
         </Tabs>
       </Container>
@@ -87,7 +123,7 @@ class JobsList extends Component {
 }
 
 const mapStateToProps = state => {
-  const user = state.auth.user;
+  const user = state.user.user;
   return { user };
 };
 

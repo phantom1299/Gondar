@@ -14,6 +14,7 @@ moment.updateLocale('tr', trLocale);
 class ActiveJobItem extends Component {
   constructor() {
     super();
+    this.getJobDetails = this.getJobDetails.bind(this);
     this.onPress = this.onPress.bind(this);
     this.pressed = false;
     this.state = {
@@ -23,15 +24,7 @@ class ActiveJobItem extends Component {
   }
 
   componentWillMount() {
-    getJobById(this.props.jobId)
-      .then(response => {
-        if (response.status === 200) {
-          response
-            .json()
-            .then(responseJson => this.setState({ job: responseJson, loading: false }));
-        }
-      })
-      .catch(console.log);
+    this.getJobDetails();
   }
 
   onPress() {
@@ -41,14 +34,27 @@ class ActiveJobItem extends Component {
         job: this.state.job,
         employer: this.state.employer,
         title: this.state.job.title,
-        userId: this.props.userId
+        user: this.props.user,
+        updateJob: this.getJobDetails
       });
     }
     setTimeout(() => {
       this.pressed = false;
     }, 2000);
   }
-  
+
+  getJobDetails() {
+    getJobById(this.props.jobId)
+      .then(response => {
+        if (response.status === 200) {
+          response
+            .json()
+            .then(responseJson => this.setState({ job: responseJson, loading: false }));
+        } else this.getJobDetails();
+      })
+      .catch(console.log);
+  }
+
   render() {
     const { title, description, deadline, progress } = this.state.job;
     return (
@@ -63,7 +69,7 @@ class ActiveJobItem extends Component {
           indeterminate={this.state.loading}
           thickness={10}
           color={'#332324'}
-          progress={0.5}
+          progress={progress}
           borderWidth={progress === 0 ? 1 : 0}
           showsText
         >

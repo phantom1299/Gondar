@@ -73,8 +73,18 @@ class ActiveJobDetail extends Component {
   }
 
   renderUserDependingContent({ jobId, applicants, participants }) {
-    if (this.state.isEmployer && this.props.job.hiring) {
-      return <EmployerContent jobId={jobId} applicants={applicants} participants={participants} />;
+    if (this.state.isEmployer) {
+      return (
+        <EmployerContent
+          navigation={this.props.navigation}
+          hiring={this.props.job.hiring}
+          jobId={jobId}
+          applicants={applicants}
+          participants={participants}
+          status={this.props.job.status}
+          progress={this.props.job.progress}
+        />
+      );
     }
     return [
       <CardItem header style={{ justifyContent: 'center' }}>

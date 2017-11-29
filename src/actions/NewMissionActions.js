@@ -1,4 +1,5 @@
 import { Toast } from 'native-base';
+import { NavigationActions } from 'react-navigation';
 import {
   NEW_MISSION_FORM_WILL_MOUNT,
   NEW_MISSION_FORM_TITLE_CHANGED,
@@ -55,42 +56,38 @@ export const newMissionFormDescriptionChanged = text => {
 
 //İş Ekleme burda yapılacak
 //TODO Dosya ekleme
-export const newMissionAdd = (job) => {
+export const newMissionAdd = job => {
   return dispatch => {
     dispatch({ type: NEW_MISSION_FORM_ADD_MISSION });
     createJob(job)
-      .then(stats => {
-        console.log(stats);
-        newMissionAddSuccess(dispatch);
+      .then(response => {
+        if (response.status === 200) { 
+          response.json().then(result => newMissionAddSuccess(dispatch, result._id)); 
+        } else newMissionAddFail(dispatch, `Sunucu "${response.status}" hata kodunu döndrüdü.`);
       })
       .catch(err => {
         console.log(err);
-        newMissionAddFail(dispatch);
+        newMissionAddFail(dispatch, err);
       });
   };
 };
 
 //İş başarılı bir şekilde oluşturulduysa, verileri database gir,
-const newMissionAddSuccess = dispatch => {
+const newMissionAddSuccess = (dispatch, jobId) => {
   dispatch({
-    type: NEW_MISSION_FORM_ADD_MISSION_SUCCESS
+    type: NEW_MISSION_FORM_ADD_MISSION_SUCCESS,
+    payload: jobId
   });
-  Toast.show({
-    text: 'İş Teklifi eklendi!',
-    position: 'bottom',
-    buttonText: 'Tamam',
-    type: 'success',
-    duration: 2000
-  });
+  dispatch(NavigationActions.back());
 };
 
 //İş ekleme başarısız olduysa hata mesajı göster
-const newMissionAddFail = dispatch => {
+const newMissionAddFail = (dispatch, err) => {
   dispatch({
     type: NEW_MISSION_FORM_ADD_MISSION_FAIL
   });
   Toast.show({
-    text: 'İş Teklifi eklenemedi!',
+    text: `İş Teklifi eklenemedi! ${err}`,
     position: 'bottom',
     buttonText: 'Tamam',
     type: 'danger',

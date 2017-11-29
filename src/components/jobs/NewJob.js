@@ -41,7 +41,7 @@ class NewJob extends Component {
     this.onTagAdd = this.onTagAdd.bind(this);
     this.onTagChange = this.onTagChange.bind(this);
     this.onButtonPress = this.onButtonPress.bind(this);
-    this.state = { height: 0, tag: '', date: moment() };
+    this.state = { height: 0, tag: '', date: moment().format('DD MMM YY') };
   }
 
   componentWillMount() {
@@ -112,7 +112,7 @@ class NewJob extends Component {
     return (
       <View style={{ flex: 1 }}>
         <Button
-          title={'Kaydet'}
+          title={'Oluştur'}
           buttonStyle={{ padding: '3%' }}
           onPress={this.onButtonPress}
           backgroundColor={'#397af8'}
@@ -178,7 +178,7 @@ class NewJob extends Component {
               mode="date"
               format="DD MMM YY"
               showIcon={false}
-              androidMode="calendar"
+              androidMode="spinner"
               minDate={moment().format('DD MMM YY')}
               customStyles={{
                 dateInput: {

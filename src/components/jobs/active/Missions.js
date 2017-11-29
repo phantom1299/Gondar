@@ -1,47 +1,30 @@
 import React, { Component } from 'react';
-import { Dimensions, Platform, UIManager, LayoutAnimation, TouchableOpacity } from 'react-native';
-import { Content, Card, View, Thumbnail, Left } from 'native-base';
+import { NavigationActions } from 'react-navigation';
+import {
+  Dimensions,
+  Platform,
+  UIManager,
+  LayoutAnimation,
+  Modal,
+  TouchableOpacity,
+  Slider,
+  Alert
+} from 'react-native';
+import {
+  Content,
+  Card,
+  CardItem,
+  View,
+  Thumbnail,
+  Left,
+  Button,
+  Spinner,
+  Toast
+} from 'native-base';
 import * as Progress from 'react-native-progress';
 
 import { AutoText as Text } from '../../common';
-
-const missions = [
-  {
-    _id: 1,
-    title: 'Dökümanları yaz', //işin başlığı
-    description: 'Örnek görev 1 açıklama', //işin açıklaması
-    participants: [{ name: 'Aslı', avatarUrl: 'https://randomuser.me/api/portraits/women/49.jpg' }], //iş teklifindeki çalışanın IDleri
-    progress: 0.2, //tamamlanma yüzdesi
-    notes: {} //notlar
-  },
-  {
-    _id: 2,
-    title: 'Yazılım Ücretlerini Araştır ve Raporla', //işin başlığı
-    description: 'Örnek görev 2 açıklama', //işin açıklaması
-    participants: [{ name: 'Halil', avatarUrl: 'https://randomuser.me/api/portraits/men/17.jpg' }], //iş teklifindeki çalışanın IDsi
-    progress: 0.3, //tamamlanma yüzdesi
-    notes: {} //notlar
-  },
-  {
-    _id: 3,
-    title: 'Örnek görev 3', //işin başlığı
-    description: 'Örnek görev 3 açıklama', //işin açıklaması
-    participants: [
-      { name: 'Ceyda', avatarUrl: 'https://randomuser.me/api/portraits/women/25.jpg' },
-      { name: 'Canıthın', avatarUrl: 'https://randomuser.me/api/portraits/men/82.jpg' }
-    ], //iş teklifindeki çalışanın IDsi
-    progress: 0.7, //tamamlanma yüzdesi
-    notes: {} //notlar
-  },
-  {
-    _id: 4,
-    title: 'Örnek görev 4', //işin başlığı
-    description: 'Örnek görev 4 açıklama', //işin açıklaması
-    participants: [{ name: 'Jack', avatarUrl: 'https://randomuser.me/api/portraits/men/29.jpg' }], //iş teklifindeki çalışanın IDsi
-    progress: 0.8, //tamamlanma yüzdesi
-    notes: {} //notlar
-  }
-];
+import { updateSubJobProgress, getSubJobsOfJob, deleteSubJob } from '../../../data';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -49,33 +32,133 @@ class Missions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: null
+      selected: null,
+      modalVisible: false,
+      missions: [],
+      loadingForMissions: true,
+      loading: false
     };
   }
 
   componentWillMount() {
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
+    if (this.state.selected === null) this.getSubJobs();
   }
 
-  componentWillUpdate() {
-    LayoutAnimation.spring();
+  getSubJobs() {
+    getSubJobsOfJob(this.props.jobId)
+      .then(response => {
+        if (response.status === 200) {
+          response.json().then(result => {
+            this.setState({ missions: result, loadingForMissions: false });
+          });
+        }
+        this.setState({
+          error: `Sunucu ${response.status} hata kodunu döndürdü, lütfen tekrar deneyin.`
+        });
+      })
+      .catch(error => {
+        this.getSubJobs();
+      });
   }
+
+  // componentWillMount() {
+  //   if (Platform.OS === 'android') {
+  //     UIManager.setLayoutAnimationEnabledExperimental(true);
+  //   }
+  // }
+
+  // componentWillUpdate() {
+  //   LayoutAnimation.spring();
+  // }
 
   getcolor(x = 0) {
     if (x >= 0.5) return '#5cb85c';
     return '#5bc0de';
   }
 
-  renderDetails(mission) {
-    if (mission._id === this.state.selected) {
-      return (
-        <Card>
-          <Text>{mission.description}</Text>
-        </Card>
-      );
-    }
+  onDeleteSubJob() {
+    this.setState({ loadingDelete: true });
+    deleteSubJob(this.props.jobId, this.state.selected)
+      .then(() => {
+        this.setState({ loadingDelete: false });
+        this.props.navigation.state.params.updateJob();
+        this.props.navigation.goBack();
+      })
+      .catch(error => {
+        this.setState({ loadingDelete: false, error });
+      });
+  }
+
+  showModal() {
+    const formatedProgress = Math.round(this.state.progress * 100);
+    return (
+      <Modal
+        animationType="fade"
+        transparent
+        visible={this.state.modalVisible}
+        onRequestClose={() => {
+          this.setState({ modalVisible: false });
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#0004'
+          }}
+        >
+          <Card
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 0,
+              paddingTop: '5%'
+            }}
+          >
+            <Slider
+              style={{ width: deviceWidth }}
+              step={0.05}
+              onSlidingComplete={progress => this.setState({ progress })}
+              value={this.state.progress}
+            />
+            <Text>{`${formatedProgress}%`}</Text>
+            {this.state.loading ? (
+              <Spinner />
+            ) : (
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <Button transparent onPress={() => this.setState({ modalVisible: false })}>
+                  <Text>İptal</Text>
+                </Button>
+                <Button
+                  transparent
+                  onPress={() => {
+                    this.setState({ loading: true });
+                    updateSubJobProgress(
+                      this.props.jobId,
+                      this.state.selected,
+                      formatedProgress / 100
+                    )
+                      .then(response => {
+                        if (response.status === 200) {
+                          this.setState({ modalVisible: false, loading: false });
+                          this.props.navigation.state.params.updateJob();
+                          this.props.navigation.goBack();
+                        } else this.setState({ modalVisible: false, loading: false });
+                      })
+                      .catch(() => {
+                        this.setState({ modalVisible: false, loading: false });
+                      });
+                  }}
+                >
+                  <Text>Tamam</Text>
+                </Button>
+              </View>
+            )}
+          </Card>
+        </View>
+      </Modal>
+    );
   }
 
   renderParticipant(participant) {
@@ -96,8 +179,9 @@ class Missions extends Component {
 
   renderMission = mission => {
     const { _id, title, participants, progress } = mission;
+    const fade = this.state.selected !== null && this.state.selected !== _id;
     return (
-      <Card key={_id} style={{ paddingHorizontal: '5%' }}>
+      <Card key={_id} style={{ paddingHorizontal: '5%', opacity: fade ? 0.6 : 1 }}>
         <TouchableOpacity
           onPress={() => {
             if (this.state.selected === _id) this.setState({ selected: null });
@@ -146,8 +230,70 @@ class Missions extends Component {
     );
   };
 
+  renderDetails(mission) {
+    if (mission._id === this.state.selected) {
+      return [
+        <CardItem>
+          <Text>{mission.description}</Text>
+        </CardItem>,
+        <CardItem>
+          <Button style={{ flex: 1, justifyContent: 'center' }} info small>
+            <Text>Görevi Güncelle</Text>
+          </Button>
+          <Button
+            style={{ flex: 1, justifyContent: 'center' }}
+            onPress={() => this.setState({ modalVisible: true, progress: mission.progress })}
+            warning
+            small
+          >
+            <Text>Yüzdeyi Güncelle</Text>
+          </Button>
+        </CardItem>,
+        <CardItem>
+          {this.state.loadingDelete ? (
+            <Spinner style={{ flex: 1 }} />
+          ) : (
+            <Button
+              style={{ flex: 1, justifyContent: 'center' }}
+              onPress={() =>
+                Alert.alert(
+                  'Görevi silmek istediğinize emin misiniz?',
+                  'Bu işlem, görevi kalıcı olarak silecek.',
+                  [
+                    {
+                      text: 'İptal',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel'
+                    },
+                    {
+                      text: 'Evet',
+                      onPress: () => this.onDeleteSubJob()
+                    }
+                  ],
+                  { cancelable: false }
+                )}
+              danger
+              small
+            >
+              <Text>Görevi Sil</Text>
+            </Button>
+          )}
+        </CardItem>
+      ];
+    }
+  }
+
   render() {
-    return <Content>{missions.map(this.renderMission)}</Content>;
+    return (
+      <Content>
+        {this.showModal()}
+        {this.state.loadingForMissions ? (
+          <Spinner style={{ margin: '20%' }} />
+        ) : (
+          this.state.missions.map(this.renderMission)
+        )}
+      </Content>
+    );
   }
 }
 

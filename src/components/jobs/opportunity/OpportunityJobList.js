@@ -8,6 +8,7 @@ import { getJobsByTags } from '../../../data';
 class OpportunitiesList extends Component {
   constructor() {
     super();
+    this.getJobs = this.getJobs.bind(this);
     this.state = {
       loading: true,
       jobs: []
@@ -15,10 +16,13 @@ class OpportunitiesList extends Component {
   }
 
   componentWillMount() {
+    this.getJobs();
+  }
+
+  getJobs() {
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2
     });
-
     this.DataSource = ds.cloneWithRows(this.state.jobs);
 
     getJobsByTags(this.props.user._id, this.props.user.tags)
@@ -32,6 +36,7 @@ class OpportunitiesList extends Component {
   }
 
   renderRow(job) {
+    console.log(this.getJobs);
     return <OpportunityJobItem navigation={this.props.navigation} job={job} />;
   }
 
@@ -49,6 +54,7 @@ class OpportunitiesList extends Component {
           dataArray={this.state.jobs.reverse()}
           renderRow={job => (
             <OpportunityJobItem
+              updateJobs={this.getJobs}
               navigation={this.props.navigation}
               job={job}
               userId={this.props.user._id}

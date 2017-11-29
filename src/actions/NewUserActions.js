@@ -54,7 +54,7 @@ export const newUserPasswordChanged = text => {
 };
 
 //Kişi Ekleme burda yapılacak
-export const newUserAdd = ({ name, surname, email, password, tags }) => {
+export const newUserAdd = ({ name, surname, email, password, tags }, updateUsers) => {
   return dispatch => {
     dispatch({ type: NEW_USER_FORM_ADD_USER });
     auth0.auth
@@ -65,7 +65,7 @@ export const newUserAdd = ({ name, surname, email, password, tags }) => {
       })
       .then(user => {
         createUser({ _id: user.Id, name, surname, email, tags })
-          .then(() => newUserAddSuccess(dispatch))
+          .then(() => newUserAddSuccess(dispatch, updateUsers))
           .catch(err => {
             console.log(err);
             newUserAddFail(dispatch, 'Kullanıcı veritabanına kaydedilemedi.');
@@ -79,11 +79,12 @@ export const newUserAdd = ({ name, surname, email, password, tags }) => {
 };
 
 //Kişi başarılı bir şekilde oluşturulduysa, verileri database gir,
-const newUserAddSuccess = dispatch => {
+const newUserAddSuccess = (dispatch, updateUsers) => {
   dispatch({
     type: NEW_USER_FORM_ADD_USER_SUCCESS
   });
-  dispatch(NavigationActions.navigate({ routeName: 'UserList', params: { userAdded: true } }));
+  updateUsers(true);
+  dispatch(NavigationActions.back());
 };
 
 //Kişi ekleme başarısız olduysa hata mesajı göster

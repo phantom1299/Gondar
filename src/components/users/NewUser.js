@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, Keyboard, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import { Container, Content } from 'native-base';
-import { Card, Button, FormLabel, FormInput, Icon } from 'react-native-elements';
+import { Container, Content, Form, Item, Label, Input } from 'native-base';
+import { Card, Button, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import {
@@ -38,7 +38,7 @@ class NewUser extends Component {
     this.onTagDelete = this.onTagDelete.bind(this);
     this.onButtonPress = this.onButtonPress.bind(this);
     this.renderTags = this.renderTags.bind(this);
-    this.state = { tag: '' };
+    this.state = { tag: '', error: '' };
   }
 
   componentWillMount() {
@@ -82,7 +82,14 @@ class NewUser extends Component {
   onButtonPress() {
     Keyboard.dismiss();
     const { name, email, password, loading, surname, tags } = this.props;
-    this.props.newUserAdd({ name, email, password, surname, tags, loading });
+    if (name === '' || surname === '' || email === '' || password === '' || tags.length === 0) {
+      this.setState({ error: 'Lütfen * ile belirtilmiş alanları doldurun!' });
+    } else {
+      this.props.newUserAdd(
+        { name, email, password, surname, tags, loading },
+        this.props.navigation.state.params.updateUsers
+      );
+    }
   }
 
   renderTags() {
@@ -103,11 +110,11 @@ class NewUser extends Component {
   }
 
   renderError() {
-    if (this.props.error) {
+    if (this.state.error) {
       return (
         <View style={styles.errorContainerStyle}>
           <Icon name={'error'} color={'#D8000C'} />
-          <Text style={styles.errorTextStyle}>{this.props.error}</Text>
+          <Text style={styles.errorTextStyle}>{this.state.error}</Text>
         </View>
       );
     }
@@ -134,98 +141,49 @@ class NewUser extends Component {
   render() {
     const { name, email, password, surname } = this.props;
     const {
-      labelStyle,
-      labelContainerStyle,
-      inputStyle,
-      inputContainerStyle,
       iconStyle,
-      iconContainerStyle,
-      tagInputStyle
+      iconContainerStyle
     } = styles;
     return (
       <Container>
         <Content>
           <Card>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
-                İsim
-              </FormLabel>
-              <FormInput
-                inputStyle={inputStyle}
-                containerStyle={inputContainerStyle}
-                ref="form1"
-                containerRef="nameInputContainer"
-                textInputRef="nameInput"
-                onChangeText={this.onNameChange}
-                value={name}
-                autoCapitalize="words"
-              />
-            </View>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
-                Soyisim
-              </FormLabel>
-              <FormInput
-                inputStyle={inputStyle}
-                containerStyle={inputContainerStyle}
-                ref="form1"
-                containerRef="surnameInputContainer"
-                textInputRef="surnameInput"
-                value={surname}
-                onChangeText={this.onSurnameChange}
-              />
-            </View>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
-                Email
-              </FormLabel>
-              <FormInput
-                inputStyle={inputStyle}
-                containerStyle={inputContainerStyle}
-                ref="form1"
-                containerRef="emailInputContainer"
-                textInputRef="emailInput"
-                onChangeText={this.onEmailChange}
-                value={email}
-                keyboardType="email-address"
-              />
-            </View>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <FormLabel labelStyle={labelStyle} containerStyle={labelContainerStyle}>
-                Şifre
-              </FormLabel>
-              <FormInput
-                secureTextEntry
-                inputStyle={inputStyle}
-                containerStyle={inputContainerStyle}
-                ref="form1"
-                containerRef="passwordInputContainer"
-                textInputRef="passwordInput"
-                value={password}
-                onChangeText={this.onPasswordChange}
-              />
-            </View>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <FormLabel labelStyle={labelStyle}>Etiket</FormLabel>
-              <FormInput
-                inputStyle={tagInputStyle}
-                ref="form1"
-                containerRef="tagInputContainer"
-                textInputRef="tagInput"
-                value={this.state.tag}
-                onChangeText={this.onTagChange}
-              />
-              <Icon
-                name={'add-circle'}
-                size={deviceWidth / 15}
-                color={'#28f'}
-                iconStyle={iconStyle}
-                containerStyle={iconContainerStyle}
-                onPress={this.onTagAdd}
-              />
-            </View>
+            <Form>
+              {this.renderError()}
+              <Item>
+                <Label>*İsim</Label>
+                <Input onChangeText={this.onNameChange} value={name} autoCapitalize="words" />
+              </Item>
+              <Item>
+                <Label>*Soyisim</Label>
+                <Input onChangeText={this.onSurnameChange} value={surname} autoCapitalize="words" />
+              </Item>
+              <Item>
+                <Label>*Email</Label>
+                <Input
+                  onChangeText={this.onEmailChange}
+                  value={email}
+                  keyboardType="email-address"
+                />
+              </Item>
+              <Item>
+                <Label>*Şifre</Label>
+                <Input secureTextEntry value={password} onChangeText={this.onPasswordChange} />
+              </Item>
+              <Item>
+                <Label>*Etiket</Label>
+                <Input value={this.state.tag} onChangeText={this.onTagChange} />
+                <Icon
+                  name={'add-circle'}
+                  size={deviceWidth / 15}
+                  color={'#28f'}
+                  iconStyle={iconStyle}
+                  containerStyle={iconContainerStyle}
+                  onPress={this.onTagAdd}
+                />
+              </Item>
+            </Form>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>{this.renderTags()}</View>
-            {this.renderError()}
             <CardSection>{this.renderButtonOrLoading()}</CardSection>
           </Card>
         </Content>
@@ -236,10 +194,11 @@ class NewUser extends Component {
 
 const styles = StyleSheet.create({
   errorTextStyle: {
-    fontSize: deviceWidth / 18,
+    fontSize: deviceWidth / 28,
     alignSelf: 'center',
     color: '#D8000C',
-    marginLeft: 5
+    marginLeft: 5,
+    padding: 5
   },
   errorContainerStyle: {
     flexDirection: 'row',
@@ -249,34 +208,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#FFBABA',
     justifyContent: 'center'
-  },
-  labelStyle: {
-    fontSize: deviceWidth / 28,
-    fontWeight: '200',
-    color: '#777',
-    marginRight: 0,
-    paddingRight: 0
-  },
-  labelContainerStyle: {
-    flex: 1
-  },
-  inputContainerStyle: {
-    flex: 3,
-    marginLeft: 0
-  },
-  inputStyle: {
-    fontSize: deviceWidth / 28,
-    height: 20,
-    color: '#888',
-    marginTop: 2,
-    width: '100%'
-  },
-  tagInputStyle: {
-    fontSize: deviceWidth / 28,
-    height: 20,
-    width: 150,
-    color: '#888',
-    marginTop: 2
   },
   iconStyle: {
     justifyContent: 'center'

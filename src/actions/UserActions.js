@@ -3,13 +3,12 @@ import { NavigationActions } from 'react-navigation';
 import { DELETE_USER } from '../actions/types';
 import { deleteUser as deleteUserService } from '../data';
 
-export const deleteUser = id => {
+export const deleteUser = (id, updateUser) => {
   return dispatch => {
     deleteUserService(id)
       .then(() => {
-        dispatch(
-          NavigationActions.navigate({ routeName: 'UserList', params: { userDeleted: true } })
-        );
+        updateUser(false);
+        dispatch(NavigationActions.back());
       })
       .catch(err => {
         console.log(err);

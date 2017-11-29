@@ -10,10 +10,10 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  name: 'İsim',
-  surname: 'Soyisim',
-  email: 'email@gmail.com',
-  password: 'asd123',
+  name: '',
+  surname: '',
+  email: '',
+  password: '',
   tags: [],
   error: '',
   loading: false

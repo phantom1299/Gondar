@@ -12,7 +12,10 @@ import {
   USER_EMAIL_CHANGED,
   USER_ADDRESS_CHANGED,
   USER_SOCIAL_ACCOUNTS_CHANGED,
-  USER_SOCIAL_ACCOUNT_DELETE
+  USER_SOCIAL_ACCOUNT_DELETE,
+  NEW_MISSION_FORM_ADD_MISSION_SUCCESS,
+  JOB_DELETE_SUCCESS,
+  APPLY_TO_JOB_SUCCESS
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -81,11 +84,34 @@ export default (state = INITIAL_STATE, action) => {
     case LOGIN_USER_SUCCESS:
       return { ...state, user: action.payload };
 
+    case NEW_MISSION_FORM_ADD_MISSION_SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user, activeJobs: state.user.activeJobs.concat(action.payload) }
+      };
+
+    case JOB_DELETE_SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user, activeJobs: state.user.activeJobs.filter(e => e !== action.payload) }
+      };
+
+    case APPLY_TO_JOB_SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user, appliedJobs: state.user.appliedJobs.concat(action.payload) }
+      };
+
     case USER_RESET:
       return {
         ...state,
         editable: false,
-        user: { ...state.user, socialAccounts: state.backup.socialAccounts ? state.backup.socialAccounts : state.user.socialAccounts }
+        user: {
+          ...state.user,
+          socialAccounts: state.backup.socialAccounts
+            ? state.backup.socialAccounts
+            : state.user.socialAccounts
+        }
       };
 
     case USER_EDIT:
