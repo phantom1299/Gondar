@@ -5,8 +5,8 @@ Gondar, React-Native ve MongoDB kullanılarak geliştirilen bir Mobil Uygulamad�
 Bu uygulama ile freelance çalışan ve iş vereni, bir mobil uygulama çatısı altında toplamayı hedefliyoruz.
 
 Uygulama 3 bileşenden oluşuyor;
-  Freelance iş yapan kişiler / social media influencer
-  İşi veren yönetici/yöneticiler
+  Freelance iş yapan kişiler / social media influencer,
+  İşi veren yönetici/yöneticiler,
   İşlerin kendisi
 
 # Admin bölümü
